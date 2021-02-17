@@ -1,5 +1,5 @@
 # Audiometry Data Generation
-JavaScript code to generate audiometry data.
+JavaScript program to generate audiometry data.
 
 ## How To Run
 
