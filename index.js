@@ -47,11 +47,12 @@ const {
 /*************************************/
 
 /*
- * getNextSetNo() Function
- * Returns the next set number to generate.
+ * getNextID() Function
+ * Returns the next ID to generate.
  */
-function getNextSetNo() {
-  return dataObj[dataObj.length - 1]['Set No.'] + 1;
+function getNextID() {
+  // 'ID' is the first property of the object.
+  return Object.values(dataObj[dataObj.length - 1])[0] + 1;
 }
 
 
@@ -107,15 +108,28 @@ function main() {
 
 
   // Generate new data.
+  console.log("Generating the data. This may take a while.")
 
-  dataArr = generateNormal(numSets, getNextSetNo());
+  dataArr = generateNormal(numSets, getNextID());
   dataObj = dataObj.concat(dataArr);
 
-  dataArr = generateMild(numSets, getNextSetNo());
+  dataArr = generateMild(numSets, getNextID());
+  dataObj = dataObj.concat(dataArr);
+
+  dataArr = generateModerate(numSets, getNextID());
+  dataObj = dataObj.concat(dataArr);
+
+  dataArr = generateModeratelySevere(numSets, getNextID());
+  dataObj = dataObj.concat(dataArr);
+
+  dataArr = generateSevere(numSets, getNextID());
+  dataObj = dataObj.concat(dataArr);
+
+  dataArr = generateProfound(numSets, getNextID());
   dataObj = dataObj.concat(dataArr);
 
 
-  // Save the previous data.
+  // Save the new data.
   try {
     writeCSVFile(dataFilePath, dataObj);
     console.log(`New data successfully saved to ${dataFilePath}`)

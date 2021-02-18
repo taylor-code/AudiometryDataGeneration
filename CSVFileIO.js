@@ -7,7 +7,7 @@
 /* @date:   02/01/2021                      */
 /********************************************/
 
-/* VARIABLES */
+
 const fs = require('fs');
 
 
@@ -55,7 +55,8 @@ function parseCSVData(dataStr) {
     
     const dataSet = {};
 
-    // If a value is empty, replace it with null.
+    // Try to set a value as an integer. If the operation
+    // returns NaN, then save the value as a string.
     for (let i = 0; i < attributes.length; i++) {
       let value = !values[i] ? null : parseInt(values[i]);
       dataSet[attributes[i]] = isNaN(value) ? values[i] : value;

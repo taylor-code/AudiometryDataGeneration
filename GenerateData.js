@@ -21,9 +21,6 @@ Object.freeze(HEARING_DEGREES = {
   PROFOUND:        { MIN: 91,  MAX: 100 }
 });
 
-Object.freeze(EAR_STRINGS = [ 'Left Ear', 'Right Ear' ]);
-Object.freeze(NUM_EARS = 2);
-
 const roundToNearest5 = (dB) => Math.round(dB / 5) * 5;
 
 
@@ -51,70 +48,115 @@ function getRandomInt_Range(min, max) {
 
 
 /*************************************/
+/* HEARING TYPE GENERATION FUNCTIONS */
+/*************************************/
+
+/* 
+ * generateConductive() Function
+ *
+ * Generates random decibel values
+ * for conductive hearing loss.
+ *
+ * @param: id, an Int.
+ * @param: otherArgs, an array of three arguments:
+ *         1. min, an Int.
+ *         2. max, an Int.
+ *         3. degree, a String.
+ *
+ * @return: an Object with (possible)
+ *          conductive hearing loss.
+ */
+function generateConductive(id, otherArgs) {
+  let [min, max, degree] = [...otherArgs];
+  return {
+    'ID':                      id,
+    '250 Hz':                  getRandomInt_Range(min, max),
+    '500 Hz':                  getRandomInt_Range(min, max),
+    '1000 Hz':                 getRandomInt_Range(min, max),
+    '2000 Hz':                 getRandomInt_Range(min, max),
+    '4000 Hz':                 getRandomInt_Range(min, max),
+    '8000 Hz':                 getRandomInt_Range(min, max),
+    'Degree of Hearing Loss':  degree,
+    'Conductive':              'Y',
+    'Sensorineural':           null,
+    'High-Frequency':          null,
+    'Low-Frequency':           null,
+  };
+}
+
+
+/* 
+ * generateSensorineural() Function
+ *
+ * Generates random decibel values
+ * for sensorineural hearing loss.
+ *
+ * @param: id, an Int.
+ * @param: otherArgs, an array.
+ *
+ * @return: an Object with sensorineural hearing loss.
+ */
+function generateSensorineural(id, otherArgs) {
+  return undefined;
+}
+
+
+/*
+ * getGenerationTypeFunction() Function
+ *
+ * @param: type, a String.
+ * @return: a Function.
+ */
+function getGenerationTypeFunction(type) {
+  const generationFunctions = {
+    'conductive':    generateConductive,
+    'sensorineural': generateSensorineural,
+  }
+  return generationFunctions[type]
+}
+
+
+
+/*************************************/
 /*     DATA GENERATION FUNCTIONS     */
 /*************************************/
 
 /* 
- * generateOneDataSet() Function
+ * generateOneEarSet() Function
  *
- * Generates random decibel values for
- * frequencies. Returns an array of two
- * objects: an object for the left ear
- * and an object for the right ear.
+ * Generates random decibel values.
+ * Returns a data set for one ear.
  *
- * @param: setNo, an Int.
- * @param: min, an Int.
- * @param: max, an Int.
+ * @param: type, a String of the hearing loss type.
+ * @param: otherArgs, an Array of arguments
+ *         for the specific generation function.
  *
- * @return: an Array of two Objects.
+ * @return: an Object with hearing data.
  */
-function generateOneDataSet(setNo, min, max) {
-  let dataArr = [];
-
-  // Generate two data sets, one for the
-  // left ear and one for the right ear.
-  for (let ear = 0; ear < NUM_EARS; ear++) {
-    dataArr.push({
-      'Set No.':  setNo,
-      'Ear':      EAR_STRINGS[ear],
-      '250 Hz':   getRandomInt_Range(min, max),
-      '500 Hz':   getRandomInt_Range(min, max),
-      '1000 Hz':  getRandomInt_Range(min, max),
-      '2000 Hz':  getRandomInt_Range(min, max),
-      '4000 Hz':  getRandomInt_Range(min, max),
-      '8000 Hz':  getRandomInt_Range(min, max),
-      'Degree of Hearing Loss':  '',
-      'Conductive':              '',
-      'Sensorineural':           '',
-      'High-Frequency':          '',
-      'Low-Frequency':           '',
-      'Asymmetrical':            ''
-    })
-  }
-
-  return dataArr;
+function generateOneEarSet(type, id, otherArgs) {
+  let func = getGenerationTypeFunction(type)
+  return func(id, otherArgs);
 }
 
 
 /* 
  * generateDataSets() Function
  *
- * Generates hearing data for really good hearing.
+ * Generates hearing data sets.
  *
+ * @param: type, a String of the hearing loss type.
  * @param: numSets, an Int of sets to create.
- * @param: setNo, an Int of the next set number.
- * @param: min, an Int.
- * @param: max, an Int.
+ * @param: id, an Int of the next set number.
+ * @param: otherArgs, an Array of arguments
+ *         for the specific generation function.
  *
  * @return: dataArr, an Array of hearing sets.
  */
-function generateDataSets(numSets, setNo, min, max) {
+function generateDataSets(type, numSets, id, otherArgs) {
   let dataArr = [];
-  let dataSet = [];
 
   while (numSets-- > 0) {
-    dataSet = generateOneDataSet(setNo++, min, max);
-    dataArr.push(dataSet[0], dataSet[1]);
+    dataArr.push(generateOneEarSet(type, id++, otherArgs));
   }
 
   return dataArr;
