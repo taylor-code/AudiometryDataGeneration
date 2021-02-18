@@ -17,4 +17,5 @@ JavaScript program to generate audiometry data.
 
 ## Data
 Previous data is written to CSVData/PreviousDataCSV.csv
+
 New data is written to CSVData/AudiometryDataCSV.csv
