@@ -68,6 +68,8 @@ function getRandomInt_Range(min, max) {
  */
 function generateConductive(id, otherArgs) {
   let [min, max, degree] = [...otherArgs];
+  let conductive = degree === 'Normal' ? null : 'Y'
+  
   return {
     'ID':                      id,
     '250 Hz':                  getRandomInt_Range(min, max),
@@ -77,7 +79,7 @@ function generateConductive(id, otherArgs) {
     '4000 Hz':                 getRandomInt_Range(min, max),
     '8000 Hz':                 getRandomInt_Range(min, max),
     'Degree of Hearing Loss':  degree,
-    'Conductive':              'Y',
+    'Conductive':              conductive,
     'Sensorineural':           null,
     'High-Frequency':          null,
     'Low-Frequency':           null,
