@@ -1,6 +1,7 @@
 # Audiometry Data Generation
 JavaScript program to generate audiometry data.
 
+
 ## How To Run
 
 ### On repl.it:
@@ -13,6 +14,8 @@ JavaScript program to generate audiometry data.
 3. Run `npm install` in the terminal to install the dependencies.
 4. Run `node index` in the terminal to run the program.
 
+
 ## Data
-1. Previous data is written to CSVData/PreviousDataCSV.csv
-2. The new data is written to CSVData/AudiometryDataCSV.csv
+Previous data is written to CSVData/PreviousDataCSV.csv
+
+New data is written to CSVData/AudiometryDataCSV.csv
