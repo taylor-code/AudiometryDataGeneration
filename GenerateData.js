@@ -58,17 +58,15 @@ function getRandomInt_Range(min, max) {
  * for conductive hearing loss.
  *
  * @param: id, an Int.
- * @param: otherArgs, an array of three arguments:
+ * @param: otherArgs, an array of two arguments:
  *         1. min, an Int.
  *         2. max, an Int.
- *         3. degree, a String.
  *
  * @return: an Object with (possible)
  *          conductive hearing loss.
  */
 function generateConductive(id, otherArgs) {
-  let [min, max, degree] = [...otherArgs];
-  let conductive = degree === 'Normal' ? null : 'Y';
+  let [min, max] = [...otherArgs];
 
   return {
     'ID':                      id,
@@ -78,8 +76,8 @@ function generateConductive(id, otherArgs) {
     '2000 Hz':                 getRandomInt_Range(min, max),
     '4000 Hz':                 getRandomInt_Range(min, max),
     '8000 Hz':                 getRandomInt_Range(min, max),
-    'Degree of Hearing Loss':  degree,
-    'Conductive':              conductive,
+    'Degree of Hearing Loss':  null,
+    'Conductive':              null,
     'Sensorineural':           null,
     'High-Frequency':          null,
     'Low-Frequency':           null,
@@ -113,7 +111,7 @@ function getGenerationTypeFunction(type) {
   const generationFunctions = {
     'conductive':    generateConductive,
     'sensorineural': generateSensorineural,
-  }
+  };
   return generationFunctions[type]
 }
 
@@ -136,7 +134,7 @@ function getGenerationTypeFunction(type) {
  * @return: an Object with hearing data.
  */
 function generateOneEarSet(type, id, otherArgs) {
-  let func = getGenerationTypeFunction(type)
+  let func = getGenerationTypeFunction(type);
   return func(id, otherArgs);
 }
 

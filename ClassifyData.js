@@ -8,39 +8,46 @@
 /********************************************/
 
 
+const { HEARING_DEGREES } = require('./GenerateData');
+
+
+// Properties 1-7 of obj are the decibels.
+const getDecibelValues = obj => Object.values(obj).slice(1, 7);
+
+const add = (accumulator, currVal) => accumulator + currVal;
+
+// Gets the sum of values in arr then returns the average.
+const getAverageDecibel = arr => arr.reduce(add) / arr.length;
+
+// Returns true x is between min and max.
+const isInRange = (x, min, max) => (x - min) * (x - max) <= 0;
+
+
 /* 
- * () Function
+ * classifyHLDegree() Function
  *
+ * @param: average, a Float of the average decibels.
  * 
- *
- * @param: 
- * 
- * @return: 
+ * @return: a String of the hearing degree.
  */
-function classifyHearingLossDegree() {
-  /*
-  Hearing within normal limits: 0 – 20 decibels (dB)
-  Mild hearing loss: 20 – 40 dB
-  Moderate hearing loss: 40 – 55 dB
-  Moderately-severe hearing loss: 55 – 70 dB
-  Severe hearing loss: 70 – 90 dB
-  Profound hearing loss: 90+ dB
-  */
-  return undefined;
+function classifyHLDegree(average) {
+  if (isInRange(average, 0, 20))  return "Normal";
+  if (isInRange(average, 21, 40)) return "Mild";
+  if (isInRange(average, 41, 55)) return "Moderate";
+  if (isInRange(average, 56, 70)) return "Moderately-Severe";
+  if (isInRange(average, 71, 90)) return "Severe";
+  return "Profound";
 }
 
 
 /* 
- * () Function
+ * classifyConductive() Function
  *
- * 
- *
- * @param: 
- * 
- * @return: 
+ * Returns 'Y' if the average decibel value is above
+ * the Normal maximum decibel. Else, returns null.
  */
-function classifyConductive() {
-  return undefined;
+function classifyConductive(average) {
+  return average > HEARING_DEGREES.NORMAL.MAX ? 'Y' : null;
 }
 
 
@@ -86,13 +93,30 @@ function classifyLowFrequency() {
 }
 
 
+/* 
+ * classifyData() Function
+ *
+ * For each object in dataArr,
+ * classifies the hearing loss.
+ *
+ * @param: dataArr, an Array of earing data objects.
+ * 
+ * @return: dataArr with the classifications.
+ */
+function classifyData(dataArr) {
+  for (let obj of dataArr) {
+    let decibelsArr = getDecibelValues(obj);
+    let average = getAverageDecibel(decibelsArr);
+
+    obj['Degree of Hearing Loss'] = classifyHLDegree(average);
+    obj['Conductive'] = classifyConductive(average);
+  }
+  
+  return dataArr;
+}
+
+
 
 /********************************************/
 
-module.exports = {
-  classifyHearingLossDegree,
-  classifyConductive,
-  classifySensorineural,
-  classifyHighFrequency,
-  classifyLowFrequency
-};
+module.exports = { classifyData };

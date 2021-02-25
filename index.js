@@ -23,22 +23,9 @@ const {
   fsWriteFile
 } = require('./CSVFileIO');
 
-const {
-  classifyHearingLossDegree,
-  classifyConductive,
-  classifySensorineural,
-  classifyHighFrequency,
-  classifyLowFrequency
-} = require('./ClassifyData');
+const { classifyData } = require('./ClassifyData');
 
-const {
-  generateNormal,
-  generateMild,
-  generateModerate,
-  generateModeratelySevere,
-  generateSevere,
-  generateProfound
-} = require('./HearingLossTypes/Conductive');
+const { generateConductive } = require('./HearingLossTypes/Conductive');
 
 
 
@@ -110,23 +97,23 @@ function main() {
   // Generate new data.
   console.log("Generating the data. This may take a while.")
 
-  dataArr = generateNormal(numSets, getNextID());
-  dataObj = dataObj.concat(dataArr);
+  dataArr = generateConductive(numSets, getNextID(), 'NORMAL');
+  dataObj = dataObj.concat(classifyData(dataArr))
 
-  dataArr = generateMild(numSets, getNextID());
-  dataObj = dataObj.concat(dataArr);
+  dataArr = generateConductive(numSets, getNextID(), 'MILD');
+  dataObj = dataObj.concat(classifyData(dataArr))
 
-  dataArr = generateModerate(numSets, getNextID());
-  dataObj = dataObj.concat(dataArr);
+  dataArr = generateConductive(numSets, getNextID(), 'MODERATE');
+  dataObj = dataObj.concat(classifyData(dataArr))
 
-  dataArr = generateModeratelySevere(numSets, getNextID());
-  dataObj = dataObj.concat(dataArr);
+  dataArr = generateConductive(numSets, getNextID(), 'MODERATE_SEVERE');
+  dataObj = dataObj.concat(classifyData(dataArr))
 
-  dataArr = generateSevere(numSets, getNextID());
-  dataObj = dataObj.concat(dataArr);
+  dataArr = generateConductive(numSets, getNextID(), 'SEVERE');
+  dataObj = dataObj.concat(classifyData(dataArr))
 
-  dataArr = generateProfound(numSets, getNextID());
-  dataObj = dataObj.concat(dataArr);
+  dataArr = generateConductive(numSets, getNextID(), 'PROFOUND');
+  dataObj = dataObj.concat(classifyData(dataArr))
 
 
   // Save the new data.
