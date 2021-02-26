@@ -22,7 +22,6 @@ const fs = require('fs');
  * Reads the contents of a CSV file.
  *
  * @param: filename, a String of the file path.
- *
  * @return: a String of the CSV file contents.
  */
 function readCSVFile(filename) {
@@ -36,7 +35,6 @@ function readCSVFile(filename) {
  * Converts the CSV string to a JS object.
  *
  * @param: dataStr, a String of CSV contents.
- * 
  * @return: an Object of the CSV contents.
  */
 function parseCSVData(dataStr) {

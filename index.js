@@ -23,7 +23,7 @@ const {
   fsWriteFile
 } = require('./CSVFileIO');
 
-const { classifyData } = require('./ClassifyData');
+const { classifyData } = require('./DataManipulation/ClassifyData');
 const { cleanseData } = require('./CleanseData')
 const { generateConductive } = require('./HearingLossTypes/Conductive');
 
