@@ -30,17 +30,81 @@ const { generateConductive } = require('./HearingLossTypes/Conductive');
 
 
 /*************************************/
-/*          HELPER FUNCTION          */
+/*         HELPER FUNCTIONS          */
 /*************************************/
 
 /*
- * getNextID() Function
- * Returns the next ID to generate.
+ * setup() Function
+ *
+ * Reads in the data, saves the previous data,
+ * and converts the data string to an object.
  */
-// function getNextID() {
-//   // 'ID' is the first property of the object.
-//   return Object.values(dataObj[dataObj.length - 1])[0] + 1;
-// }
+function setup() {
+  let dataStr = undefined;
+
+  // Read in the data.
+  try {
+    dataStr = readCSVFile(dataFilePath);
+    console.log('Previous data successfully read.');
+  }
+  catch (err) {
+    throw Error(`An error occurred while reading data: \n'${err}'\n`);
+  }
+
+  // Save the previous data.
+  try {
+    fsWriteFile(prevDataFilePath, dataStr);
+    console.log(`Previous data successfully saved to ${prevDataFilePath}`);
+  }
+  catch (err) {
+    throw Error(`An error occurred while saving previous data: \n'${err}'\n`);
+  }
+
+  // Convert the data string to an object.
+  try {
+    dataObj = parseCSVData(dataStr);
+  }
+  catch (err) {
+    throw Error(`An error occurred during object conversion: \n'${err}'\n`);
+  }
+}
+
+
+/*
+ * createData() Function
+ *
+ * Generates and cleanses hearing data.
+ */
+function createData() {
+
+  /* VARIABLES */
+  let dataArr = undefined;
+  let numSets = 100;
+
+  const HEARING_DEGREES = [
+    'NORMAL', 'MILD', 'MODERATE',
+    'MODERATE_SEVERE', 'SEVERE', 'PROFOUND'
+  ];
+
+
+  /* GENERATE DATA */
+  console.log('Generating the data. This may take a while.')
+
+  // Conductive
+  for (let degree of HEARING_DEGREES) {
+    dataArr = generateConductive(numSets, degree);
+    dataObj = dataObj.concat(classifyData(dataArr))
+  }
+
+
+  /* CLEANSE DATA */
+  console.log('Cleansing the data. This may take a while.')
+  let cleaned = cleanseData(dataObj);
+  console.log(`\nRemoved ${dataObj.length - cleaned.length} duplicates.`);
+  console.log(`Number of data sets: ${cleaned.length}\n`);
+  
+  return cleaned;
+}
 
 
 
@@ -51,73 +115,46 @@ const { generateConductive } = require('./HearingLossTypes/Conductive');
 /*
  * main() Function
  *
- * Reads in the a file, generates hearing
+ * Reads in the a file, creates hearing
  * test data, and writes to a CSV file.
  */
 function main() {
 
-  /* VARIABLES */
-  let dataStr = undefined;
-  let dataArr = undefined;
-  let numSets = 10;
+  let newDataObj = undefined;
 
 
-  // Read in the data.
+  /*-------------------------------*/
+  /*             SETUP             */
+  /*-------------------------------*/
+
   try {
-    dataStr = readCSVFile(dataFilePath);
-    console.log("Previous data successfully read.");
+    setup();
   }
   catch (err) {
-    console.log(`An error occurred while reading data: \n'${err}'\n`);
-    return;
-  }
-  
-
-  // Save the previous data.
-  try {
-    fsWriteFile(prevDataFilePath, dataStr);
-    console.log(`Previous data successfully saved to ${prevDataFilePath}`);
-  }
-  catch (err) {
-    console.log(`An error occurred while saving previous data: \n'${err}'\n`);
+    console.log(err.message);
     return;
   }
 
 
-  // Convert the data string to an object.
+  /*-------------------------------*/
+  /*         DATA CREATION         */
+  /*-------------------------------*/
+
   try {
-    dataObj = parseCSVData(dataStr);
+    newDataObj = createData();
   }
   catch (err) {
-    console.log(`An error occurred while converting the data string to an object: \n'${err}'\n`);
+    console.log(err.message);
     return;
   }
 
 
-  const HEARING_DEGREES = [
-    'NORMAL', 'MILD', 'MODERATE',
-    'MODERATE_SEVERE', 'SEVERE', 'PROFOUND'
-  ];
+  /*-------------------------------*/
+  /*             SAVE              */
+  /*-------------------------------*/
 
-
-  /* Generate new data. */
-  console.log("Generating the data. This may take a while.")
-
-  // Conductive
-  for (let degree of HEARING_DEGREES) {
-    dataArr = generateConductive(numSets, degree);
-    dataObj = dataObj.concat(classifyData(dataArr))
-  }
-
-
-  /* Cleanse the data */
-  let cleaned = cleanseData(dataObj);
-  console.log(cleaned.length, dataObj.length);
-
-
-  // Save the new data.
   try {
-    writeCSVFile(dataFilePath, cleaned);
+    writeCSVFile(dataFilePath, newDataObj);
     console.log(`New data successfully saved to ${dataFilePath}`)
   }
   catch (err) {

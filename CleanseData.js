@@ -12,6 +12,22 @@ const { getDecibelValues } = require('./ClassifyData');
 
 
 /* 
+ * cleanseData() Function
+ * 
+ * Removes duplicate data objects then sorts.
+ */
+function cleanseData(dataObj) {
+  let unique = removeDuplicates(dataObj);
+  return sortDataObj(unique);
+}
+
+
+
+/**************************************/
+/*     DUPLICATE REMOVAL FUNCTION     */
+/**************************************/
+
+/* 
  * removeDuplicates() Function
  * 
  * Removes duplicate objects in the array.
@@ -45,20 +61,42 @@ function removeDuplicates(data) {
 }
 
 
-function sortByHLDegree(dataObj) {
+
+/**************************************/
+/*           SORT FUNCTIONS           */
+/**************************************/
+
+/* 
+ * sortDataObj() Function
+ * 
+ * Sorts alphabetically by hearing degree,
+ * then sorts by conductive hearing loss.
+ */
+function sortDataObj(dataObj) {
   return dataObj.sort((a, b) => {
-    return a['Degree of Hearing Loss'].localeCompare(b['Degree of Hearing Loss']);
-  }).sort((a, b) => {
-    return a['Conductive'] > b['Conductive'];
+    let hlDiff = sortByHLDegree(a, b);
+    return hlDiff !== 0 ? hlDiff : sortByConductive(a, b);
   });
 }
 
 
-function cleanseData(dataObj) {
-  let unique = removeDuplicates(dataObj);
+/* 
+ * sortByHLDegree() Function
+ * 
+ * Sorts alphabetically by hearing degree.
+ */
+function sortByHLDegree(a, b) {
+  return a['Degree of Hearing Loss'].localeCompare(b['Degree of Hearing Loss']);
+}
 
-  // Sort alphabetically by hearing degree.
-  return sortByHLDegree(unique);
+
+/* 
+ * sortByConductive() Function
+ * 
+ * Groups conductive data and groups sensorineural data.
+ */
+function sortByConductive(a, b) {
+  return String(a['Conductive']).localeCompare(String(b['Conductive']));
 }
 
 
