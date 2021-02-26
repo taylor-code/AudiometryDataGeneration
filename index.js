@@ -21,7 +21,7 @@ const {
   printStats
 } = require('./MainHelpers');
 
-const { cleanseData } = require('./DataManipulation/CleanseData')
+const { cleanseData } = require('./DataManipulation/CleanseData');
 
 
 
