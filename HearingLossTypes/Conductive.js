@@ -14,7 +14,7 @@ Object.freeze(TYPE = 'conductive');
 const {
   HEARING_DEGREES,
   generateDataSets
-} = require('../GenerateData');
+} = require('../DataManipulation/GenerateData');
 
 
 /* 
