@@ -11,8 +11,8 @@
 const { HEARING_DEGREES } = require('./GenerateData');
 
 
-// Properties 1-7 of obj are the decibels.
-const getDecibelValues = obj => Object.values(obj).slice(1, 7);
+// Properties 0-6 of obj are the decibels.
+const getDecibelValues = obj => Object.values(obj).slice(0, 6);
 
 const add = (accumulator, currVal) => accumulator + currVal;
 
@@ -27,7 +27,6 @@ const isInRange = (x, min, max) => (x - min) * (x - max) <= 0;
  * classifyHLDegree() Function
  *
  * @param: average, a Float of the average decibels.
- * 
  * @return: a String of the hearing degree.
  */
 function classifyHLDegree(average) {
@@ -119,4 +118,4 @@ function classifyData(dataArr) {
 
 /********************************************/
 
-module.exports = { classifyData };
+module.exports = { getDecibelValues, classifyData };

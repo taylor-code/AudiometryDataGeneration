@@ -57,7 +57,6 @@ function getRandomInt_Range(min, max) {
  * Generates random decibel values
  * for conductive hearing loss.
  *
- * @param: id, an Int.
  * @param: otherArgs, an array of two arguments:
  *         1. min, an Int.
  *         2. max, an Int.
@@ -65,11 +64,10 @@ function getRandomInt_Range(min, max) {
  * @return: an Object with (possible)
  *          conductive hearing loss.
  */
-function generateConductive(id, otherArgs) {
+function generateConductive(otherArgs) {
   let [min, max] = [...otherArgs];
 
   return {
-    'ID':                      id,
     '250 Hz':                  getRandomInt_Range(min, max),
     '500 Hz':                  getRandomInt_Range(min, max),
     '1000 Hz':                 getRandomInt_Range(min, max),
@@ -91,12 +89,11 @@ function generateConductive(id, otherArgs) {
  * Generates random decibel values
  * for sensorineural hearing loss.
  *
- * @param: id, an Int.
  * @param: otherArgs, an array.
  *
  * @return: an Object with sensorineural hearing loss.
  */
-function generateSensorineural(id, otherArgs) {
+function generateSensorineural(otherArgs) {
   return undefined;
 }
 
@@ -133,9 +130,9 @@ function getGenerationTypeFunction(type) {
  *
  * @return: an Object with hearing data.
  */
-function generateOneEarSet(type, id, otherArgs) {
+function generateOneEarSet(type, otherArgs) {
   let func = getGenerationTypeFunction(type);
-  return func(id, otherArgs);
+  return func(otherArgs);
 }
 
 
@@ -146,17 +143,16 @@ function generateOneEarSet(type, id, otherArgs) {
  *
  * @param: type, a String of the hearing loss type.
  * @param: numSets, an Int of sets to create.
- * @param: id, an Int of the next set number.
  * @param: otherArgs, an Array of arguments
  *         for the specific generation function.
  *
  * @return: dataArr, an Array of hearing sets.
  */
-function generateDataSets(type, numSets, id, otherArgs) {
+function generateDataSets(type, numSets, otherArgs) {
   let dataArr = [];
 
   while (numSets-- > 0) {
-    dataArr.push(generateOneEarSet(type, id++, otherArgs));
+    dataArr.push(generateOneEarSet(type, otherArgs));
   }
 
   return dataArr;

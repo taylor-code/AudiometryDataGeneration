@@ -24,7 +24,7 @@ const {
 } = require('./CSVFileIO');
 
 const { classifyData } = require('./ClassifyData');
-
+const { cleanseData } = require('./CleanseData')
 const { generateConductive } = require('./HearingLossTypes/Conductive');
 
 
@@ -37,10 +37,10 @@ const { generateConductive } = require('./HearingLossTypes/Conductive');
  * getNextID() Function
  * Returns the next ID to generate.
  */
-function getNextID() {
-  // 'ID' is the first property of the object.
-  return Object.values(dataObj[dataObj.length - 1])[0] + 1;
-}
+// function getNextID() {
+//   // 'ID' is the first property of the object.
+//   return Object.values(dataObj[dataObj.length - 1])[0] + 1;
+// }
 
 
 
@@ -94,36 +94,34 @@ function main() {
   }
 
 
-  // Generate new data.
+  const HEARING_DEGREES = [
+    'NORMAL', 'MILD', 'MODERATE',
+    'MODERATE_SEVERE', 'SEVERE', 'PROFOUND'
+  ];
+
+
+  /* Generate new data. */
   console.log("Generating the data. This may take a while.")
 
-  dataArr = generateConductive(numSets, getNextID(), 'NORMAL');
-  dataObj = dataObj.concat(classifyData(dataArr))
+  // Conductive
+  for (let degree of HEARING_DEGREES) {
+    dataArr = generateConductive(numSets, degree);
+    dataObj = dataObj.concat(classifyData(dataArr))
+  }
 
-  dataArr = generateConductive(numSets, getNextID(), 'MILD');
-  dataObj = dataObj.concat(classifyData(dataArr))
 
-  dataArr = generateConductive(numSets, getNextID(), 'MODERATE');
-  dataObj = dataObj.concat(classifyData(dataArr))
-
-  dataArr = generateConductive(numSets, getNextID(), 'MODERATE_SEVERE');
-  dataObj = dataObj.concat(classifyData(dataArr))
-
-  dataArr = generateConductive(numSets, getNextID(), 'SEVERE');
-  dataObj = dataObj.concat(classifyData(dataArr))
-
-  dataArr = generateConductive(numSets, getNextID(), 'PROFOUND');
-  dataObj = dataObj.concat(classifyData(dataArr))
+  /* Cleanse the data */
+  let cleaned = cleanseData(dataObj);
+  console.log(cleaned.length, dataObj.length);
 
 
   // Save the new data.
   try {
-    writeCSVFile(dataFilePath, dataObj);
+    writeCSVFile(dataFilePath, cleaned);
     console.log(`New data successfully saved to ${dataFilePath}`)
   }
   catch (err) {
     console.log(`An error occurred while saving new data: \n'${err}'\n`);
-    return;
   }
 
 }
