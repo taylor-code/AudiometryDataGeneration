@@ -8,34 +8,41 @@
 /********************************************/
 
 
-const { HEARING_DEGREES } = require('./GenerateData');
+/*************************************/
+/*              IMPORTS              */
+/*************************************/
+
+const {
+  getPTA,
+  getAverageBothEars
+} = require('./ClassifyHelpers/GetAverage');
+
+const {
+  isInRange,
+  abgIsLessThan10,
+  getEarValues
+} = require('./ClassifyHelpers/ClassifyDataHelpers');
 
 
-// Properties 0-6 of obj are the decibels.
-const getDecibelValues = obj => Object.values(obj).slice(0, 6);
 
-const add = (accumulator, currVal) => accumulator + currVal;
-
-// Gets the sum of values in arr then returns the average.
-const getAverageDecibel = arr => arr.reduce(add) / arr.length;
-
-// Returns true x is between min and max.
-const isInRange = (x, min, max) => (x - min) * (x - max) <= 0;
-
+/*************************************/
+/*     CLASSIFICATION FUNCTIONS      */
+/*************************************/
 
 /* 
  * classifyHLDegree() Function
  *
- * @param: average, a Float of the average decibels.
+ * @param: average, a Float of the PTA.
  * @return: a String of the hearing degree.
  */
-function classifyHLDegree(average) {
-  if (isInRange(average, 0, 20))  return "Normal";
-  if (isInRange(average, 21, 40)) return "Mild";
-  if (isInRange(average, 41, 55)) return "Moderate";
-  if (isInRange(average, 56, 70)) return "Moderately-Severe";
-  if (isInRange(average, 71, 90)) return "Severe";
-  return "Profound";
+function classifyHLDegree(averagePTA) {
+  if (isInRange(averagePTA, -10, 15)) return 'Normal';
+  if (isInRange(averagePTA,  16, 25)) return 'Slight';
+  if (isInRange(averagePTA,  26, 40)) return 'Mild';
+  if (isInRange(averagePTA,  41, 55)) return 'Moderate';
+  if (isInRange(averagePTA,  56, 70)) return 'Moderately-Severe';
+  if (isInRange(averagePTA,  71, 90)) return 'Severe';
+  return 'Profound';
 }
 
 
@@ -45,8 +52,22 @@ function classifyHLDegree(average) {
  * Returns 'Y' if the average decibel value is above
  * the Normal maximum decibel. Else, returns null.
  */
-function classifyConductive(average) {
-  return average > HEARING_DEGREES.NORMAL.MAX ? 'Y' : null;
+function classifyConductive(averageAC, averageBC, abgLess10) {
+  if (isInRange(averageBC, -10, 15)) {
+    if (isInRange(averageAC, -10, 15) && abgLess10) return 'Normal';
+
+    if (!abgLess10) {
+      if (isInRange(averageAC, -10, 15)) return 'Conductive';
+      if (isInRange(averageAC,  16, 25)) return 'Slight';
+      if (isInRange(averageAC,  26, 40)) return 'Mild';
+      if (isInRange(averageAC,  41, 55)) return 'Moderate';
+      if (isInRange(averageAC,  56, 70)) return 'Moderately-Severe';
+      if (isInRange(averageAC,  71, 90)) return 'Severe';
+      return 'Profound';
+    }
+  }
+
+  return 'null';
 }
 
 
@@ -104,11 +125,18 @@ function classifyLowFrequency() {
  */
 function classifyData(dataArr) {
   for (let obj of dataArr) {
-    let decibelsArr = getDecibelValues(obj);
-    let average = getAverageDecibel(decibelsArr);
+    // Get the calculation variables.
+    const { leftAC, rightAC, leftBC, rightBC } = getEarValues(obj);
+    const valuesAC = leftAC.concat(rightAC);
+    const valuesBC = leftBC.concat(rightBC);
+    const averageAC = getAverageBothEars(leftAC, rightAC);
+    const averageBC = getAverageBothEars(leftBC, rightBC);
 
-    obj['Degree of Hearing Loss'] = classifyHLDegree(average);
-    obj['Conductive'] = classifyConductive(average);
+    // Question: Is the average the same as the threshold? (Line 11 in txt file.)
+    const abgLess10 = abgIsLessThan10(valuesAC, valuesBC);
+
+    obj['Degree'] = classifyHLDegree(getPTA(leftAC, rightAC, leftBC, rightBC));
+    //obj['Type'] = classifyConductive(averageAC, averageBC, abgLess10);
   }
   
   return dataArr;
@@ -118,4 +146,4 @@ function classifyData(dataArr) {
 
 /********************************************/
 
-module.exports = { getDecibelValues, classifyData };
+module.exports = { classifyData };

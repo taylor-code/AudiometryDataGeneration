@@ -21,8 +21,8 @@ const {
   fsWriteFile
 } = require('./CSVFileIO');
 
-const { classifyData } = require('./DataManipulation/ClassifyData');
-const { generateConductive } = require('./HearingLossTypes/Conductive');
+const { classifyData } = require('../DataManipulation/ClassifyData');
+const { generateConductive } = require('../HearingLossTypes/Conductive');
 
 
 
@@ -76,10 +76,10 @@ function createData(dataObj) {
 
   /* VARIABLES */
   let dataArr = undefined;
-  let numSets = 10;
+  let numSets = 1;
 
   const HEARING_DEGREES = [
-    'NORMAL', 'MILD', 'MODERATE',
+    'NORMAL', 'SLIGHT', 'MILD', 'MODERATE',
     'MODERATE_SEVERE', 'SEVERE', 'PROFOUND'
   ];
 

@@ -1,0 +1,44 @@
+[
+  {
+    "Set No.": 1,
+    "AC": {
+      "Left Ear": {
+        "250 Hz": 0,
+        "500 Hz": 0,
+        "1000 Hz": 0,
+        "2000 Hz": 0,
+        "4000 Hz": 0,
+        "8000 Hz": 0
+      },
+      "Right Ear": {
+        "250 Hz": 0,
+        "500 Hz": 0,
+        "1000 Hz": 0,
+        "2000 Hz": 0,
+        "4000 Hz": 0,
+        "8000 Hz": 0
+      }
+    },
+    "BC": {
+      "Left Ear": {
+        "250 Hz": 0,
+        "500 Hz": 0,
+        "1000 Hz": 0,
+        "2000 Hz": 0,
+        "4000 Hz": 0,
+        "8000 Hz": 0
+      },
+      "Right Ear": {
+        "250 Hz": 0,
+        "500 Hz": 0,
+        "1000 Hz": 0,
+        "2000 Hz": 0,
+        "4000 Hz": 0,
+        "8000 Hz": 0
+      }
+    },
+    "Type": "Conductive/Sensorineural/Mixed",
+    "Degree": "Normal/Slight/Mild/Moderate/Moderately Severe/Severe/Profound",
+    "Configuration": "High-Frequency/Low-Frequency/Bilateral/Unilateral/Symmetrical/Asymmetrical"
+  }
+]

@@ -13,12 +13,13 @@
 /*************************************/
 
 Object.freeze(HEARING_DEGREES = {
-  NORMAL:          { MIN: 0,   MAX: 20 },
-  MILD:            { MIN: 21,  MAX: 40 },
-  MODERATE:        { MIN: 41,  MAX: 55 },
-  MODERATE_SEVERE: { MIN: 56,  MAX: 70 },
-  SEVERE:          { MIN: 71,  MAX: 90 },
-  PROFOUND:        { MIN: 91,  MAX: 100 }
+  NORMAL:          { MIN: -10,  MAX: 15  },
+  SLIGHT:          { MIN:  16,  MAX: 25  },
+  MILD:            { MIN:  26,  MAX: 40  },
+  MODERATE:        { MIN:  41,  MAX: 55  },
+  MODERATE_SEVERE: { MIN:  56,  MAX: 70  },
+  SEVERE:          { MIN:  71,  MAX: 90  },
+  PROFOUND:        { MIN:  91,  MAX: 100 }
 });
 
 const roundToNearest5 = (dB) => Math.round(dB / 5) * 5;
@@ -68,17 +69,12 @@ function generateConductive(otherArgs) {
   let [min, max] = [...otherArgs];
 
   return {
-    '250 Hz':                  getRandomInt_Range(min, max),
-    '500 Hz':                  getRandomInt_Range(min, max),
-    '1000 Hz':                 getRandomInt_Range(min, max),
-    '2000 Hz':                 getRandomInt_Range(min, max),
-    '4000 Hz':                 getRandomInt_Range(min, max),
-    '8000 Hz':                 getRandomInt_Range(min, max),
-    'Degree of Hearing Loss':  null,
-    'Conductive':              null,
-    'Sensorineural':           null,
-    'High-Frequency':          null,
-    'Low-Frequency':           null,
+    '250 Hz':  getRandomInt_Range(min, max),
+    '500 Hz':  getRandomInt_Range(min, max),
+    '1000 Hz': getRandomInt_Range(min, max),
+    '2000 Hz': getRandomInt_Range(min, max),
+    '4000 Hz': getRandomInt_Range(min, max),
+    '8000 Hz': getRandomInt_Range(min, max)
   };
 }
 
@@ -152,7 +148,21 @@ function generateDataSets(type, numSets, otherArgs) {
   let dataArr = [];
 
   while (numSets-- > 0) {
-    dataArr.push(generateOneEarSet(type, otherArgs));
+    dataArr.push(
+      {
+        'Type':          'null',
+        'Degree':        'null',
+        'Configuration': 'null',
+        'AC': {
+          'Left Ear':     generateOneEarSet(type, otherArgs),
+          'Right Ear':    generateOneEarSet(type, otherArgs)
+        },
+        'BC': {
+          'Left Ear':     generateOneEarSet(type, otherArgs),
+          'Right Ear':    generateOneEarSet(type, otherArgs)
+        }
+      }
+    );
   }
 
   return dataArr;

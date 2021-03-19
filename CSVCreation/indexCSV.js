@@ -1,7 +1,8 @@
 /********************************************/
-/*                 index.js                 */
+/*               indexCSV.js                */
 /*                                          */
-/* Holds the main() function.               */
+/* Holds the main() function for            */
+/* generating CSV data.                     */
 /*                                          */
 /* @author: Kyra Taylor                     */
 /* @date:   02/01/2021                      */
@@ -12,16 +13,9 @@
 /*              IMPORTS              */
 /*************************************/
 
-const { writeJSONFile } = require('./JSONCreation/JSONFileIO');
-
-const {
-  dataFilePath,
-  setup,
-  createData,
-  printStats
-} = require('./JSONCreation/MainHelpers');
-
-const { cleanseData } = require('./DataManipulation/CleanseData');
+const { writeCSVFile } = require('./CSVFileIO');
+const { dataFilePath, setup, createData, printStats } = require('./MainHelpers');
+const { cleanseData } = require('../DataManipulation/CleanseData');
 
 
 
@@ -45,13 +39,13 @@ function main() {
     let dataObj = setup();
     let prevLength = dataObj.length;
 
-    // Generate and classify new data.
-    //console.log('Generating the data. This may take a while.')
+    // // Generate and classify new data.
+    console.log('Generating the data. This may take a while.');
     let newDataObj = createData(dataObj);
     let newLength = newDataObj.length;
 
-    // Cleanse the data.
-    // console.log('Cleansing the data. This may take a while.')
+    // // Cleanse the data.
+    console.log('Cleansing the data. This may take a while.');
     cleanedObj = cleanseData(newDataObj);
     let cleanedLength = cleanedObj.length;
 
@@ -65,8 +59,8 @@ function main() {
 
   // Save the new data.
   try {
-    writeJSONFile(dataFilePath, cleanedObj);
-    console.log(`New data successfully saved to ${dataFilePath}`)
+    writeCSVFile(dataFilePath, cleanedObj);
+    console.log(`New data successfully saved to ${dataFilePath}`);
   }
   catch (err) {
     console.log(`An error occurred while saving new data: \n'${err}'\n`);
