@@ -56,11 +56,6 @@ function setup() {
 }
 
 
-// function getCurrentSetNo(dataObj) {
-//   return dataObj[dataObj.length - 1]['Set No.'] + 1;
-// }
-
-
 /*
  * createData() Function
 *
@@ -114,6 +109,6 @@ function printStats(prevLen, newLen, cleanLen) {
 
 
 
-/********************************************/
+/***************************************************************/
 
 module.exports = { dataFilePath, setup, createData, printStats };

@@ -13,13 +13,19 @@
 const isInRange = (x, min, max) => (x - min) * (x - max) <= 0;
 
 
+// Returns true if both x and y are between min and max.
+function isInRange_TwoValues(x, y, min, max) {
+  return isInRange(x, min, max) && isInRange(y, min, max);
+}
+
+
 
 /*************************************/
 /*       AIR-BONE GAP FUNCTION       */
 /*************************************/
 
 /* 
- * getAverageDecibel_BothEars() Function
+ * abgIsGreaterThan10() Function
  *
  * Determines if the Air-Bone Gap (ABG)
  * is <= 10 or > 10 for all frequencies.
@@ -34,14 +40,14 @@ const isInRange = (x, min, max) => (x - min) * (x - max) <= 0;
  * 
  * @return: a Bool: true if all values are <= 10.
  */
-function abgIsLessThan10(valuesAC, valuesBC) {
+function abgIsGreaterThan10(valuesAC, valuesBC) {
   let diagnosis = [];
   let abg = 0;
 
   // ABG = AC Threshold – BC Threshold
   for (let i = 0; i < valuesAC.length; i++) {
     abg = valuesAC[i] - valuesBC[i];
-    diagnosis.push(abg <= 10? true : false);
+    diagnosis.push(abg > 10? true : false);
   }
 
   return diagnosis.every(e => e === true);
@@ -78,6 +84,7 @@ function getEarValues(obj) {
 
 module.exports = {
   isInRange,
-  abgIsLessThan10,
+  isInRange_TwoValues,
+  abgIsGreaterThan10,
   getEarValues
 };

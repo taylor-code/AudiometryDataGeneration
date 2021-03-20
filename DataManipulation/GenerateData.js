@@ -31,16 +31,15 @@ const roundToNearest5 = (dB) => Math.round(dB / 5) * 5;
 /*************************************/
 
 /* 
- * getRandomInt_Range() Function
+ * getRandomInt_InRange() Function
  *
  * Generates a random integer between min and max.
  *
- * @param: min, an Int.
- * @param: max, an Int.
+ * @params: min (Int) and max (Int).
  *
  * @return: an Int.
  */
-function getRandomInt_Range(min, max) {
+function getRandomInt_InRange(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return roundToNearest5(Math.floor(Math.random() * (max - min) + min));
@@ -55,26 +54,29 @@ function getRandomInt_Range(min, max) {
 /* 
  * generateConductive() Function
  *
- * Generates random decibel values
- * for conductive hearing loss.
+ * Generates random decibel values for
+ * conductive hearing loss. The bone
+ * conduction (BC) values are in the
+ * normal range.
  *
  * @param: otherArgs, an array of two arguments:
  *         1. min, an Int.
  *         2. max, an Int.
  *
- * @return: an Object with (possible)
+ * @return: an Object depicting (possible)
  *          conductive hearing loss.
  */
 function generateConductive(otherArgs) {
-  let [min, max] = [...otherArgs];
+  const NORMAL_MIN = HEARING_DEGREES.NORMAL.MIN;
+  const NORMAL_MAX = HEARING_DEGREES.NORMAL.MAX;
+  const [min, max] = [...otherArgs];
 
   return {
-    '250 Hz':  getRandomInt_Range(min, max),
-    '500 Hz':  getRandomInt_Range(min, max),
-    '1000 Hz': getRandomInt_Range(min, max),
-    '2000 Hz': getRandomInt_Range(min, max),
-    '4000 Hz': getRandomInt_Range(min, max),
-    '8000 Hz': getRandomInt_Range(min, max)
+    'Type':          'null',
+    'Degree':        'null',
+    'Configuration': 'null',
+    'AC':             generateSet_BothEars(min, max),
+    'BC':             generateSet_BothEars(NORMAL_MIN, NORMAL_MAX)
   };
 }
 
@@ -115,20 +117,32 @@ function getGenerationTypeFunction(type) {
 /*************************************/
 
 /* 
- * generateOneEarSet() Function
+ * generateSet_BothEars() Function
  *
- * Generates random decibel values.
- * Returns a data set for one ear.
+ * @param: min, an Int.
+ * @param: max, an Int.
  *
- * @param: type, a String of the hearing loss type.
- * @param: otherArgs, an Array of arguments
- *         for the specific generation function.
- *
- * @return: an Object with hearing data.
+ * @return: a data set Object for both ears.
  */
-function generateOneEarSet(type, otherArgs) {
-  let func = getGenerationTypeFunction(type);
-  return func(otherArgs);
+function generateSet_BothEars(min, max) {
+  return {
+    'Left Ear': {
+      '250 Hz':  getRandomInt_InRange(min, max),
+      '500 Hz':  getRandomInt_InRange(min, max),
+      '1000 Hz': getRandomInt_InRange(min, max),
+      '2000 Hz': getRandomInt_InRange(min, max),
+      '4000 Hz': getRandomInt_InRange(min, max),
+      '8000 Hz': getRandomInt_InRange(min, max)
+    },
+    'Right Ear': {
+      '250 Hz':  getRandomInt_InRange(min, max),
+      '500 Hz':  getRandomInt_InRange(min, max),
+      '1000 Hz': getRandomInt_InRange(min, max),
+      '2000 Hz': getRandomInt_InRange(min, max),
+      '4000 Hz': getRandomInt_InRange(min, max),
+      '8000 Hz': getRandomInt_InRange(min, max)
+    }
+  };
 }
 
 
@@ -146,24 +160,9 @@ function generateOneEarSet(type, otherArgs) {
  */
 function generateDataSets(type, numSets, otherArgs) {
   let dataArr = [];
+  const func = getGenerationTypeFunction(type);
 
-  while (numSets-- > 0) {
-    dataArr.push(
-      {
-        'Type':          'null',
-        'Degree':        'null',
-        'Configuration': 'null',
-        'AC': {
-          'Left Ear':     generateOneEarSet(type, otherArgs),
-          'Right Ear':    generateOneEarSet(type, otherArgs)
-        },
-        'BC': {
-          'Left Ear':     generateOneEarSet(type, otherArgs),
-          'Right Ear':    generateOneEarSet(type, otherArgs)
-        }
-      }
-    );
-  }
+  while (numSets-- > 0) dataArr.push(func(otherArgs));
 
   return dataArr;
 }

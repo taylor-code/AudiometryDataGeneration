@@ -72,7 +72,7 @@ Bone Conduction pure-tone average (BCPTA)
 Air-Bone Gap (ABG) at a given frequency: The difference between the AC and BC thresholds at a given frequency. (ABG = AC Threshold - BC Threshold).
 
     if (-10   <= BCPTA <= 15  dB)  AND (-10  <= ACPTA <= 15  dB) AND (ABG <= 10 dB for all frequencies)  => Normal Hearing
-	if (-10   <= BCPTA <= 15  dB)  AND (-10  <= ACPTA <= 15  dB) AND (ABG >  10 dB for all frequencies)  => Conductive Hearing Loss
+	if (-10   <= BCPTA <= 15  dB)  AND (-10  <= ACPTA <= 15  dB) AND (ABG >  10 dB for all frequencies)  => Normal Conductive Hearing Loss
     if (-10   <= BCPTA <= 15  dB)  AND ( 15  <  ACPTA <= 25  dB) AND (ABG >  10 dB for all frequencies)  => Slight Conductive Hearing Loss	
     if (-10   <= BCPTA <= 15  dB)  AND ( 25  <  ACPTA <= 40  dB) AND (ABG >  10 dB for all frequencies)  => Mild Conductive Hearing Loss
     if (-10   <= BCPTA <= 15  dB)  AND ( 40  <  ACPTA <= 55  dB) AND (ABG >  10 dB for all frequencies)  => Moderate Conductive Hearing Loss
