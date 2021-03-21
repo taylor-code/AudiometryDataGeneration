@@ -27,7 +27,7 @@ const roundToNearest5 = (dB) => Math.round(dB / 5) * 5;
 
 
 /*************************************/
-/*         RANDOM FUNCTIONS          */
+/*          RANDOM FUNCTION          */
 /*************************************/
 
 /* 
@@ -48,79 +48,13 @@ function getRandomInt_InRange(min, max) {
 
 
 /*************************************/
-/* HEARING TYPE GENERATION FUNCTIONS */
-/*************************************/
-
-/* 
- * generateConductive() Function
- *
- * Generates random decibel values for
- * conductive hearing loss. The bone
- * conduction (BC) values are in the
- * normal range.
- *
- * @param: otherArgs, an array of two arguments:
- *         1. min, an Int.
- *         2. max, an Int.
- *
- * @return: an Object depicting (possible)
- *          conductive hearing loss.
- */
-function generateConductive(otherArgs) {
-  const NORMAL_MIN = HEARING_DEGREES.NORMAL.MIN;
-  const NORMAL_MAX = HEARING_DEGREES.NORMAL.MAX;
-  const [min, max] = [...otherArgs];
-
-  return {
-    'Type':          'null',
-    'Degree':        'null',
-    'Configuration': 'null',
-    'AC':             generateSet_BothEars(min, max),
-    'BC':             generateSet_BothEars(NORMAL_MIN, NORMAL_MAX)
-  };
-}
-
-
-/* 
- * generateSensorineural() Function
- *
- * Generates random decibel values
- * for sensorineural hearing loss.
- *
- * @param: otherArgs, an array.
- *
- * @return: an Object with sensorineural hearing loss.
- */
-function generateSensorineural(otherArgs) {
-  return undefined;
-}
-
-
-/*
- * getGenerationTypeFunction() Function
- *
- * @param: type, a String.
- * @return: a Function.
- */
-function getGenerationTypeFunction(type) {
-  const generationFunctions = {
-    'conductive':    generateConductive,
-    'sensorineural': generateSensorineural,
-  };
-  return generationFunctions[type]
-}
-
-
-
-/*************************************/
 /*     DATA GENERATION FUNCTIONS     */
 /*************************************/
 
 /* 
  * generateSet_BothEars() Function
  *
- * @param: min, an Int.
- * @param: max, an Int.
+ * @params: min (Int) and max (Int).
  *
  * @return: a data set Object for both ears.
  */
@@ -151,18 +85,16 @@ function generateSet_BothEars(min, max) {
  *
  * Generates hearing data sets.
  *
- * @param: type, a String of the hearing loss type.
+ * @param: func, the data generation Function.
  * @param: numSets, an Int of sets to create.
- * @param: otherArgs, an Array of arguments
- *         for the specific generation function.
+ * @params: min (Int) and max (Int).
  *
  * @return: dataArr, an Array of hearing sets.
  */
-function generateDataSets(type, numSets, otherArgs) {
+function generateDataSets(func, numSets, min, max) {
   let dataArr = [];
-  const func = getGenerationTypeFunction(type);
 
-  while (numSets-- > 0) dataArr.push(func(otherArgs));
+  while (numSets-- > 0) dataArr.push(func(min, max));
 
   return dataArr;
 }
@@ -173,5 +105,6 @@ function generateDataSets(type, numSets, otherArgs) {
 
 module.exports = {
   HEARING_DEGREES,
+  generateSet_BothEars,
   generateDataSets
 };

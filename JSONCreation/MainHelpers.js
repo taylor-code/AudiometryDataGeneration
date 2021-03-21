@@ -16,8 +16,8 @@ const prevDataFilePath = './JSONData/PreviousDataJSON.json';
 const dataFilePath = './JSONData/AudiometryDataJSON.json';
 
 const { readJSONFile, writeJSONFile } = require('./JSONFileIO');
-const { classifyData } = require('../DataManipulation/ClassifyData');
-const { generateConductive } = require('../HearingLossTypes/Conductive');
+const { classifyData } = require('../DataManipulation/Classify/ClassifyData');
+const { generateHearingLossType } = require('../DataManipulation/Generate/GenerateType');
 
 
 
@@ -63,9 +63,14 @@ function setup() {
  */
 function createData(dataObj) {
 
-  /* VARIABLES */
+  /* VARIABLES/CONSTANTS */
+  
   let dataArr = undefined;
-  let numSets = 1;
+  const numSets = 1;
+
+  const HEARING_LOSS_TYPES = [
+    'CONDUCTIVE', 'SENSORINEURAL'
+  ];
 
   const HEARING_DEGREES = [
     'NORMAL', 'SLIGHT', 'MILD', 'MODERATE',
@@ -74,11 +79,11 @@ function createData(dataObj) {
 
 
   /* GENERATE DATA */
-
-  // Conductive
-  for (let degree of HEARING_DEGREES) {
-    dataArr = generateConductive(numSets, degree);
-    dataObj = dataObj.concat(classifyData(dataArr))
+  for (let type of HEARING_LOSS_TYPES) {
+    for (let degree of HEARING_DEGREES) {
+      dataArr = generateHearingLossType(type, numSets, degree);
+      dataObj = dataObj.concat(classifyData(dataArr));
+    }
   }
 
   return dataObj;

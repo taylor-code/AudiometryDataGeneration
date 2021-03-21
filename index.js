@@ -12,6 +12,8 @@
 /*              IMPORTS              */
 /*************************************/
 
+const { cleanseData } = require('./DataManipulation/CleanseData');
+
 const { writeJSONFile } = require('./JSONCreation/JSONFileIO');
 
 const {
@@ -20,8 +22,6 @@ const {
   createData,
   printStats
 } = require('./JSONCreation/MainHelpers');
-
-const { cleanseData } = require('./DataManipulation/CleanseData');
 
 
 
@@ -46,12 +46,12 @@ function main() {
     let prevLength = dataObj.length;
 
     // Generate and classify new data.
-    //console.log('Generating the data. This may take a while.')
+    console.log('Generating the data.');
     let newDataObj = createData(dataObj);
     let newLength = newDataObj.length;
 
     // Cleanse the data.
-    // console.log('Cleansing the data. This may take a while.')
+    console.log('Cleansing the data. This may take a while.');
     cleanedObj = cleanseData(newDataObj);
     let cleanedLength = cleanedObj.length;
 
@@ -66,7 +66,7 @@ function main() {
   // Save the new data.
   try {
     writeJSONFile(dataFilePath, cleanedObj);
-    console.log(`New data successfully saved to ${dataFilePath}`)
+    console.log(`New data successfully saved to ${dataFilePath}`);
   }
   catch (err) {
     console.log(`An error occurred while saving new data: \n'${err}'\n`);

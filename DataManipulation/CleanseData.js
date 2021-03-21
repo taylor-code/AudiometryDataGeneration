@@ -66,34 +66,34 @@ function removeDuplicates(data) {
 /* 
  * sortDataObj() Function
  * 
- * Sorts alphabetically by hearing degree,
- * then sorts by conductive hearing loss.
+ * Sorts alphabetically by hearing loss
+ * type, then sorts by hearing loss degree.
  */
 function sortDataObj(dataObj) {
   return dataObj.sort((a, b) => {
-    let diff = sortByDegree(a, b);
-    return diff !== 0 ? diff : sortByType(a, b);
+    let diff = sortByType(a, b);
+    return diff !== 0 ? diff : sortByDegree(a, b);
   });
-}
-
-
-/* 
- * sortByDegree() Function
- * 
- * Sorts alphabetically by hearing degree.
- */
-function sortByDegree(a, b) {
-  return a['Degree'].localeCompare(b['Degree']);
 }
 
 
 /* 
  * sortByType() Function
  * 
- * Groups conductive data and groups sensorineural data.
+ * Sorts alphabetically by hearing loss type.
  */
 function sortByType(a, b) {
-  return String(a['Type']).localeCompare(String(b['Type']));
+  return a['Type'].localeCompare(b['Type']);
+}
+
+
+/* 
+ * sortByDegree() Function
+ * 
+ * Sorts alphabetically by hearing loss degree.
+ */
+function sortByDegree(a, b) {
+  return String(a['Degree']).localeCompare(String(b['Degree']));
 }
 
 

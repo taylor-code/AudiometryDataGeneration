@@ -43,14 +43,14 @@ function classifyConductive(averageAC, averageBC, abgGreater10) {
     if (isInRange(averageAC, -10, 15) && !abgGreater10) return 'Normal';
 
     if (abgGreater10) {
-      // Note: The 'Normal Conductive' statement never gets returned:
+      // Note: The 'Normal Conductive' statement has never been returned:
       if (isInRange(averageAC, -10, 15)) return 'Normal Conductive';
       if (isInRange(averageAC,  16, 25)) return 'Slight';
       if (isInRange(averageAC,  26, 40)) return 'Mild';
       if (isInRange(averageAC,  41, 55)) return 'Moderate';
       if (isInRange(averageAC,  56, 70)) return 'Moderately-Severe';
       if (isInRange(averageAC,  71, 90)) return 'Severe';
-      return 'Profound';
+      if (averageAC > 90) return 'Profound';
     }
   }
 
@@ -74,14 +74,13 @@ function classifyConductive(averageAC, averageBC, abgGreater10) {
  */
 function classifySensorineural(averageAC, averageBC, abgLess10) {
   if (abgLess10) {
-    // Might need to delete the "Normal" statement:
     if (isInRange_TwoValues(averageAC, averageBC, -10, 15)) return 'Normal';
-    if (isInRange_TwoValues(averageAC, averageBC, 16, 25)) return 'Slight';
-    if (isInRange_TwoValues(averageAC, averageBC, 26, 40)) return 'Mild';
-    if (isInRange_TwoValues(averageAC, averageBC, 41, 55)) return 'Moderate';
-    if (isInRange_TwoValues(averageAC, averageBC, 56, 70)) return 'Moderately-Severe';
-    if (isInRange_TwoValues(averageAC, averageBC, 71, 90)) return 'Severe';
-    return 'Profound';
+    if (isInRange_TwoValues(averageAC, averageBC,  16, 25)) return 'Slight';
+    if (isInRange_TwoValues(averageAC, averageBC,  26, 40)) return 'Mild';
+    if (isInRange_TwoValues(averageAC, averageBC,  41, 55)) return 'Moderate';
+    if (isInRange_TwoValues(averageAC, averageBC,  56, 70)) return 'Moderately-Severe';
+    if (isInRange_TwoValues(averageAC, averageBC,  71, 90)) return 'Severe';
+    if (averageAC > 90 && averageBC > 90) return 'Profound';
   }
 
   return 'null';
