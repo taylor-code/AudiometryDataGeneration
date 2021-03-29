@@ -1,7 +1,9 @@
 /********************************************/
-/*               CSVFileIO.js               */
+/*              CSVFileRead.js              */
 /*                                          */
-/* Holds the CSV file I/O functions.        */
+/*     ***** CURRENTLY NOT IN USE *****     */
+/*                                          */
+/* Holds the CSV file reading functions.    */
 /*                                          */
 /* @author: Kyra Taylor                     */
 /* @date:   02/01/2021                      */
@@ -10,11 +12,6 @@
 
 const fs = require('fs');
 
-
-
-/*************************************/
-/*        READ CSV FUNCTIONS         */
-/*************************************/
 
 /* 
  * readCSVFile() Function
@@ -68,50 +65,6 @@ function parseCSVData(dataStr) {
 
 
 
-/*************************************/
-/*        WRITE CSV FUNCTIONS        */
-/*************************************/
+/*********************************************/
 
-/* 
- * writeCSVFile() Function
- *
- * Writes a JS Object to a CSV file.
- *
- * @param: filename, a String of the file path.
- * @param: data, a JS Object.
- */
-function writeCSVFile(filename, data) {
-
-  // The first line of a CSV file is the header.
-  let header = Object.keys(data[0]).join(',');
-  let content = (header + '\n');
-  
-  // Convert each object to a CSV string.
-  data.forEach(row => content += Object.values(row).join(',') + '\n');
-
-  fsWriteFile(filename, content);
-}
-
-
-/* 
- * fsWriteFile() Function
- *
- * Synchronously writes a String to a CSV file.
- *
- * @param: filename, a String of the file path.
- * @param: contents, a String.
- */
-function fsWriteFile(filename, contents) {
-  fs.writeFileSync(filename, contents);
-}
-
-
-
-/********************************************/
-
-module.exports = {
-  readCSVFile,
-  writeCSVFile,
-  parseCSVData,
-  fsWriteFile
-};
+module.exports = { readCSVFile, parseCSVData };

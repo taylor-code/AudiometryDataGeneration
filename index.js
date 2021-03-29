@@ -13,7 +13,6 @@
 /*************************************/
 
 const { cleanseData } = require('./DataManipulation/CleanseData');
-
 const { writeJSONFile } = require('./JSONCreation/JSONFileIO');
 
 const {
@@ -32,8 +31,8 @@ const {
 /*
  * main() Function
  *
- * Reads in the a file, creates hearing
- * test data, and writes to a CSV file.
+ * Reads in the JSON file, generates and classifies
+ * hearing test data, and writes to JSON files.
  */
 function main() {
 
