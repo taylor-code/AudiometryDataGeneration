@@ -9,25 +9,16 @@
 /********************************************/
 
 
-/*************************************/
-/*              IMPORTS              */
-/*************************************/
-
 const { writeCSVFile } = require('./CSVFileWrite');
 const { readJSONFile } = require('../JSONCreation/JSONFileIO');
 
 
-
-/*************************************/
-/*          MAIN() FUNCTION          */
-/*************************************/
-
 /*
- * main() Function
+ * convertJSONToCSV() Function
  *
  * Reads in a JSON file and writes to a CSV file.
  */
-function main() {
+function convertJSONToCSV() {
   const JSONFilePath = './JSONData/AudiometryDataJSON.json';
   const CSVFilePath = './CSVData/AudiometryTrain.csv';
 
@@ -50,4 +41,4 @@ function main() {
 
 /********************************************/
 
-main();
+convertJSONToCSV();
