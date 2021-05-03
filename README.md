@@ -10,12 +10,15 @@ JavaScript program to generate audiometry data.
 
 ### On Your Computer:
 1. Download Node.js for your platform: https://nodejs.org/en/download/
-2. In Visual Studio Code, open the AudiometryDataGeneration folder.
-3. Run `npm install` in the terminal to install the dependencies.
-4. Run `node index` in the terminal to run the program.
+2. In Visual Studio Code, open the /AudiometryDataGeneration folder.
+3. Type `npm install` in the terminal to install the dependencies.
+4. Type `npm run json` to run the data generation program.
+5. Type `npm run csv` to convert the JSON file to a CSV file.
 
 
 ## Data
-Previous data is written to CSVData/PreviousDataCSV.csv
-
-New data is written to CSVData/AudiometryDataCSV.csv
+### JSON
+Previous data is written to /JSONData/PreviousDataJSON.json
+New data is written to /CSVData/AudiometryDataJSON.json
+### CSV
+After running the `npm run csv` command, the data is in /CSVData
