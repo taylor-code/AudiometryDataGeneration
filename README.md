@@ -18,7 +18,8 @@ JavaScript program to generate audiometry data.
 
 ## Data
 ### JSON
-- Previous data is written to /JSONData/PreviousDataJSON.json
-- New data is written to /CSVData/AudiometryDataJSON.json
+Previous data is written to /JSONData/PreviousDataJSON.json
+
+New data is written to /CSVData/AudiometryDataJSON.json
 ### CSV
-- After running the `npm run csv` command, the data is in /CSVData
+After running the `npm run csv` command, the data is in /CSVData
