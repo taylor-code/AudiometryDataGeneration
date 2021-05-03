@@ -10,6 +10,8 @@
 
 const fs = require('fs');
 
+const convertObjToJSON = (obj) => JSON.stringify(obj, null, 2)
+
 
 /* 
  * readJSONFile() Function
@@ -22,9 +24,6 @@ const fs = require('fs');
 function readJSONFile(filename) {
   return JSON.parse(fs.readFileSync(filename, 'utf-8'));
 }
-
-
-const convertObjToJSON = (obj) => JSON.stringify(obj, null, 2)
 
 
 /* 

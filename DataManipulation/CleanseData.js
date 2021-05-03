@@ -8,14 +8,34 @@
 /********************************************/
 
 
+let numNulls      = 0
+let numDuplicates = 0
+
+
+/**************************************/
+/*       STATS GETTER FUNCTIONS       */
+/**************************************/
+
+const getNumberOfNulls      = () => numNulls
+const getNumberOfDuplicates = () => numDuplicates
+
+
+
+/**************************************/
+/*       NULL REMOVAL FUNCTION        */
+/**************************************/
+
 /* 
- * cleanseData() Function
+ * removeNullDegrees() Function
  * 
- * Removes duplicate data objects then sorts.
+ * Removes objects where the 'Degree' is 'null'.
+ * 
+ * @param: data, an Array of hearing objects.
  */
-function cleanseData(dataObj) {
-  let unique = removeDuplicates(dataObj);
-  return sortDataObj(unique);
+function removeNullDegrees(data) {
+  const noNulls = data.filter(obj => !obj['Degree'].includes('null'));
+  numNulls = data.length - noNulls.length
+  return noNulls
 }
 
 
@@ -54,6 +74,8 @@ function removeDuplicates(data) {
 
   });
 
+  numDuplicates = duplicates.length
+
   return unique;
 }
 
@@ -64,14 +86,14 @@ function removeDuplicates(data) {
 /**************************************/
 
 /* 
- * sortDataObj() Function
+ * sortData() Function
  * 
  * Sorts alphabetically by hearing loss
  * type, then sorts by hearing loss degree.
  */
-function sortDataObj(dataObj) {
-  return dataObj.sort((a, b) => {
-    let diff = sortByType(a, b);
+function sortData(data) {
+  return data.sort((a, b) => {
+    const diff = sortByType(a, b);
     return diff !== 0 ? diff : sortByDegree(a, b);
   });
 }
@@ -98,6 +120,28 @@ function sortByDegree(a, b) {
 
 
 
+/**************************************/
+/*          CLEANSE FUNCTION          */
+/**************************************/
+
+/* 
+ * cleanseData() Function
+ * 
+ * Removes data objects with 'null' degrees,
+ * removes duplicate data objects, then sorts.
+ */
+function cleanseData(data) {
+  const noNull = removeNullDegrees(data)
+  const unique = removeDuplicates(noNull);
+  return sortData(unique);
+}
+
+
+
 /********************************************/
 
-module.exports = { cleanseData };
+module.exports = {
+  getNumberOfNulls,
+  getNumberOfDuplicates,
+  cleanseData
+};

@@ -12,13 +12,13 @@
 /*              IMPORTS              */
 /*************************************/
 
-const { cleanseData } = require('./DataManipulation/CleanseData');
+const { cleanseData   } = require('./DataManipulation/CleanseData');
+const { createData    } = require('./DataManipulation/CreateData');
 const { writeJSONFile } = require('./JSONCreation/JSONFileIO');
 
 const {
   dataFilePath,
   setup,
-  createData,
   printStats
 } = require('./JSONCreation/MainHelpers');
 
@@ -36,39 +36,34 @@ const {
  */
 function main() {
 
-  let cleanedObj = undefined;
-
+  let cleanedData;
 
   try {
     // Initialize the previous data object.
-    let dataObj = setup();
-    let prevLength = dataObj.length;
+    const prevData = setup();
 
     // Generate and classify new data.
     console.log('Generating the data.');
-    let newDataObj = createData(dataObj);
-    let newLength = newDataObj.length;
+    const data = createData(prevData);
 
     // Cleanse the data.
     console.log('Cleansing the data. This may take a while.');
-    cleanedObj = cleanseData(newDataObj);
-    let cleanedLength = cleanedObj.length;
+    cleanedData = cleanseData(data);
 
-    printStats(prevLength, newLength, cleanedLength);
+    printStats(prevData.length, data.length, cleanedData.length);
   }
   catch (err) {
-    console.log(err.message);
-    return;
+    return console.error(err.message);
   }
 
 
   // Save the new data.
   try {
-    writeJSONFile(dataFilePath, cleanedObj);
+    writeJSONFile(dataFilePath, cleanedData);
     console.log(`New data successfully saved to ${dataFilePath}`);
   }
   catch (err) {
-    console.log(`An error occurred while saving new data: \n'${err}'\n`);
+    console.error(`Error: Unable to save new data: \n'${err}'\n`);
   }
 
 }

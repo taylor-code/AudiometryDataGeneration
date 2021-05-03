@@ -1,7 +1,7 @@
 /********************************************/
 /*              MainHelpers.js              */
 /*                                          */
-/* Holds the helper functions for main()    */
+/* Holds the helper functions for main().   */
 /*                                          */
 /* @author: Kyra Taylor                     */
 /* @date:   02/26/2021                      */
@@ -9,15 +9,18 @@
 
 
 /*************************************/
-/*             CONSTANTS             */
+/*              IMPORTS              */
 /*************************************/
 
 const prevDataFilePath = './JSONData/PreviousDataJSON.json';
-const dataFilePath = './JSONData/AudiometryDataJSON.json';
+const dataFilePath     = './JSONData/AudiometryDataJSON.json';
 
 const { readJSONFile, writeJSONFile } = require('./JSONFileIO');
-const { classifyData } = require('../DataManipulation/Classify/ClassifyData');
-const { generateHearingLossType } = require('../DataManipulation/Generate/GenerateType');
+
+const {
+  getNumberOfNulls,
+  getNumberOfDuplicates
+} = require('../DataManipulation/CleanseData');
 
 
 
@@ -32,11 +35,11 @@ const { generateHearingLossType } = require('../DataManipulation/Generate/Genera
  * and converts the data string to an object.
  */
 function setup() {
-  let dataObj = undefined;
+  let allData;
 
   // Read in the data.
   try {
-    dataObj = readJSONFile(dataFilePath);
+    allData = readJSONFile(dataFilePath);
     console.log('Previous data successfully read.');
   }
   catch (err) {
@@ -45,48 +48,14 @@ function setup() {
 
   // Save the previous data.
   try {
-    writeJSONFile(prevDataFilePath, dataObj);
+    writeJSONFile(prevDataFilePath, allData);
     console.log(`Previous data successfully saved to ${prevDataFilePath}`);
   }
   catch (err) {
     throw Error(`An error occurred while saving previous data: \n'${err}'\n`);
   }
 
-  return dataObj;
-}
-
-
-/*
- * createData() Function
-*
- * Generates and classifies hearing data.
- */
-function createData(dataObj) {
-
-  /* VARIABLES/CONSTANTS */
-  
-  let dataArr = undefined;
-  const numSets = 1;
-
-  const HEARING_LOSS_TYPES = [
-    'CONDUCTIVE', 'SENSORINEURAL'
-  ];
-
-  const HEARING_DEGREES = [
-    'NORMAL', 'SLIGHT', 'MILD', 'MODERATE',
-    'MODERATE_SEVERE', 'SEVERE', 'PROFOUND'
-  ];
-
-
-  /* GENERATE DATA */
-  for (let type of HEARING_LOSS_TYPES) {
-    for (let degree of HEARING_DEGREES) {
-      dataArr = generateHearingLossType(type, numSets, degree);
-      dataObj = dataObj.concat(classifyData(dataArr));
-    }
-  }
-
-  return dataObj;
+  return allData;
 }
 
 
@@ -95,18 +64,20 @@ function createData(dataObj) {
  *
  * Prints the statistics of:
  *   1. How many data sets were generated
- *   2. How many of the data sets were duplicates
- *   3. The current number of data sets.
+ *   2. How many data sets were null
+ *   3. How many of the sets were duplicates
+ *   4. The current number of data sets
  */
 function printStats(prevLen, newLen, cleanLen) {
   const numNewSets = newLen - prevLen;
-  const numDuplicates = newLen - cleanLen;
+  const numDuplicates = getNumberOfDuplicates();
   const dupPercentage = ((numDuplicates / numNewSets) * 100).toFixed(2);
 
   console.log('\n************************************************');
   console.log('                  STATISTICS                  \n');
   console.log(`Generated ${numNewSets} sets of data.`);
-  console.log(`Removed ${numDuplicates} duplicates.`);
+  console.log(`Removed ${getNumberOfNulls()} null sets.`);
+  console.log(`Removed ${getNumberOfDuplicates()} duplicates.`);
   console.log(`\t${dupPercentage}% of the new sets were duplicates.`);
   console.log(`Current number of data sets: ${cleanLen}`);
   console.log('************************************************\n');
@@ -116,4 +87,4 @@ function printStats(prevLen, newLen, cleanLen) {
 
 /***************************************************************/
 
-module.exports = { dataFilePath, setup, createData, printStats };
+module.exports = { dataFilePath, setup, printStats };

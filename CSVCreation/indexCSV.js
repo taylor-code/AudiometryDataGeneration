@@ -20,7 +20,7 @@ const { readJSONFile } = require('../JSONCreation/JSONFileIO');
  */
 function convertJSONToCSV() {
   const JSONFilePath = './JSONData/AudiometryDataJSON.json';
-  const CSVFilePath = './CSVData/AudiometryTrain.csv';
+  const CSVFilePath  = './CSVData/AudiometryTrain.csv';
 
   try {
     // Initialize the previous data object.
@@ -31,8 +31,7 @@ function convertJSONToCSV() {
     console.log(`Data successfully saved to ${CSVFilePath}`);
   }
   catch (err) {
-    console.log(`Error: ${err.message}`);
-    return;
+    return console.error(`Error: ${err.message}`);
   }
 
 }

@@ -79,7 +79,7 @@ function getTypeAsInt(type) {
  * writeCSVFile() Function
  *
  * Writes a JS Object to a CSV file.
- * Currently does not include configuration.
+ * NOTE: Currently does not include configuration.
  *
  * @param: filename, a String of the file path.
  * @param: data, a JS Object.

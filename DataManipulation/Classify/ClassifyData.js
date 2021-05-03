@@ -21,7 +21,8 @@ const {
 
 const {
   classifyConductive,
-  classifySensorineural
+  classifySensorineural,
+  classifyMixed
 } = require('./ClassifyType');
 
 const {
@@ -49,25 +50,23 @@ const {
  * 
  * @return: dataArr with the classifications.
  */
-function classifyData(dataArr) {
-  for (let obj of dataArr) {
+function classifyData(data) {
+  for (let obj of data) {
     
     // Get the calculation variables.
     const { leftAC, rightAC, leftBC, rightBC } = getEarValues(obj);
-    const valuesAC = leftAC.concat(rightAC);
-    const valuesBC = leftBC.concat(rightBC);
-    const averageAC = getAverageBothEars(leftAC, rightAC);
-    const averageBC = getAverageBothEars(leftBC, rightBC);
+    const valuesAC     = leftAC.concat(rightAC);
+    const valuesBC     = leftBC.concat(rightBC);
+    const averageAC    = getAverageBothEars(leftAC, rightAC);
+    const averageBC    = getAverageBothEars(leftBC, rightBC);
     const abgGreater10 = abgIsGreaterThan10(valuesAC, valuesBC);
-    const abgLess10 = !abgGreater10;
+    const abgLess10    = !abgGreater10;
 
     // Classify conductive hearing loss.
     obj['Degree'] = classifyConductive(averageAC, averageBC, abgGreater10);
     
-    // Normal hearing; no hearing loss.
+    
     if (obj['Degree'] === 'Normal') obj['Type'] = 'None';
-
-    // Conductive hearing loss.
     else if (obj['Degree'] !== 'null') obj['Type'] = 'Conductive';
 
     
@@ -77,10 +76,17 @@ function classifyData(dataArr) {
 
       if (obj['Degree'] !== 'null') obj['Type'] = 'Sensorineural';
     }
+
+    // Classify mixed hearing loss.
+    if (obj['Degree'] === 'null') {
+      obj['Degree'] = classifyMixed(averageAC, averageBC, abgLess10);
+
+      if (obj['Degree'] !== 'null') obj['Type'] = 'Mixed';
+    }
     
   }
   
-  return dataArr;
+  return data;
 }
 
 

@@ -86,17 +86,15 @@ function generateSet_BothEars(min, max) {
  * Generates hearing data sets.
  *
  * @param: func, the data generation Function.
- * @param: numSets, an Int of sets to create.
+ * @param: numSets, how many sets to create.
  * @params: min (Int) and max (Int).
  *
- * @return: dataArr, an Array of hearing sets.
+ * @return: data, an Array of hearing sets.
  */
 function generateDataSets(func, numSets, min, max) {
-  let dataArr = [];
-
-  while (numSets-- > 0) dataArr.push(func(min, max));
-
-  return dataArr;
+  let data = [];
+  while (numSets-- > 0) data.push(func(min, max));
+  return data;
 }
 
 
