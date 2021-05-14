@@ -11,11 +11,6 @@
 const fs = require('fs');
 
 
-
-/*************************************/
-/*         HELPER FUNCTIONS          */
-/*************************************/
-
 /* 
  * getHeader() Function
  *
@@ -56,26 +51,6 @@ function getHeader() {
 
 
 /* 
- * getTypeAsInt() Function
- *
- * For binary machine learning,
- * Conductive = 0 and Sensorineural = 1.
- *
- * @param: type, a String of the hearing loss type.
- * 
- * @return: an Int: 0 or 1
- */
-function getTypeAsInt(type) {
-  return type === 'Conductive' ? 0 : 1;
-}
-
-
-
-/*************************************/
-/*        WRITE CSV FUNCTIONS        */
-/*************************************/
-
-/* 
  * writeCSVFile() Function
  *
  * Writes a JS Object to a CSV file.
@@ -93,29 +68,14 @@ function writeCSVFile(filename, data) {
   for (let row of data) {
     [ type, degree, configuration, ACEarSet, BCEarSet ] = Object.values(row);
 
-    if (type === 'Conductive' || type === 'Sensorineural') {
-      content += `${getTypeAsInt(type)},${degree},`;
-      content += Object.values(ACEarSet['Left Ear']).join(',')  + ',';
-      content += Object.values(ACEarSet['Right Ear']).join(',') + ',';
-      content += Object.values(BCEarSet['Left Ear']).join(',')  + ',';
-      content += Object.values(BCEarSet['Right Ear']).join(',') + '\n';
-    }
+    content += `${type},${degree},`;
+    content += Object.values(ACEarSet['Left Ear']).join(',')  + ',';
+    content += Object.values(ACEarSet['Right Ear']).join(',') + ',';
+    content += Object.values(BCEarSet['Left Ear']).join(',')  + ',';
+    content += Object.values(BCEarSet['Right Ear']).join(',') + '\n';
   }
 
-  fsWriteCSVFile(filename, content);
-}
-
-
-/* 
- * fsWriteCSVFile() Function
- *
- * Writes a String to a CSV file.
- *
- * @param: filename, a String of the file path.
- * @param: contents, a String.
- */
-function fsWriteCSVFile(filename, contents) {
-  fs.writeFileSync(filename, contents);
+  fs.writeFileSync(filename, content);
 }
 
 
