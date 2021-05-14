@@ -19,8 +19,8 @@ const { readJSONFile } = require('../JSONCreation/JSONFileIO');
  * Reads in a JSON file and writes to a CSV file.
  */
 function convertJSONToCSV() {
-  const JSONFilePath = './JSONData/AudiometryDataJSON.json';
-  const CSVFilePath  = './CSVData/AudiometryTrain.csv';
+  const JSONFilePath = './JSONData/AudiometryTestDataJSON.json';
+  const CSVFilePath  = './CSVData/AudiometryTest.csv';
 
   try {
     // Initialize the previous data object.
