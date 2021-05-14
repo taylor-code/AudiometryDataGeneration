@@ -16,7 +16,7 @@
 const { classifyData } = require('./Classify/ClassifyData');
 const { generateHearingLossType } = require('./Generate/GenerateType');
 
-const NUM_SETS = 500;
+const NUM_SETS = 80;
 
 const HEARING_DEGREES = [
   'SLIGHT', 'MILD', 'MODERATE',
