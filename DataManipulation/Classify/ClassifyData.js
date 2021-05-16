@@ -40,57 +40,45 @@ const {
 /*     CLASSIFICATION FUNCTIONS      */
 /*************************************/
 
+function getClassificationFunction(type) {
+  const classificationFunctions = {
+    'Conductive':    classifyConductive,
+    'Sensorineural': classifySensorineural,
+    'Mixed':         classifyMixed
+  };
+  return classificationFunctions[type];
+}
+
+
 /* 
- * classifyData() Function
- *
- * For each object in dataArr,
- * classifies the hearing loss.
- *
- * @param: dataArr, an Array of earing data objects.
- * 
- * @return: dataArr with the classifications.
+ * Classifies the degree and type of hearing loss.
  */
-function classifyData(data) {
-  for (let obj of data) {
-    
-    // Get the calculation variables.
-    const { leftAC, rightAC, leftBC, rightBC } = getEarValues(obj);
-    const valuesAC     = leftAC.concat(rightAC);
-    const valuesBC     = leftBC.concat(rightBC);
-    const averageAC    = getAverageBothEars(leftAC, rightAC);
-    const averageBC    = getAverageBothEars(leftBC, rightBC);
-    const abgGreater10 = abgIsGreaterThan10(valuesAC, valuesBC);
-    const abgLess10    = !abgGreater10;
+function classifyDataSet(set, tryType) {
 
-    // Classify conductive hearing loss.
-    obj['Degree'] = classifyConductive(averageAC, averageBC, abgGreater10);
-    
-    
-    if (obj['Degree'] === 'Normal') obj['Type'] = 'None';
-    else if (obj['Degree'] !== 'null') obj['Type'] = 'Conductive';
+  // Get the calculation variables.
+  const { leftAC, rightAC, leftBC, rightBC } = getEarValues(set);
+  const valuesAC     = leftAC.concat(rightAC);
+  const valuesBC     = leftBC.concat(rightBC);
+  const averageAC    = getAverageBothEars(leftAC, rightAC);
+  const averageBC    = getAverageBothEars(leftBC, rightBC);
+  const abgGreater10 = abgIsGreaterThan10(valuesAC, valuesBC);
 
-    
-    // Classify sensorineural hearing loss.
-    if (obj['Degree'] === 'null') {
-      obj['Degree'] = classifySensorineural(averageAC, averageBC, abgLess10);
+  // Classify the degree.
+  const func = getClassificationFunction(tryType);
+  set['Degree'] = func(averageAC, averageBC, abgGreater10);
 
-      if (obj['Degree'] !== 'null') obj['Type'] = 'Sensorineural';
-    }
+  // Return `undefined` for invalid sets.
+  if (set['Degree'] === 'null') return;
 
-    // Classify mixed hearing loss.
-    if (obj['Degree'] === 'null') {
-      obj['Degree'] = classifyMixed(averageAC, averageBC, abgLess10);
+  // Set the type.
+  if (set['Degree'] === 'Normal') set['Type'] = 'None';
+  else set['Type'] = tryType;
 
-      if (obj['Degree'] !== 'null') obj['Type'] = 'Mixed';
-    }
-    
-  }
-  
-  return data;
+  return set;
 }
 
 
 
 /********************************************/
 
-module.exports = { classifyData };
+module.exports = { classifyDataSet };

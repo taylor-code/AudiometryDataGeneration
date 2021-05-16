@@ -51,7 +51,7 @@ A classification will consist of a three tuple: (Type of Hearing Loss, Degree of
 Examples: 
 
 (Conductive, Severe, Bilateral)
-(Sensorineural, Profound, Unilateral - Left Air)
+(Sensorineural, Profound, Unilateral - Left Ear)
 (Mixed, Moderate, Bilateral - Low-Frequency)
 (Conductive, Severe, Symmetrical)
 (Sensorineural, Profound, Asymmetrical)

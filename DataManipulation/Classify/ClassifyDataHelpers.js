@@ -19,63 +19,44 @@ function isInRange_TwoValues(x, y, min, max) {
 }
 
 
-
-/*************************************/
-/*       AIR-BONE GAP FUNCTION       */
-/*************************************/
-
-/* 
- * abgIsGreaterThan10() Function
- *
- * Determines if the Air-Bone Gap (ABG)
- * is <= 10 or > 10 for all frequencies.
+/*
+ * Gets the decibel values.
  * 
- * Used to determine conductive and
- * sensorineural hearing loss types.
- * 
- * @param: valuesAC, an Int array of decibel
- *         values for air conduction (AC).
- * @param: valuesBC, an Int array of decibel
- *         values for bone conduction (BC).
- * 
- * @return: a Bool: true if all values are <= 10.
+ * @return: an Object of four Arrays.
  */
-function abgIsGreaterThan10(valuesAC, valuesBC) {
-  let diagnosis = [];
-  let abg = 0;
+function getEarValues(obj) {
+  const leftAC  = Object.values(obj['AC']['Left Ear']);
+  const rightAC = Object.values(obj['AC']['Right Ear']);
 
-  // ABG = AC Threshold – BC Threshold
-  for (let i = 0; i < valuesAC.length; i++) {
-    abg = valuesAC[i] - valuesBC[i];
-    diagnosis.push(abg > 10? true : false);
-  }
+  const leftBC  = Object.values(obj['BC']['Left Ear']);
+  const rightBC = Object.values(obj['BC']['Right Ear']);
 
-  return diagnosis.every(e => e === true);
+  return { leftAC, rightAC, leftBC, rightBC };
 }
 
 
 
 /*************************************/
-/*      GET EAR VALUES FUNCTION      */
+/*       AIR-BONE GAP FUNCTION       */
 /*************************************/
 
-/* 
- * getEarValues() Function
- *
- * Gets the frequency decibel values.
+/*
+ * Used to determine conductive and
+ * sensorineural hearing loss types.
  * 
- * @param: obj, a dataset Object.
+ * @param: valuesAC, dBs for air conduction (AC).
+ * @param: valuesBC, dBs for bone conduction (BC).
  * 
- * @return: an Object of four Arrays.
+ * @return: a Bool: true if all values are > 10.
  */
-function getEarValues(obj) {
-  const leftAC = Object.values(obj['AC']['Left Ear']);
-  const rightAC = Object.values(obj['AC']['Right Ear']);
+function abgIsGreaterThan10(valuesAC, valuesBC) {
 
-  const leftBC = Object.values(obj['BC']['Left Ear']);
-  const rightBC = Object.values(obj['BC']['Right Ear']);
+  // ABG = AC Threshold – BC Threshold
+  for (let i = 0; i < valuesAC.length; i++) {
+    if (valuesAC[i] - valuesBC[i] <= 10) return false;
+  }
 
-  return { leftAC, rightAC, leftBC, rightBC };
+  return true;
 }
 
 
@@ -85,6 +66,6 @@ function getEarValues(obj) {
 module.exports = {
   isInRange,
   isInRange_TwoValues,
-  abgIsGreaterThan10,
-  getEarValues
+  getEarValues,
+  abgIsGreaterThan10
 };

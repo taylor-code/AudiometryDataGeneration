@@ -9,10 +9,14 @@
 
 
 /*************************************/
-/*             CONSTANTS             */
+/*         IMPORTS/CONSTANTS         */
 /*************************************/
 
-Object.freeze(HEARING_DEGREES = {
+const { deepFreeze } = require('../../Utility/Utility');
+
+const roundToNearest5 = (dB) => Math.round(dB / 5) * 5;
+
+HEARING_DEGREES = {
   NORMAL:          { MIN: -10,  MAX: 15  },
   SLIGHT:          { MIN:  16,  MAX: 25  },
   MILD:            { MIN:  26,  MAX: 40  },
@@ -20,9 +24,10 @@ Object.freeze(HEARING_DEGREES = {
   MODERATE_SEVERE: { MIN:  56,  MAX: 70  },
   SEVERE:          { MIN:  71,  MAX: 90  },
   PROFOUND:        { MIN:  91,  MAX: 100 }
-});
+};
 
-const roundToNearest5 = (dB) => Math.round(dB / 5) * 5;
+// Prevent modification of this object.
+deepFreeze(HEARING_DEGREES);
 
 
 
@@ -30,14 +35,8 @@ const roundToNearest5 = (dB) => Math.round(dB / 5) * 5;
 /*          RANDOM FUNCTION          */
 /*************************************/
 
-/* 
- * getRandomInt_InRange() Function
- *
+/*
  * Generates a random integer between min and max.
- *
- * @params: min (Int) and max (Int).
- *
- * @return: an Int.
  */
 function getRandomInt_InRange(min, max) {
   min = Math.ceil(min);
@@ -52,13 +51,9 @@ function getRandomInt_InRange(min, max) {
 /*************************************/
 
 /* 
- * generateSet_BothEars() Function
- *
- * @params: min (Int) and max (Int).
- *
- * @return: a data set Object for both ears.
+ * Generates one data set Object for both ears.
  */
-function generateSet_BothEars(min, max) {
+function generateSet(min, max) {
   return {
     'Left Ear': {
       '250 Hz':  getRandomInt_InRange(min, max),
@@ -80,29 +75,7 @@ function generateSet_BothEars(min, max) {
 }
 
 
-/* 
- * generateDataSets() Function
- *
- * Generates hearing data sets.
- *
- * @param: func, the data generation Function.
- * @param: numSets, how many sets to create.
- * @params: min (Int) and max (Int).
- *
- * @return: data, an Array of hearing sets.
- */
-function generateDataSets(func, numSets, min, max) {
-  let data = [];
-  while (numSets-- > 0) data.push(func(min, max));
-  return data;
-}
 
+/************************************************/
 
-
-/********************************************/
-
-module.exports = {
-  HEARING_DEGREES,
-  generateSet_BothEars,
-  generateDataSets
-};
+module.exports = { HEARING_DEGREES, generateSet };

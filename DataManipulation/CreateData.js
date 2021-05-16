@@ -10,18 +10,15 @@
 
 
 /*************************************/
-/*             CONSTANTS             */
+/*         IMPORTS/CONSTANTS         */
 /*************************************/
 
-const { classifyData } = require('./Classify/ClassifyData');
-const { generateHearingLossType } = require('./Generate/GenerateType');
-
-const NUM_SETS = 80;
+const { generateSets_Type } = require('./Generate/GenerateType');
 
 const HEARING_DEGREES = [
   'SLIGHT', 'MILD', 'MODERATE',
   'MODERATE_SEVERE', 'SEVERE', 'PROFOUND'
-]; 
+];
 
 
 
@@ -30,60 +27,46 @@ const HEARING_DEGREES = [
 /*************************************/
 
 /*
- * createNormalHLData() Function
- *
  * Generates and classifies
  * data with no hearing loss.
  */
-function createNormalHLData(allData) {
-  return generateAndClassify(allData, 'CONDUCTIVE', ['NORMAL']);
+function createNormalHLData() {
+  return generateSets_Type('Conductive', ['NORMAL']);
 }
 
 
 /*
- * createMixedHLData() Function
- *
  * Generates and classifies
  * mixed hearing loss data.
  */
-function createMixedHLData(allData) {
+function createMixedHLData() {
+  let data = [];
+
   for (let degree1 of HEARING_DEGREES) {
     for (let degree2 of HEARING_DEGREES) {
       if (degree1 === degree2) break;
-      allData = generateAndClassify(allData, 'MIXED', [degree1, degree2]);
+      data = data.concat(generateSets_Type('Mixed', [degree1, degree2]));
     }
   }
 
-  return allData;
+  return data;
 }
 
 
 /*
- * createCondOrSensHLData() Function
- *
- * Generates and classifies conductive
- * or sensorineural hearing loss data.
+ * Generates conductive or sensorineural
+ * hearing loss data.
  * 
- * @param: type, a String: 'CONDUCTIVE'
- *         or 'SENSORINEURAL'.
+ * @param: type, 'Conductive' or 'Sensorineural'.
  */
-function createCondOrSensHLData(allData, type) {
+function createCondOrSensHLData(type) {
+  let data = [];
+  
   for (let degree of HEARING_DEGREES) {
-    allData = generateAndClassify(allData, type, [degree]);
+    data = data.concat(generateSets_Type(type, [degree]));
   }
 
-  return allData;
-}
-
-
-/*
- * generateAndClassify() Function
- *
- * Generates and classifies data sets.
- */
-function generateAndClassify(allData, type, otherArgs) {
-  const data = generateHearingLossType(type, NUM_SETS, otherArgs);
-  return allData.concat(classifyData(data));
+  return data;
 }
 
 
@@ -93,18 +76,16 @@ function generateAndClassify(allData, type, otherArgs) {
 /*************************************/
 
 /*
- * createData() Function
- *
  * Drives the data generation 
  * and classification process.
  */
-function createData(allData) {
-  allData = createNormalHLData(allData);
-  allData = createMixedHLData(allData);
-  allData = createCondOrSensHLData(allData, 'CONDUCTIVE');
-  allData = createCondOrSensHLData(allData, 'SENSORINEURAL');
+function createData() {
+  let data1 = createCondOrSensHLData('Conductive');
+  const data2 = createMixedHLData();
+  const data3 = createNormalHLData();
+  const data4 = createCondOrSensHLData('Sensorineural');
 
-  return allData;
+  return data1.concat(data2, data3, data4);
 }
 
 

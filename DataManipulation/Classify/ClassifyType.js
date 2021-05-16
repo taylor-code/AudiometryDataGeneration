@@ -22,8 +22,6 @@ const {
 /*************************************/
 
 /* 
- * classifyConductive() Function
- *
  * Conductive hearing loss occurs when the
  * BC test values are in the normal range
  * but the AC test values are not. The Air-
@@ -33,10 +31,7 @@ const {
  *         (air conduction pure-tone average).
  * @param: averageBC, an Int of the BCPTA
  *         (bone conduction pure-tone average).
- * @param: abgGreater10, a Boolean. True if
- *         ABG > 10, false if AGB <= 10.
- * 
- * @return: a String of the hearing degree.
+ * @param: abgGreater10, a Boolean.
  */
 function classifyConductive(averageAC, averageBC, abgGreater10) {
   if (isInRange(averageBC, -10, 15)) {
@@ -59,21 +54,12 @@ function classifyConductive(averageAC, averageBC, abgGreater10) {
 
 
 /* 
- * classifySensorineural() Function
- *
  * Sensorineural hearing loss occurs when the
  * AC and BC test values are within 10 dB of
  * each other at ALL test frequencies.
- *
- * @param: averageAC, an Int of the ACPTA.
- * @param: averageBC, an Int of the BCPTA.
- * @param: abgLess10, a Boolean. True if
- *         ABG <= 10, false if AGB > 10.
- * 
- * @return: a String of the hearing degree. 
  */
-function classifySensorineural(averageAC, averageBC, abgLess10) {
-  if (abgLess10) {
+function classifySensorineural(averageAC, averageBC, abgGreater10) {
+  if (!abgGreater10) {
     if (isInRange_TwoValues(averageAC, averageBC, -10, 15)) return 'Normal';
     if (isInRange_TwoValues(averageAC, averageBC,  16, 25)) return 'Slight';
     if (isInRange_TwoValues(averageAC, averageBC,  26, 40)) return 'Mild';
@@ -88,24 +74,15 @@ function classifySensorineural(averageAC, averageBC, abgLess10) {
 
 
 /* 
- * classifyMixed() Function
- *
- * Mixed hearing loss occurs when both 
- * the AC and BC thresholds show loss,
- * but the Air-Bone-Gap is > 10 dB for
- * all test frequencies.
- *
- * @param: averageAC, an Int of the ACPTA.
- * @param: averageBC, an Int of the BCPTA.
- * @param: abgGreater10, a Boolean.
- * 
- * @return: a String of the hearing degree.
+ * Mixed hearing loss occurs when both the
+ * AC and BC thresholds show loss, but the
+ * ABG is > 10 dB for all test frequencies.
  */
 function classifyMixed(averageAC, averageBC, abgGreater10) {
+  if (!abgGreater10) return 'null';
+
   let acDegree = 'AC: ';
   let bcDegree = 'BC: ';
-
-  if (!abgGreater10) return 'null';
 
   /* Air-Conduction */
   if      (isInRange(averageAC, 16, 25)) acDegree += 'Slight';
