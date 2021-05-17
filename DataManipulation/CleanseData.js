@@ -25,7 +25,6 @@ const getNumDuplicates = () => numDuplicates;
  * @return: unique, an Array of unique objects.
  */
 function removeDuplicates(data) {
-
   const unique     = [];
   const duplicates = [];
   
@@ -98,6 +97,27 @@ function getKeyValueHearingSets(data) {
 }
 
 
+/* 
+ * Separates the sets into two arrays.
+ * Puts 90% of the sets into `trainData`,
+ * and 10% into `testData`.
+ */
+function separateTrainAndTestData(hearingSets) {
+  let testData  = [];
+  let trainData = [];
+  
+  let separator;
+  for (let value of Object.values(hearingSets)) {
+    separator = Math.round(value.length / 10);
+
+    testData  = testData.concat(value.splice(0, separator));
+    trainData = trainData.concat(value);
+  }
+
+  return [ testData, trainData ];
+}
+
+
 
 /**************************************/
 /*          CLEANSE FUNCTION          */
@@ -115,8 +135,7 @@ function cleanseData(data) {
     hearingSets[key] = removeDuplicates(hearingSets[key]);
   }
 
-  // Re-combine the sets into one array.
-  return [].concat.apply([], Object.values(hearingSets));
+  return separateTrainAndTestData(hearingSets);
 }
 
 

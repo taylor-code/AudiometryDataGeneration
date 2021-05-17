@@ -17,7 +17,7 @@
 const { HEARING_DEGREES, generateSet, } = require('./GenerateData');
 const { classifyDataSet } = require('../Classify/ClassifyData');
 
-const NUM_SETS = 5;
+const NUM_SETS = 700;
 
 
 

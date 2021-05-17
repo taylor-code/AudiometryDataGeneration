@@ -1,13 +1,7 @@
 {
   "name": "data-generation",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
-  "scripts": {
-    "json": "node index.js",
-    "csv": "node CSVCreation/indexCSV.js"
-  },
-  "keywords": [],
   "author": "Kyra Taylor",
   "license": "ISC"
 }

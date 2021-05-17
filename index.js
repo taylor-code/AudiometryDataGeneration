@@ -12,15 +12,20 @@
 /*              IMPORTS              */
 /*************************************/
 
-const { cleanseData   } = require('./DataManipulation/CleanseData');
-const { createData    } = require('./DataManipulation/CreateData');
-const { writeJSONFile } = require('./JSONCreation/JSONFileIO');
+const { createData  } = require('./DataManipulation/CreateData');
+const { cleanseData } = require('./DataManipulation/CleanseData');
 
 const {
-  NEW_DATA_PATH,
-  setup,
-  printStats
-} = require('./JSONCreation/MainHelpers');
+  readJSONFile,
+  writeJSONFile
+} = require('./FileIO/JSONFileIO');
+
+const {
+  TRAIN_DATA_PATH,
+  TEST_DATA_PATH,
+  convertJSONToCSV,
+  printStats,
+} = require('./MainHelpers');
 
 
 
@@ -35,40 +40,39 @@ const {
  * hearing test data, and writes to JSON files.
  */
 function main() {
-  console.time('Timer');
+  const args = process.argv.splice(2);
 
-  let cleanedData;
+  console.time('Timer');
 
   try {
     // Initialize the previous data object.
-    let data = setup();
+    // Combine the train and the test data.
+    let data = readJSONFile(TRAIN_DATA_PATH);
+    data = data.concat(readJSONFile(TEST_DATA_PATH));
 
     // Generate and classify new data.
-    let newData = createData();
+    const newData = createData();
     data = data.concat(newData);
     console.log('Generated the data.');
 
     // Cleanse the data.
     console.log('Now cleansing the data. This may take a while.');
-    cleanedData = cleanseData(data);
-    printStats(newData.length, cleanedData.length);
+    const [ testData, trainData ] = cleanseData(data);
+    printStats(newData.length, testData.length, trainData.length);
+
+    // Save the new data.
+    writeJSONFile(TEST_DATA_PATH, testData);
+    writeJSONFile(TRAIN_DATA_PATH, trainData);
+
+    // If the user include '-csv' in the
+    // command, write to the CSV files.
+    if (args.includes('-csv')) convertJSONToCSV(testData, trainData);
   }
   catch (err) {
-    return console.error(err.message);
-  }
-
-
-  // Save the new data.
-  try {
-    writeJSONFile(NEW_DATA_PATH, cleanedData);
-    console.log(`New data successfully saved to ${NEW_DATA_PATH}`);
-  }
-  catch (err) {
-    console.error(`Error: Unable to save new data: \n'${err}'\n`);
+    return console.error(err)//.message);
   }
 
   console.timeEnd('Timer');
-
 }
 
 
