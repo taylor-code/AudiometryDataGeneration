@@ -5,8 +5,11 @@ JavaScript program to generate hearing loss data.
 
 ## How To Run
 
-### On repl.it:
-1. Go to: https://repl.it/@taylorcode/AudiometryDataGeneration
+**Note: Running the program on replit will take 8–10x longer
+than in Visual Studio Code.*
+
+### On replit:
+1. Go to: https://replit.com/@taylorcode/AudiometryDataGeneration
 2. Click the green "run" button.
 
 ### On Your Computer:
@@ -85,7 +88,7 @@ Here is a sample data set:
 ```
 
 One hearing set contains the following information:
-- Air Conduction (AC) Hearing Test Values
-- Bone Conduction (BC) Hearing Test Values
+- Air Conduction (`AC`) Hearing Test Values
+- Bone Conduction (`BC`) Hearing Test Values
 - `Degree`: Normal, Slight, Mild, Moderate, Moderately-Severe, Severe, or Profound
 - `Type`: Conductive, Sensorineural, Mixed, or None (no hearing loss).
