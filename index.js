@@ -40,8 +40,6 @@ const {
  * hearing test data, and writes to JSON files.
  */
 function main() {
-  const args = process.argv.splice(2);
-
   console.time('Timer');
 
   try {
@@ -64,12 +62,11 @@ function main() {
     writeJSONFile(TEST_DATA_PATH, testData);
     writeJSONFile(TRAIN_DATA_PATH, trainData);
 
-    // If the user include '-csv' in the
-    // command, write to the CSV files.
-    if (args.includes('-csv')) convertJSONToCSV(testData, trainData);
+    // Write to the CSV files.
+    convertJSONToCSV(testData, trainData);
   }
   catch (err) {
-    return console.error(err)//.message);
+    return console.error(err.message);
   }
 
   console.timeEnd('Timer');
