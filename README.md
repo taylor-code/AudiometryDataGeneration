@@ -93,4 +93,4 @@ One hearing set contains the following information:
 - Bone Conduction (`BC`) Hearing Test Values
 - `Configuration`: Bilateral, Unilateral
 - `Degree`: Normal, Slight, Mild, Moderate, Moderately-Severe, Severe, or Profound
-- `Type`: Conductive, Sensorineural, Mixed, or None (no hearing loss).
+- `Type`: Conductive, Sensorineural, Mixed, or None (no hearing loss)
