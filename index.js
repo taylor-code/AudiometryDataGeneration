@@ -24,7 +24,7 @@ const {
   TRAIN_DATA_PATH,
   TEST_DATA_PATH,
   convertJSONToCSV,
-  printStats,
+  printStats
 } = require('./MainHelpers');
 
 
@@ -34,8 +34,6 @@ const {
 /*************************************/
 
 /*
- * main() Function
- *
  * Reads in the JSON file, generates and classifies
  * hearing test data, and writes to JSON files.
  */

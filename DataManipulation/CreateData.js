@@ -13,7 +13,7 @@
 /*         IMPORTS/CONSTANTS         */
 /*************************************/
 
-const { generateSets_Type } = require('./Generate/GenerateType');
+const { generate } = require('./Generate/GenerateData');
 
 const HEARING_DEGREES = [
   'SLIGHT', 'MILD', 'MODERATE',
@@ -31,7 +31,7 @@ const HEARING_DEGREES = [
  * data with no hearing loss.
  */
 function createNormalHLData() {
-  return generateSets_Type('Conductive', ['NORMAL']);
+  return generate(['NORMAL'], 'Conductive');
 }
 
 
@@ -45,7 +45,7 @@ function createMixedHLData() {
   for (let degree1 of HEARING_DEGREES) {
     for (let degree2 of HEARING_DEGREES) {
       if (degree1 === degree2) break;
-      data = data.concat(generateSets_Type('Mixed', [degree1, degree2]));
+      data = data.concat(generate([degree1, degree2], 'Mixed'));
     }
   }
 
@@ -63,7 +63,33 @@ function createCondOrSensHLData(type) {
   let data = [];
   
   for (let degree of HEARING_DEGREES) {
-    data = data.concat(generateSets_Type(type, [degree]));
+    data = data.concat(generate([degree], type));
+  }
+
+  return data;
+}
+
+
+
+/*************************************/
+/*     CONFIG CREATION FUNCTIONS     */
+/*************************************/
+
+/*
+ * Generates conductive or sensorineural
+ * unilateral hearing loss data.
+ * 
+ * @param: type, 'Conductive' or 'Sensorineural'.
+ */
+function createUnilateralData(type) {
+  let data = [];
+  let degrees;
+  
+  for (let hlEar of ['Left', 'Right']) {
+    for (let degree of HEARING_DEGREES) {
+      degrees = hlEar === 'Left' ? [degree, 'NORMAL'] : ['NORMAL', degree];
+      data = data.concat(generate(degrees, type, 'Unilateral'));
+    }
   }
 
   return data;
@@ -80,12 +106,14 @@ function createCondOrSensHLData(type) {
  * and classification process.
  */
 function createData() {
-  let data1 = createCondOrSensHLData('Conductive');
+  let   data1 = createCondOrSensHLData('Conductive');
   const data2 = createMixedHLData();
   const data3 = createNormalHLData();
   const data4 = createCondOrSensHLData('Sensorineural');
+  const data5 = createUnilateralData('Conductive');
+  const data6 = createUnilateralData('Sensorineural');
 
-  return data1.concat(data2, data3, data4);
+  return data1.concat(data2, data3, data4, data5, data6);
 }
 
 

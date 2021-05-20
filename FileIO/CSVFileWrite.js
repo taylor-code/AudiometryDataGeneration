@@ -18,6 +18,7 @@ function getHeader() {
   const header = [
     'Type',
     'Degree',
+    'Configuration',
     'AC L 250 Hz',
     'AC L 500 Hz',
     'AC L 1000 Hz',
@@ -54,13 +55,13 @@ function getHeader() {
  */
 function writeCSVFile(filename, data) {
   let content = getHeader() + '\n';
-  let configuration, ACSet, BCSet, degree, type;
+  let ACSet, BCSet, configuration, degree, type;
   
   // Convert each object to a CSV string.
   for (let row of data) {
-    [ configuration, ACSet, BCSet, degree, type ] = Object.values(row);
+    [ ACSet, BCSet, configuration, degree, type ] = Object.values(row);
 
-    content += `${type},${degree},`;
+    content += `${type},${degree},${configuration},`;
     content += Object.values(ACSet['Left Ear']).join(',')  + ',';
     content += Object.values(ACSet['Right Ear']).join(',') + ',';
     content += Object.values(BCSet['Left Ear']).join(',')  + ',';

@@ -80,15 +80,15 @@ function dbAreEqual(obj1, obj2) {
 
 /* 
  * Creates a dictionary of key-value pairs.
- * The key is the Type and Degree, and the
- * value is an array of hearing sets.
+ * The key is Type_Degree_Configuration.
+ * The value is an array of hearing sets.
  */
 function getKeyValueHearingSets(data) {
   let hearingSets = {};
   let key;
 
   for (let datum of data) {
-    key = `${datum['Type']}_${datum['Degree']}`;
+    key = `${datum['Type']}_${datum['Degree']}_${datum['Configuration']}`;
     if (!(key in hearingSets)) hearingSets[key] = [];
     hearingSets[key].push(datum);
   }

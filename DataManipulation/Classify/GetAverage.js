@@ -9,7 +9,7 @@
 /********************************************/
 
 
-// Used by the reduce() method in getAverage().
+// Used by the reduce methods.
 const add = (accumulator, currVal) => accumulator + currVal;
 
 
@@ -17,7 +17,29 @@ const add = (accumulator, currVal) => accumulator + currVal;
  * Given an array of decibel values, returns
  * the average of the first three values.
  */
-const getAverage = arr => arr.slice(0, 3).reduce(add) / 3;
+const getAverage = arr => arr.reduce(add) / arr.length;
+
+
+/*
+ * Given an array of decibel values, returns
+ * the average of the first three values.
+ */
+const getAverageOf3 = arr => getAverage(arr.slice(0, 3));
+
+
+/*
+ * Returns low-frequency pure-tone-average (PTA)
+ * and high-frequency PTA. lowPTA includes the
+ * low Hz values (250, 500, 1000, 2000). highPTA
+ * includes the high Hz values (4000, 8000).
+ */
+function getLowHighPTA(decibels) {
+  const highHz  = decibels.splice(-2);
+  const highPTA = getAverage(highHz);
+  const lowPTA  = getAverage(decibels);
+
+  return [ lowPTA, highPTA ];
+}
 
 
 /* 
@@ -26,8 +48,8 @@ const getAverage = arr => arr.slice(0, 3).reduce(add) / 3;
  * to determine the degree of hearing loss.
  */
 function getPTA(leftAC, rightAC, leftBC, rightBC) {
-  return Math.round((getAverage(leftAC) + getAverage(rightAC) +
-                     getAverage(leftBC) + getAverage(rightBC)) / 4);
+  return Math.round((getAverageOf3(leftAC) + getAverageOf3(rightAC) +
+                     getAverageOf3(leftBC) + getAverageOf3(rightBC)) / 4);
 }
 
 
@@ -36,11 +58,16 @@ function getPTA(leftAC, rightAC, leftBC, rightBC) {
  * ears (for either an AC test or a BC test).
  */
 function getAverageBothEars(leftDB, rightDB) {
-  return Math.round((getAverage(leftDB) + getAverage(rightDB)) / 2);
+  return Math.round((getAverageOf3(leftDB) + getAverageOf3(rightDB)) / 2);
 }
 
 
 
 /***********************************************/
 
-module.exports = { getPTA, getAverageBothEars };
+module.exports = {
+  getAverage,
+  getLowHighPTA,
+  getPTA,
+  getAverageBothEars
+};

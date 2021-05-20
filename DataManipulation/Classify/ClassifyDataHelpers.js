@@ -19,6 +19,18 @@ function isInRange_TwoValues(x, y, min, max) {
 }
 
 
+function getDegree(dB) {
+  if (isInRange(dB, -10, 15)) return 'Normal';
+  if (isInRange(dB,  16, 25)) return 'Slight';
+  if (isInRange(dB,  26, 40)) return 'Mild';
+  if (isInRange(dB,  41, 55)) return 'Moderate';
+  if (isInRange(dB,  56, 70)) return 'Moderately-Severe';
+  if (isInRange(dB,  71, 90)) return 'Severe';
+  if (dB > 90) return 'Profound';
+  return 'null';
+}
+
+
 /*
  * Gets the decibel values.
  * 
@@ -66,6 +78,7 @@ function abgIsGreaterThan10(valuesAC, valuesBC) {
 module.exports = {
   isInRange,
   isInRange_TwoValues,
+  getDegree,
   getEarValues,
   abgIsGreaterThan10
 };

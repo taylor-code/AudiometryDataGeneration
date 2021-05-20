@@ -65,7 +65,7 @@ Classification Rules for Determining the Types of Hearing Loss (Conductive, Sens
 You have two sets of audiograms, one for air-conduction (AC) and the second for bone-conduction (BC). AC measurements combined with BC measurements helps differentiate outer and middle ear problems (conductive hearing loss) from inner ear problems (sensorineural hearing loss).
 
 %%
-1.  Conductive Hearing Loss: If reduced hearing sensitivity (or hearing loss) with AC but normal hearing sensitivity with BC is classified as conductive hearing loss
+1.  Conductive Hearing Loss: Reduced hearing sensitivity (or hearing loss) with AC but normal hearing sensitivity with BC.
 
 Air Conduction pure-tone average (ACPTA)
 Bone Conduction pure-tone average (BCPTA)

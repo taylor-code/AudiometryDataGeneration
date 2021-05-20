@@ -1,7 +1,8 @@
 /********************************************/
 /*             GenerateData.js              */
 /*                                          */
-/* Holds the data generation functions.     */
+/* Holds the general data generation        */
+/* functions.                               */
 /*                                          */
 /* @author: Kyra Taylor                     */
 /* @date:   02/04/2021                      */
@@ -12,70 +13,66 @@
 /*         IMPORTS/CONSTANTS         */
 /*************************************/
 
-const { deepFreeze } = require('../../Utility/Utility');
+const { getMinMaxArr }            = require('./GenerateHelpers');
+const { getGenerationTypeFunc }   = require('./GenerateType');
+const { getGenerationConfigFunc } = require('./GenerateConfig');
 
-const roundToNearest5 = (dB) => Math.round(dB / 5) * 5;
+const { classifyType }   = require('../Classify/ClassifyType');
+const { classifyConfig } = require('../Classify/ClassifyConfig');
 
-HEARING_DEGREES = {
-  NORMAL:          { MIN: -10,  MAX: 15  },
-  SLIGHT:          { MIN:  16,  MAX: 25  },
-  MILD:            { MIN:  26,  MAX: 40  },
-  MODERATE:        { MIN:  41,  MAX: 55  },
-  MODERATE_SEVERE: { MIN:  56,  MAX: 70  },
-  SEVERE:          { MIN:  71,  MAX: 90  },
-  PROFOUND:        { MIN:  91,  MAX: 100 }
-};
-
-// Prevent modification of this object.
-deepFreeze(HEARING_DEGREES);
+const NUM_SETS = 245;
 
 
 
 /*************************************/
-/*          RANDOM FUNCTION          */
+/* GENERAL TYPE AND CONFIG FUNCTIONS */
 /*************************************/
 
 /*
- * Generates a random integer between min and max.
+ * Generates hearing data for a type
+ * of hearing loss or a configuration.
+ * 
+ * @return: an Array of hearing data sets.
  */
-function getRandomInt_InRange(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return roundToNearest5(Math.floor(Math.random() * (max - min) + min));
+function generateSets(identifier, degrees, generateFunc, classifyFunc) {
+  const minMax = getMinMaxArr(degrees);
+
+  let numSets = NUM_SETS;
+  let data = [];
+  let set;
+
+  while (numSets-- > 0) {
+    set = classifyFunc(generateFunc(minMax), identifier);
+
+    // Only add valid sets.
+    if (set) data.push(set);
+  }
+
+  return data;
 }
 
 
 
 /*************************************/
-/*     DATA GENERATION FUNCTIONS     */
+/*         GENERAL FUNCTION          */
 /*************************************/
 
-/* 
- * Generates one data set Object for both ears.
+/*
+ * Generates data for a loss
+ * loss type or configuration.
  */
-function generateSet(min, max) {
-  return {
-    'Left Ear': {
-      '250 Hz':  getRandomInt_InRange(min, max),
-      '500 Hz':  getRandomInt_InRange(min, max),
-      '1000 Hz': getRandomInt_InRange(min, max),
-      '2000 Hz': getRandomInt_InRange(min, max),
-      '4000 Hz': getRandomInt_InRange(min, max),
-      '8000 Hz': getRandomInt_InRange(min, max)
-    },
-    'Right Ear': {
-      '250 Hz':  getRandomInt_InRange(min, max),
-      '500 Hz':  getRandomInt_InRange(min, max),
-      '1000 Hz': getRandomInt_InRange(min, max),
-      '2000 Hz': getRandomInt_InRange(min, max),
-      '4000 Hz': getRandomInt_InRange(min, max),
-      '8000 Hz': getRandomInt_InRange(min, max)
-    }
-  };
+function generate(degrees, type, config = null) {
+  if (!config) {
+    const generateFunc = getGenerationTypeFunc(type);
+    return generateSets(type, degrees, generateFunc, classifyType);
+  }
+
+  const generateFunc = getGenerationConfigFunc(`${config}_${type}`);
+  return generateSets(config, degrees, generateFunc, classifyConfig);
 }
 
 
 
 /************************************************/
 
-module.exports = { HEARING_DEGREES, generateSet };
+module.exports = { generate };
