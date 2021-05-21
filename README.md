@@ -91,6 +91,6 @@ Here is a sample data set:
 One hearing set contains the following information:
 - Air Conduction (`AC`) Hearing Test Values
 - Bone Conduction (`BC`) Hearing Test Values
-- `Configuration`: Bilateral, Unilateral
+- `Configuration`: Bilateral, Unilateral, Asymmetrical
 - `Degree`: Normal, Slight, Mild, Moderate, Moderately-Severe, Severe, or Profound
 - `Type`: Conductive, Sensorineural, Mixed, or None (no hearing loss)
