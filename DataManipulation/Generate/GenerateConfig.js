@@ -3,7 +3,7 @@
 /*                                          */
 /* Holds the data generation functions      */
 /* for hearing loss configuration           */
-/* (unilateral, symmetrical, asymmetrical,  */
+/* (unilateral, asymmetrical,               */
 /* low-frequency, and high-frequency).      */
 /*                                          */
 /* @author: Kyra Taylor                     */
@@ -12,7 +12,7 @@
 
 
 /*************************************/
-/*         IMPORTS/CONSTANTS         */
+/*              IMPORTS              */
 /*************************************/
 
 const {
@@ -21,9 +21,6 @@ const {
   generateSet
 } = require('./GenerateHelpers');
 
-const NORMAL_MIN = HEARING_DEGREES.NORMAL.MIN;
-const NORMAL_MAX = HEARING_DEGREES.NORMAL.MAX;
-
 
 
 /**************************************/
@@ -31,10 +28,29 @@ const NORMAL_MAX = HEARING_DEGREES.NORMAL.MAX;
 /**************************************/
 
 /* 
- * Generates Unilateral Sensorineural data.
+ * Generates Conductive data: Unilateral or Asymmetrical.
  */
-function generateUniSens({ min1: minL, max1: maxL,
-                           min2: minR, max2: maxR })
+function generateDiffEars_Cond({ min1: minL, max1: maxL,
+                                 min2: minR, max2: maxR })
+{
+  const NORMAL_MIN = HEARING_DEGREES.NORMAL.MIN;
+  const NORMAL_MAX = HEARING_DEGREES.NORMAL.MAX;
+
+  return {
+    'AC': {
+      'Left Ear': generateOneEar(minL, maxL),
+      'Right Ear': generateOneEar(minR, maxR)
+    },
+    'BC': generateSet(NORMAL_MIN, NORMAL_MAX)
+  };
+}
+
+
+/* 
+ * Generates Sensorineural data: Unilateral or Asymmetrical.
+ */
+function generateDiffEars_Sens({ min1: minL, max1: maxL,
+                                 min2: minR, max2: maxR })
 {
   return {
     'AC': {
@@ -50,49 +66,7 @@ function generateUniSens({ min1: minL, max1: maxL,
 
 
 /* 
- * Generates Unilateral Conductive data.
- */
-function generateUniCond({ min1: minL, max1: maxL,
-                           min2: minR, max2: maxR })
-{
-  return {
-    'AC': {
-      'Left Ear':  generateOneEar(minL, maxL),
-      'Right Ear': generateOneEar(minR, maxR)
-    },
-    'BC': generateSet(NORMAL_MIN, NORMAL_MAX)
-  };
-}
-
-
-/* 
- * Symmetrical hearing loss occurs when the
- * degree and configuration of hearing loss
- * are the same in each ear. The PTA value
- * for the left and right ears must be within
- * 10 dB of each other.
- */
-function generateSymmetrical() {
-  return undefined;
-}
-
-
-/* 
- * Asymmetrical hearing loss occurs when each
- * ear has a different degree and configuration.
- * The PTA value for the left and right ears
- * cannot be within 10 dB of each other.
- */
-function generateAsymmetrical() {
-  return undefined;
-}
-
-
-/* 
-* Low-Frequency hearing loss involves the
-* lower frequency range (125 – 4000 Hz).
-* PTA is the average of the dB values for
-* 250 Hz, 500 Hz, 1000 Hz, and 2000 Hz.
+* Generates low-frequency hearing loss data.
 */
 function generateLowFrequency() {
   return undefined;
@@ -100,10 +74,7 @@ function generateLowFrequency() {
 
 
 /* 
- * High-Frequency hearing loss involves the
- * higher frequency range (4000 – 8000 Hz).
- * PTA is the average of the dB values for
- * 4000 Hz and 8000 Hz.
+ * Generates high-frequency hearing loss data.
  */
 function generateHighFrequency() {
   return undefined;
@@ -117,12 +88,12 @@ function generateHighFrequency() {
 
 function getGenerationConfigFunc(key) {
   const generationFunctions = {
-    'Unilateral_Conductive':    generateUniCond,
-    'Unilateral_Sensorineural': generateUniSens,
-    'Symmetrical':              generateSymmetrical,
-    'Asymmetrical':             generateAsymmetrical,
-    'Low-Frequency':            generateLowFrequency,
-    'High-Frequency':           generateHighFrequency
+    'Unilateral_Conductive':      generateDiffEars_Cond,
+    'Unilateral_Sensorineural':   generateDiffEars_Sens,
+    'Asymmetrical_Conductive':    generateDiffEars_Cond,
+    'Asymmetrical_Sensorineural': generateDiffEars_Sens,
+    'Low-Frequency':              generateLowFrequency,
+    'High-Frequency':             generateHighFrequency
   };
   return generationFunctions[key];
 }

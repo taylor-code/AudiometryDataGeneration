@@ -64,7 +64,7 @@ function main() {
     convertJSONToCSV(testData, trainData);
   }
   catch (err) {
-    return console.error(err.message);
+    return console.error(err)//.message);
   }
 
   console.timeEnd('Timer');

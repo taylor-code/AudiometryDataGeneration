@@ -14,10 +14,9 @@ const add = (accumulator, currVal) => accumulator + currVal;
 
 
 /*
- * Given an array of decibel values, returns
- * the average of the first three values.
+ * Returns the rounded average of the array values.
  */
-const getAverage = arr => arr.reduce(add) / arr.length;
+const getAverage = arr => Math.round(arr.reduce(add) / arr.length);
 
 
 /*
@@ -25,6 +24,24 @@ const getAverage = arr => arr.reduce(add) / arr.length;
  * the average of the first three values.
  */
 const getAverageOf3 = arr => getAverage(arr.slice(0, 3));
+
+
+/* 
+ * Calculates the pure-tone average (PTA) of
+ * the 500, 1000, and 2000 Hz thresholds. Used
+ * to determine the degree of hearing loss.
+ * 
+ * Takes any number of arguments.
+ */
+function getPTA() {
+  const args = Array.from(arguments);
+
+  const sum = args.reduce((accumulator, current) => {
+    return accumulator + Math.round(getAverageOf3(current));
+  }, 0);
+
+  return sum / args.length;
+}
 
 
 /*
@@ -42,32 +59,11 @@ function getLowHighPTA(decibels) {
 }
 
 
-/* 
- * Calculates the pure-tone average (PTA) of
- * the 500, 1000, and 2000 Hz thresholds. Used
- * to determine the degree of hearing loss.
- */
-function getPTA(leftAC, rightAC, leftBC, rightBC) {
-  return Math.round((getAverageOf3(leftAC) + getAverageOf3(rightAC) +
-                     getAverageOf3(leftBC) + getAverageOf3(rightBC)) / 4);
-}
-
-
-/* 
- * Calculates the average decibel for both
- * ears (for either an AC test or a BC test).
- */
-function getAverageBothEars(leftDB, rightDB) {
-  return Math.round((getAverageOf3(leftDB) + getAverageOf3(rightDB)) / 2);
-}
-
-
 
 /***********************************************/
 
 module.exports = {
   getAverage,
-  getLowHighPTA,
   getPTA,
-  getAverageBothEars
+  getLowHighPTA
 };

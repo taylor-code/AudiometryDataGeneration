@@ -20,7 +20,7 @@ const { getGenerationConfigFunc } = require('./GenerateConfig');
 const { classifyType }   = require('../Classify/ClassifyType');
 const { classifyConfig } = require('../Classify/ClassifyConfig');
 
-const NUM_SETS = 245;
+const NUM_SETS = 150;
 
 
 
@@ -67,7 +67,8 @@ function generate(degrees, type, config = null) {
     return generateSets(type, degrees, generateFunc, classifyType);
   }
 
-  const generateFunc = getGenerationConfigFunc(`${config}_${type}`);
+  const key = type ? `${config}_${type}` : config;
+  const generateFunc = getGenerationConfigFunc(key);
   return generateSets(config, degrees, generateFunc, classifyConfig);
 }
 

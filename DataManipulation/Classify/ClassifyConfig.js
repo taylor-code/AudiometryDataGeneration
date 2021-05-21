@@ -15,15 +15,8 @@
 /*              IMPORTS              */
 /*************************************/
 
-const {
-  getDegree,
-  getEarValues
-} = require('./ClassifyDataHelpers');
-
-const {
-  getAverage,
-  getLowHighPTA
-} = require('./GetAverage');
+const { classifyCont: CC } = require('./ClassifyContainer');
+const { getPTA, getLowHighPTA } = require('./GetAverage');
 
 
 
@@ -38,31 +31,28 @@ const {
  * 
  * Specifies 'Left' 'Right'.
  */
-function classifyUnilateral(leftAC, rightAC, leftBC, rightBC) {
-  let type = 'Conductive';
+function classifyUnilateral() {
 
-  // Conductive
-  if (leftBC === 'Normal' && rightBC === 'Normal') {
-
-    if (leftAC === 'Normal') {
-      return ['Unilateral - Right', rightAC, type];
+  // Impaired Right Ear
+  if (CC.leftACDeg === 'Normal') {
+    
+    if (CC.rightBCDeg === 'Normal') {
+      return ['Unilateral - Right', CC.rightACDeg, 'Conductive'];
     }
 
-    return ['Unilateral - Left', leftAC, type];
+    return ['Unilateral - Right', CC.rightACDeg, 'Sensorineural'];
   }
 
-  type = 'Sensorineural';
+  // Impaired Left Ear
+  if (CC.rightACDeg === 'Normal') {
 
-  // Sensorineural - Right
-  if (leftAC === 'Normal' && leftBC === 'Normal') {
-    return ['Unilateral - Right', rightAC, type];
+    if (CC.leftBCDeg === 'Normal') {
+      return ['Unilateral - Left', CC.leftACDeg, 'Conductive'];
+    }
+
+    return ['Unilateral - Left', CC.leftACDeg, 'Sensorineural'];
   }
 
-  if (rightAC === 'Normal' && rightBC === 'Normal') {
-    return ['Unilateral - Left', leftAC, type];
-  }
-
-  return ['null', 'null', 'null'];
 }
 
 
@@ -85,7 +75,30 @@ function classifySymmetrical() {
  * cannot be within 10 dB of each other.
  */
 function classifyAsymmetrical() {
-  return undefined;
+  const degree = `Left: ${CC.leftACDeg} & Right: ${CC.rightACDeg}`;
+  let type = 'Sensorineural';
+  let leftPTA, rightPTA;
+
+  // For conductive hearing loss,
+  // get the PTA of the AC values.
+  if (CC.leftBCDeg === 'Normal' && CC.rightBCDeg === 'Normal') {
+    type = 'Conductive';
+
+    leftPTA  = getPTA(CC.leftAC);
+    rightPTA = getPTA(CC.rightAC);
+  }
+
+  // For sensorineural hearing loss, get
+  // the PTA of both the AC and BC values.
+  else {
+    leftPTA  = getPTA(CC.leftAC,  CC.leftBC);
+    rightPTA = getPTA(CC.rightAC, CC.rightBC);
+  }
+
+  // The PTA values must have a difference > 10.
+  if (Math.abs(leftPTA - rightPTA) <= 10) return;
+
+  return ['Asymmetrical', degree, type];
 }
 
 
@@ -106,9 +119,9 @@ function classifyLowFrequency() {
  * PTA is the average of the dB values for
  * 4000 Hz and 8000 Hz.
  */
-function classifyHighFrequency(decibels) {
-  const [ lowPTA, highPTA ] = getLowHighPTA(decibels);
-  return highPTA - lowPTA > 10 ? 'High Frequency' : 'null';
+function classifyHighFrequency() {
+  // const [ lowPTA, highPTA ] = getLowHighPTA(decibels);
+  // return highPTA - lowPTA > 10 ? 'High Frequency' : 'null';
 }
 
 
@@ -119,7 +132,10 @@ function classifyHighFrequency(decibels) {
 
 function getConfigFunction(config) {
   const configFunctions = {
-    'Unilateral': classifyUnilateral
+    'Unilateral':     classifyUnilateral,
+    'Asymmetrical':   classifyAsymmetrical,
+    'Low-Frequency':  classifyLowFrequency,
+    'High-Frequency': classifyHighFrequency
   };
   return configFunctions[config];
 }
@@ -128,32 +144,29 @@ function getConfigFunction(config) {
 /* 
  * Classifies the degree and type of hearing loss.
  */
-function classifyConfig(set, tryConfig) {
+function classifyConfig(dataSet, tryConfig) {
 
-  // Get the calculation variables.
-  const { leftAC, rightAC, leftBC, rightBC } = getEarValues(set);
-  const leftACDeg  = getDegree(getAverage(leftAC));
-  const rightACDeg = getDegree(getAverage(rightAC));
-  const leftBCDeg  = getDegree(getAverage(leftBC));
-  const rightBCDeg = getDegree(getAverage(rightBC));
-
-  if (leftACDeg === 'Normal' && rightACDeg === 'Normal' &&
-      leftBCDeg === 'Normal' && rightBCDeg === 'Normal') {
-    return setDataSet('None', 'Normal', 'None');
-  }
+  // Set the calculation variables.
+  CC.setPropForConfig(dataSet);
 
   // Classify the set.
   const func = getConfigFunction(tryConfig);
-  const [ config, degree, type ] = func(leftACDeg, rightACDeg, leftBCDeg, rightBCDeg);
 
-  // Set the classification qualities.
-  set['Configuration'] = config;
-  set['Degree']        = degree;
-  set['Type']          = type;
+  try {
+    const [ config, degree, type ] = func();
 
-  return set;
+    if (config.includes('null')) return;
+
+    // Set the classification qualities.
+    dataSet['Configuration'] = config;
+    dataSet['Degree']        = degree;
+    dataSet['Type']          = type;
+  }
+  // Invalid set.
+  catch { return; }
+
+  return dataSet;
 }
-
 
 
 /********************************************/

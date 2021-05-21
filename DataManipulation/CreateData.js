@@ -23,29 +23,35 @@ const HEARING_DEGREES = [
 
 
 /*************************************/
-/*      TYPE CREATION FUNCTIONS      */
+/*    GENERAL CREATION FUNCTIONS     */
 /*************************************/
 
 /*
- * Generates and classifies
- * data with no hearing loss.
+ * Generates and classifies data.
+ * Considers one degree.
  */
-function createNormalHLData() {
-  return generate(['NORMAL'], 'Conductive');
+function createWithOneDegree(type, config = null) {
+  let data = [];
+  
+  for (let degree of HEARING_DEGREES) {
+    data = data.concat(generate([degree], type, config));
+  }
+
+  return data;
 }
 
 
 /*
- * Generates and classifies
- * mixed hearing loss data.
+ * Generates and classifies data.
+ * Considers two degrees.
  */
-function createMixedHLData() {
+function createWithTwoDegrees(type, config = null) {
   let data = [];
 
   for (let degree1 of HEARING_DEGREES) {
     for (let degree2 of HEARING_DEGREES) {
       if (degree1 === degree2) break;
-      data = data.concat(generate([degree1, degree2], 'Mixed'));
+      data = data.concat(generate([degree1, degree2], type, config));
     }
   }
 
@@ -53,21 +59,16 @@ function createMixedHLData() {
 }
 
 
-/*
- * Generates conductive or sensorineural
- * hearing loss data.
- * 
- * @param: type, 'Conductive' or 'Sensorineural'.
- */
-function createCondOrSensHLData(type) {
-  let data = [];
-  
-  for (let degree of HEARING_DEGREES) {
-    data = data.concat(generate([degree], type));
-  }
+/*************************************/
+/*      TYPE CREATION FUNCTIONS      */
+/*************************************/
 
-  return data;
-}
+const createNormal = () => generate(['NORMAL'], 'Conductive');
+
+const createMixed  = () => createWithTwoDegrees('Mixed');
+
+// @param: type, 'Conductive' or 'Sensorineural'.
+const createCondOrSens = (type) => createWithOneDegree(type);
 
 
 
@@ -78,10 +79,8 @@ function createCondOrSensHLData(type) {
 /*
  * Generates conductive or sensorineural
  * unilateral hearing loss data.
- * 
- * @param: type, 'Conductive' or 'Sensorineural'.
  */
-function createUnilateralData(type) {
+function createUnilateral(type) {
   let data = [];
   let degrees;
   
@@ -96,6 +95,11 @@ function createUnilateralData(type) {
 }
 
 
+function createAsymmetrical(type) {
+  return createWithTwoDegrees(type, 'Asymmetrical');
+}
+
+
 
 /*************************************/
 /*     CREATION DRIVER FUNCTION      */
@@ -106,14 +110,16 @@ function createUnilateralData(type) {
  * and classification process.
  */
 function createData() {
-  let   data1 = createCondOrSensHLData('Conductive');
-  const data2 = createMixedHLData();
-  const data3 = createNormalHLData();
-  const data4 = createCondOrSensHLData('Sensorineural');
-  const data5 = createUnilateralData('Conductive');
-  const data6 = createUnilateralData('Sensorineural');
+  let   data1 = createCondOrSens('Conductive');
+  const data2 = createMixed();
+  const data3 = createNormal();
+  const data4 = createCondOrSens('Sensorineural');
+  const data5 = createUnilateral('Conductive');
+  const data6 = createUnilateral('Sensorineural');
+  const data7 = createAsymmetrical('Conductive');
+  const data8 = createAsymmetrical('Sensorineural');
 
-  return data1.concat(data2, data3, data4, data5, data6);
+  return data1.concat(data2, data3, data4, data5, data6, data7, data8);
 }
 
 

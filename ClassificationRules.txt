@@ -1,16 +1,22 @@
 Audiometry Classification Rules:
 
 %%
-Types of Hearing Loss: Depends upon what part of your hearing system is damaged. There are three types of hearing loss:
+Types of Hearing Loss: Depends upon what part of your hearing system is damaged.
+Three types of hearing loss:
 
 1. Conductive Hearing Loss
 2. Sensorineural Hearing Loss
 3. Mixed Hearing Loss
 
 Note:
-* AC threshold represents whole hearing loss including either or both conductive (outer and middle ear) and sensorineural (inner ear, cochlea, and auditory nerve)
+* AC threshold represents whole hearing loss including either or both conductive
+(outer and middle ear) and sensorineural (inner ear, cochlea, and auditory nerve)
 * BC threshold represents sensorineural hearing loss
-* Air-Bone-Gap (ABG = AC threshold - BC threshold) represents conductive hearing loss. Note that ABG >= 0, i.e., Theoretically, AC threshold >= BC threshold for all test frequencies. This is because air conduction also tests outer and middle ear in addition to the bone conduction mechanism. However in practice AC threshold can be within 10 dB less than BC threshold, i.e., AC threshold >= BC threshold - 10 dB.
+* Air-Bone-Gap (ABG = AC threshold - BC threshold) represents conductive hearing
+loss. Note that ABG >= 0, i.e., Theoretically, AC threshold >= BC threshold for
+all test frequencies. This is because air conduction also tests outer and middle
+ear in addition to the bone conduction mechanism. However, in practice, AC threshold
+can be within 10 dB less than BC threshold, i.e., AC threshold >= BC threshold - 10 dB.
 
 %%
 Degree of Hearing Loss: The degree of hearing loss is defined as follows:
@@ -26,27 +32,41 @@ Calculate the average (called pure-tone average PTA) of 500, 1000, and 2000 Hz t
 
 %%
 Configuration (Shape) of Hearing Loss:
-1. High-Frequency: Hearing loss in higher frequency range (4000 - 8000 Hz): You are looking at the audiogram in the high-frequency range, i.e., the dB values between 4000 Hz and 8000 Hz. The rest of the rules apply as it is but to the part of the audiogram corresponding to 4000-8000 Hz.
+1. High-Frequency: Hearing loss in higher frequency range (4000 - 8000 Hz):
+You are looking at the audiogram in the high-frequency range, i.e., the dB
+values between 4000 Hz and 8000 Hz. The rest of the rules apply as it is
+but to the part of the audiogram corresponding to 4000-8000 Hz.
 PTA is the average of dB values in the high frequency range 4000 - 8000 Hz.
 
-2. Low-Frequency: Hearing loss in lower frequency range (125 - 4000 Hz): You are looking at the audiogram in the low-frequency range, i.e., the dB values between 125 Hz and 4000 Hz. The rest of the rules apply as it is but to the part of the audiogram corresponding to 125-4000 Hz.
+2. Low-Frequency: Hearing loss in lower frequency range (125 - 4000 Hz):
+You are looking at the audiogram in the low-frequency range, i.e., the dB
+values between 125 Hz and 4000 Hz. The rest of the rules apply as it is
+but to the part of the audiogram corresponding to 125-4000 Hz.
 PTA is the average of dB values in the low frequency range 125 - 4000 Hz.
 
 3. Bilateral: Hearing loss in both ears (may not be of the same type)
 
-4. Unilateral: Hearing loss in only one ear. Hearing in the other ear is normal. Have to specify Unilateral-Left or Unilateral-Right for left and right ears respectively.
+4. Unilateral: Hearing loss in only one ear. Hearing in the other ear is
+normal. Have to specify Unilateral-Left or Unilateral-Right for left and
+right ears, respectively.
 
-5. Symmetrical: Severity (degree) and shape of hearing loss are the same in each ear. If the PTA value for the left and right ears are within 10 dB of each other.
+5. Symmetrical: Severity (degree) and shape of hearing loss are the same in
+each ear. If the PTA value for the left and right ears are within 10 dB of
+each other.
 
-6. Asymmetrical: Each ear has a different severity and shape of hearing loss. If the PTA value for the left and right ears are NOT within 10 dB of each other.
+6. Asymmetrical: Each ear has a different severity and shape of hearing loss.
+If the PTA value for the left and right ears are NOT within 10 dB of each other.
 
 
-Note: In the beginning, we may only want to classify "Degree", then "Degree and Type", and finally "Degree, Type, and Configuration" of hearing loss. This way we can incrementally test our code.
+Note: In the beginning, we may only want to classify "Degree", then "Degree
+and Type", and finally "Degree, Type, and Configuration" of hearing loss.
+This way we can incrementally test our code.
 
 %%
 Classification of Hearing Loss:
 
-A classification will consist of a three tuple: (Type of Hearing Loss, Degree of Hearing Loss, Configuration of Hearing Loss)
+A classification will consist of a three tuple: (Type of Hearing Loss,
+Degree of Hearing Loss, Configuration of Hearing Loss)
 
 Examples: 
 
@@ -60,16 +80,22 @@ Examples:
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Classification Rules for Determining the Types of Hearing Loss (Conductive, Sensorineural, Mixed):
+Classification Rules for Determining the Types of Hearing Loss
+(Conductive, Sensorineural, Mixed):
 
-You have two sets of audiograms, one for air-conduction (AC) and the second for bone-conduction (BC). AC measurements combined with BC measurements helps differentiate outer and middle ear problems (conductive hearing loss) from inner ear problems (sensorineural hearing loss).
+You have two sets of audiograms, one for air-conduction (AC) and the
+second for bone-conduction (BC). AC measurements combined with BC
+measurements helps differentiate outer and middle ear problems (conductive
+hearing loss) from inner ear problems (sensorineural hearing loss).
 
 %%
-1.  Conductive Hearing Loss: Reduced hearing sensitivity (or hearing loss) with AC but normal hearing sensitivity with BC.
+1.  Conductive Hearing Loss: Reduced hearing sensitivity (or hearing
+loss) with AC but normal hearing sensitivity with BC.
 
 Air Conduction pure-tone average (ACPTA)
 Bone Conduction pure-tone average (BCPTA)
-Air-Bone Gap (ABG) at a given frequency: The difference between the AC and BC thresholds at a given frequency. (ABG = AC Threshold - BC Threshold).
+Air-Bone Gap (ABG) at a given frequency: The difference between the AC
+and BC thresholds at a given frequency. (ABG = AC Threshold - BC Threshold).
 
     if (-10   <= BCPTA <= 15  dB)  AND (-10  <= ACPTA <= 15  dB) AND (ABG <= 10 dB for all frequencies)  => Normal Hearing
 	if (-10   <= BCPTA <= 15  dB)  AND (-10  <= ACPTA <= 15  dB) AND (ABG >  10 dB for all frequencies)  => Normal Conductive Hearing Loss
@@ -80,9 +106,11 @@ Air-Bone Gap (ABG) at a given frequency: The difference between the AC and BC th
     if (-10   <= BCPTA <= 15  dB)  AND ( 70  <  ACPTA <= 90  dB) AND (ABG >  10 dB for all frequencies)  => Severe Conductive Hearing Loss
     if (-10   <= BCPTA <= 15  dB)  AND ( 90  <  ACPTA          ) AND (ABG >  10 dB for all frequencies)  => Profound Conductive Hearing Loss
 	
-Note: To keep BCTPA within a certain specified range, you may select all the values that comprise the BCTPA average to be within the same range.	
+Note: To keep BCTPA within a certain specified range, you may select all
+the values that comprise the BCTPA average to be within the same range.	
 	
-Diagnosis: The impairment is most likely due to the an obstruction or blockage of the outer or middle ear.
+Diagnosis: The impairment is most likely due to the an obstruction
+or blockage of the outer or middle ear.
 
 Example: 
 
@@ -98,7 +126,9 @@ Left Ear  (250 Hz, 40 dB), (500 Hz, 35 dB), (1000 Hz, 30 dB), (2000 Hz, 20 dB), 
 The system should classify the above as 'Mild Conductive Hearing Loss'
 
 %%
-2.  Sensorineural Hearing Loss: When the air conduction (AC) and bone conduction (BC) thresholds are approximately the same (within 10 dB of each other) at ALL test frequencies.
+2.  Sensorineural Hearing Loss: When the air conduction (AC) and
+bone conduction (BC) thresholds are approximately the same (within
+10 dB of each other) at ALL test frequencies.
 
 ACT_250  = air conduction threshold in dB at frequency 250 Hz
 ACT_500  = air conduction threshold in dB at frequency 500 Hz
@@ -114,7 +144,10 @@ BCT_2000 = bone conduction threshold in dB at frequency 2000 Hz
 BCT_4000 = bone conduction threshold in dB at frequency 4000 Hz
 BCT_8000 = bone conduction threshold in dB at frequency 8000 Hz
 
-ABG = (ACT_X - BCT_X) <= 10 dB for all X = 250,500,1000,2000,4000,8000: Air-Bone Gap (ABG) that is the difference between the air conduction and bone conduction threshold is less than or equal to 10 dB for all test frequencies.
+ABG = (ACT_X - BCT_X) <= 10 dB for all X = 250,500,1000,2000,4000,
+8000: Air-Bone Gap (ABG) that is the difference between the air
+conduction and bone conduction threshold is less than or equal to
+10 dB for all test frequencies.
 
     if (15  < BCPTA <= 25  dB)  AND (15  <  ACPTA <= 25  dB)  AND (ABG <= 10 dB for all X = 250,500,1000,2000,4000,8000)   =>  Slight Sensorineural Hearing Loss	
     if (25  < BCPTA <= 40  dB)  AND (25  <  ACPTA <= 40  dB)  AND (ABG <= 10 dB for all X = 250,500,1000,2000,4000,8000)   =>  Mild Sensorineural Hearing Loss
@@ -124,10 +157,13 @@ ABG = (ACT_X - BCT_X) <= 10 dB for all X = 250,500,1000,2000,4000,8000: Air-Bone
     if (90  < BCPTA          )  AND (90  <  ACPTA          )  AND (ABG <= 10 dB for all X = 250,500,1000,2000,4000,8000)   =>  Profound Sensorineural Hearing Loss
 
 
-Note: To keep BCTPA within a certain specified range, you may select all the values that comprise the BCTPA average to be within the same range.
+Note: To keep BCTPA within a certain specified range, you may select all
+the values that comprise the BCTPA average to be within the same range.
 
 %%
-3. Mixed Hearing Loss: Both AC and BC thresholds are reduced in sensitivity (show loss) but ABG(ACT_X - BCT_X) >= 10 dB for all test frequencies. This means the hearing loss is partially conductive and partially sensorineural.
+3. Mixed Hearing Loss: Both AC and BC thresholds are reduced in sensitivity
+(show loss) but ABG(ACT_X - BCT_X) >= 10 dB for all test frequencies. This
+means the hearing loss is partially conductive and partially sensorineural.
 
     if (15  <  BCPTA <= 25  dB)    AND   (15  <  ACPTA <= 25  dB)   AND  (ABG > 10 for all frequencies X)   => Mixed Hearing Loss (Bone Conduction Slight-Air Conduction Slight)
     if (15  <  BCPTA <= 25  dB)    AND   (25  <  ACPTA <= 40  dB)   AND  (ABG > 10 for all frequencies X)   => Mixed Hearing Loss (Bone Conduction Slight-Air Conduction Mild)
@@ -162,7 +198,8 @@ Note: To keep BCTPA within a certain specified range, you may select all the val
     if (90  <  BCPTA         )    AND   (90  <  ACPTA           )   AND  (ABG > 10 for all frequencies X)   => Mixed Hearing Loss ( Bone Conduction Profound-Air Conduction Profound)		
 
 
-Note: To keep BCTPA within a certain specified range, you may select all the values that comprise the BCTPA average to be within the same range.
+Note: To keep BCTPA within a certain specified range, you may select all
+the values that comprise the BCTPA average to be within the same range.
 
 
 %%%%%%%%%%%%%%%%

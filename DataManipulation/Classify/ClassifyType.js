@@ -14,15 +14,13 @@
 /*              IMPORTS              */
 /*************************************/
 
-const { getAverageBothEars } = require('./GetAverage');
+const { classifyCont } = require('./ClassifyContainer');
 
 const {
   isInRange,
   isInRange_TwoValues,
-  getDegree,
-  abgIsGreaterThan10,
-  getEarValues
-} = require('./ClassifyDataHelpers');
+  getDegree
+} = require('./ClassifyHelpers');
 
 
 
@@ -35,15 +33,12 @@ const {
  * BC test values are in the normal range
  * but the AC test values are not. The Air-
  * BoneGap (ABG) must be > 10 db.
- *
- * @param: averageAC, an Int of the ACPTA
- *         (air conduction pure-tone average).
- * @param: averageBC, an Int of the BCPTA
- *         (bone conduction pure-tone average).
- * @param: abgGreater10, a Boolean.
  */
-function classifyConductive(averageAC, averageBC, abgGreater10) {
-  if (isInRange(averageBC, -10, 15)) {
+function classifyConductive() {
+  const averageAC    = classifyCont.averageAC;
+  const abgGreater10 = classifyCont.abgGreater10;
+
+  if (isInRange(classifyCont.averageBC, -10, 15)) {
     if (isInRange(averageAC, -10, 15) && !abgGreater10) return 'Normal';
     if (abgGreater10) return getDegree(averageAC);
   }
@@ -57,7 +52,11 @@ function classifyConductive(averageAC, averageBC, abgGreater10) {
  * AC and BC test values are within 10 dB of
  * each other at ALL test frequencies.
  */
-function classifySensorineural(averageAC, averageBC, abgGreater10) {
+function classifySensorineural() {
+  const averageAC    = classifyCont.averageAC;
+  const averageBC    = classifyCont.averageBC;
+  const abgGreater10 = classifyCont.abgGreater10;
+
   if (!abgGreater10) {
     if (isInRange_TwoValues(averageAC, averageBC, -10, 15)) return 'Normal';
     if (isInRange_TwoValues(averageAC, averageBC,  16, 25)) return 'Slight';
@@ -77,9 +76,11 @@ function classifySensorineural(averageAC, averageBC, abgGreater10) {
  * AC and BC thresholds show loss, but the
  * ABG is > 10 dB for all test frequencies.
  */
-function classifyMixed(averageAC, averageBC, abgGreater10) {
-  if (!abgGreater10) return 'null';
-  return `AC: ${getDegree(averageAC)} & BC: ${getDegree(averageBC)}`;
+function classifyMixed() {
+  if (!classifyCont.abgGreater10) return 'null';
+  const ACStr = getDegree(classifyCont.averageAC);
+  const BCStr = getDegree(classifyCont.averageBC);
+  return `AC: ${ACStr} & BC: ${BCStr}`;
 }
 
 
@@ -101,32 +102,27 @@ function getClassificationFunction(type) {
 /* 
  * Classifies the degree and type of hearing loss.
  */
-function classifyType(set, tryType) {
+function classifyType(dataSet, tryType) {
 
-  // Get the calculation variables.
-  const { leftAC, rightAC, leftBC, rightBC } = getEarValues(set);
-  const valuesAC     = leftAC.concat(rightAC);
-  const valuesBC     = leftBC.concat(rightBC);
-  const averageAC    = getAverageBothEars(leftAC, rightAC);
-  const averageBC    = getAverageBothEars(leftBC, rightBC);
-  const abgGreater10 = abgIsGreaterThan10(valuesAC, valuesBC);
+  // Set the calculation variables.
+  classifyCont.setProp(dataSet);
 
   // Classify the degree.
   const func = getClassificationFunction(tryType);
-  set['Degree'] = func(averageAC, averageBC, abgGreater10);
+  dataSet['Degree'] = func();
 
   // Return `undefined` for invalid sets.
-  if (set['Degree'] === 'null') return;
+  if (dataSet['Degree'].includes('null')) return;
 
   // Set the type.
-  if (set['Degree'] === 'Normal') {
-    set['Type']          = 'None';
-    set['Configuration'] = 'None';
+  if (dataSet['Degree'] === 'Normal') {
+    dataSet['Type']          = 'None';
+    dataSet['Configuration'] = 'None';
   }
   // Configuration is already set to 'Bilateral'.
-  else set['Type'] = tryType;
+  else dataSet['Type'] = tryType;
 
-  return set;
+  return dataSet;
 }
 
 
