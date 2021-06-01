@@ -48,49 +48,49 @@ Here is a sample data set:
   {
     "AC": {
       "Left Ear": {
-        "250 Hz": 55,
-        "500 Hz": 50,
-        "1000 Hz": 45,
-        "2000 Hz": 50,
-        "4000 Hz": 45,
-        "8000 Hz": 45
+        "250 Hz": 60,
+        "500 Hz": 65,
+        "1000 Hz": 65,
+        "2000 Hz": 70,
+        "4000 Hz": 65,
+        "8000 Hz": 70
       },
       "Right Ear": {
-        "250 Hz": 45,
-        "500 Hz": 45,
-        "1000 Hz": 40,
-        "2000 Hz": 45,
-        "4000 Hz": 50,
-        "8000 Hz": 55
+        "250 Hz": 5,
+        "500 Hz": 15,
+        "1000 Hz": 10,
+        "2000 Hz": 5,
+        "4000 Hz": 0,
+        "8000 Hz": 15
       }
     },
     "BC": {
       "Left Ear": {
-        "250 Hz": 5,
-        "500 Hz": 5,
-        "1000 Hz": 5,
-        "2000 Hz": -5,
-        "4000 Hz": -5,
-        "8000 Hz": -5
+        "250 Hz": 35,
+        "500 Hz": 35,
+        "1000 Hz": 35,
+        "2000 Hz": 30,
+        "4000 Hz": 30,
+        "8000 Hz": 35
       },
       "Right Ear": {
-        "250 Hz": 0,
-        "500 Hz": 5,
+        "250 Hz": 10,
+        "500 Hz": 15,
         "1000 Hz": -5,
-        "2000 Hz": 15,
+        "2000 Hz": -10,
         "4000 Hz": 0,
-        "8000 Hz": -5
+        "8000 Hz": -10
       }
     },
-    "Configuration": "Bilateral",
-    "Degree": "Moderate",
-    "Type": "Conductive"
+    "Type": "Left: Mixed",
+    "Degree": "Left: AC - Moderately-Severe, BC - Mild",
+    "Configuration": "Unilateral - Left"
   }
 ```
 
 One hearing set contains the following information:
 - Air Conduction (`AC`) Hearing Test Values
 - Bone Conduction (`BC`) Hearing Test Values
-- `Configuration`: Bilateral, Unilateral, Asymmetrical
-- `Degree`: Normal, Slight, Mild, Moderate, Moderately-Severe, Severe, or Profound
 - `Type`: Conductive, Sensorineural, Mixed, or None (no hearing loss)
+- `Degree`: Normal, Slight, Mild, Moderate, Moderately-Severe, Severe, Profound
+- `Configuration`: Bilateral, Unilateral, Symmetrical, Asymmetrical, Low-Frequency, High-Frequency
