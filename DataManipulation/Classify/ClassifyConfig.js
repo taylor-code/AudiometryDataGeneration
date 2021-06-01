@@ -1,9 +1,9 @@
 /********************************************/
 /*            ClassifyConfig.js             */
 /*                                          */
-/* Holds the data classification functions  */
-/* for hearing loss configuration           */
-/* (unilateral, symmetrical, asymmetrical,  */
+/* Holds the classification functions for   */
+/* hearing loss configuration (bilateral,   */
+/* unilateral, symmetrical, asymmetrical,   */
 /* low-frequency, and high-frequency).      */
 /*                                          */
 /* @author: Kyra Taylor                     */
@@ -16,7 +16,32 @@
 /*************************************/
 
 const { classifyCont: CC } = require('./ClassifyContainer');
-const { getPTA, getLowHighPTA } = require('./GetAverage');
+const { splitStr } = require('./ClassifyHelpers');
+
+
+
+/*************************************/
+/*         HELPER FUNCTIONS          */
+/*************************************/
+
+/*
+ * Used by classifySymmetry() to determine
+ * if the degrees and configs are the same.
+ */
+function isSame(str) {
+  return !str.includes('Left') && !str.includes('Right'); 
+}
+
+
+/*
+ * Used by classifyFrequency(). Frequency
+ * loss has a 15-dB difference with the
+ * normal ear.
+ */
+function getFreq(highLowDiff) {
+  if (highLowDiff < -15) return 'Low-Frequency';
+  if (highLowDiff >  15) return 'High-Frequency';
+}
 
 
 
@@ -25,150 +50,89 @@ const { getPTA, getLowHighPTA } = require('./GetAverage');
 /*************************************/
 
 /* 
+ * Bilateral hearing loss occurs when
+ * both ears show loss, but the severity
+ * and type may be different.
+ * 
  * Unilateral hearing loss occurs when
  * only one ear has hearing loss;
  * hearing in the other ear is normal.
- * 
- * Specifies 'Left' 'Right'.
  */
-function classifyUnilateral() {
+function classifyLateral() {
+  const L = CC.leftACDeg;
+  const R = CC.rightACDeg;
 
-  // Impaired Right Ear
-  if (CC.leftACDeg === 'Normal') {
-    
-    if (CC.rightBCDeg === 'Normal') {
-      return ['Unilateral - Right', CC.rightACDeg, 'Conductive'];
-    }
-
-    return ['Unilateral - Right', CC.rightACDeg, 'Sensorineural'];
-  }
-
-  // Impaired Left Ear
-  if (CC.rightACDeg === 'Normal') {
-
-    if (CC.leftBCDeg === 'Normal') {
-      return ['Unilateral - Left', CC.leftACDeg, 'Conductive'];
-    }
-
-    return ['Unilateral - Left', CC.leftACDeg, 'Sensorineural'];
-  }
-
+  if (L !== 'Normal' && R !== 'Normal') return 'Bilateral';
+  if (L === 'Normal' && R !== 'Normal') return 'Unilateral - Right';
+  if (L !== 'Normal' && R === 'Normal') return 'Unilateral - Left';
 }
 
 
 /* 
- * Symmetrical hearing loss occurs when the
- * degree and configuration of hearing loss
- * are the same in each ear. The PTA value
- * for the left and right ears must be within
- * 10 dB of each other.
- */
-function classifySymmetrical() {
-  return undefined;
-}
-
-
-/* 
+ * Symmetrical hearing loss occurs when each
+ * ear has the same degree and configuration.
+ * The PTA value for the left and right ears
+ * must be within 15 dB.
+ *
  * Asymmetrical hearing loss occurs when each
  * ear has a different degree and configuration.
  * The PTA value for the left and right ears
- * cannot be within 10 dB of each other.
+ * cannot be within 15 dB.
  */
-function classifyAsymmetrical() {
-  const degree = `Left: ${CC.leftACDeg} & Right: ${CC.rightACDeg}`;
-  let type = 'Sensorineural';
-  let leftPTA, rightPTA;
-
-  // For conductive hearing loss,
-  // get the PTA of the AC values.
-  if (CC.leftBCDeg === 'Normal' && CC.rightBCDeg === 'Normal') {
-    type = 'Conductive';
-
-    leftPTA  = getPTA(CC.leftAC);
-    rightPTA = getPTA(CC.rightAC);
+function classifySymmetry(degree, config) {
+  const sameDegree = isSame(degree);
+  const sameConfig = isSame(config);
+  
+  // Asymmetrical must have different degrees and configs.
+  if (Math.abs(CC.leftPTA - CC.rightPTA) > 15) {
+    if (!sameDegree && !sameConfig) return 'Asymmetrical';
   }
-
-  // For sensorineural hearing loss, get
-  // the PTA of both the AC and BC values.
-  else {
-    leftPTA  = getPTA(CC.leftAC,  CC.leftBC);
-    rightPTA = getPTA(CC.rightAC, CC.rightBC);
-  }
-
-  // The PTA values must have a difference > 10.
-  if (Math.abs(leftPTA - rightPTA) <= 10) return;
-
-  return ['Asymmetrical', degree, type];
+  // Symmetrical must have same degrees and configs.
+  else if (sameDegree && sameConfig) return 'Symmetrical';
 }
 
 
 /* 
  * Low-Frequency hearing loss involves the
- * lower frequency range (125 – 4000 Hz).
+ * lower frequency range (125 – 2000 Hz).
  * PTA is the average of the dB values for
  * 250 Hz, 500 Hz, 1000 Hz, and 2000 Hz.
- */
-function classifyLowFrequency() {
-  return undefined;
-}
-
-
-/* 
+ *
  * High-Frequency hearing loss involves the
  * higher frequency range (4000 – 8000 Hz).
  * PTA is the average of the dB values for
  * 4000 Hz and 8000 Hz.
  */
-function classifyHighFrequency() {
-  // const [ lowPTA, highPTA ] = getLowHighPTA(decibels);
-  // return highPTA - lowPTA > 10 ? 'High Frequency' : 'null';
-}
+function classifyFrequency() {
+  let configs = [];
 
+  const leftFreq = getFreq(CC.leftDiff);
+  if (leftFreq) configs.push(`Left: ${leftFreq}`);
 
+  const rightFreq = getFreq(CC.rightDiff);
+  if (rightFreq) configs.push(`Right: ${rightFreq}`);
 
-/*************************************/
-/*         GENERAL FUNCTIONS         */
-/*************************************/
+  // If one or both ears have frequency
+  // hearing loss, return the config.
+  if (configs.length) {
+    let config = configs.join(' | ');
+    const conSplit = splitStr(config);
 
-function getConfigFunction(config) {
-  const configFunctions = {
-    'Unilateral':     classifyUnilateral,
-    'Asymmetrical':   classifyAsymmetrical,
-    'Low-Frequency':  classifyLowFrequency,
-    'High-Frequency': classifyHighFrequency
-  };
-  return configFunctions[config];
-}
+    // Determine if the frequencies are the same.
+    if (conSplit.length === 4) {
+      if (conSplit[1] === conSplit[3]) config = conSplit[3];
+    }
 
-
-/* 
- * Classifies the degree and type of hearing loss.
- */
-function classifyConfig(dataSet, tryConfig) {
-
-  // Set the calculation variables.
-  CC.setPropForConfig(dataSet);
-
-  // Classify the set.
-  const func = getConfigFunction(tryConfig);
-
-  try {
-    const [ config, degree, type ] = func();
-
-    if (config.includes('null')) return;
-
-    // Set the classification qualities.
-    dataSet['Configuration'] = config;
-    dataSet['Degree']        = degree;
-    dataSet['Type']          = type;
+    return config;
   }
-  // Invalid set.
-  catch { return; }
-
-  return dataSet;
 }
+
 
 
 /********************************************/
 
-module.exports = { classifyConfig };
+module.exports = {
+  classifyLateral,
+  classifySymmetry,
+  classifyFrequency
+};

@@ -25,8 +25,8 @@ const getNumDuplicates = () => numDuplicates;
  * @return: unique, an Array of unique objects.
  */
 function removeDuplicates(data) {
-  const unique     = [];
-  const duplicates = [];
+  let unique     = [];
+  let duplicates = [];
   
   let current;
 
@@ -34,7 +34,7 @@ function removeDuplicates(data) {
   // unique unless it is in duplicates.
   for (let i = 0; i < data.length; i++) {
 
-    if (duplicates.includes(i)) return;
+    if (duplicates.includes(i)) continue;
 
     current = data[i];
     unique.push(current);
@@ -45,8 +45,8 @@ function removeDuplicates(data) {
       if (dbAreEqual(current, data[compI])) duplicates.push(compI);
     }
   }
-
-  numDuplicates += duplicates.length;
+  
+  if (duplicates.length) numDuplicates += duplicates.length;
 
   return unique;
 }
@@ -92,7 +92,7 @@ function getKeyValueHearingSets(data) {
     if (!(key in hearingSets)) hearingSets[key] = [];
     hearingSets[key].push(datum);
   }
-
+  
   return hearingSets;
 }
 
@@ -105,6 +105,7 @@ function getKeyValueHearingSets(data) {
 function separateTrainAndTestData(hearingSets) {
   let testData  = [];
   let trainData = [];
+
   
   let separator;
   for (let value of Object.values(hearingSets)) {

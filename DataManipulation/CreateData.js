@@ -15,9 +15,9 @@
 
 const { generate } = require('./Generate/GenerateData');
 
-const HEARING_DEGREES = [
-  'SLIGHT', 'MILD', 'MODERATE',
-  'MODERATE_SEVERE', 'SEVERE', 'PROFOUND'
+const HEARING_DEGREE_LABELS = [
+  'Slight', 'Mild', 'Moderate',
+  'Moderately-Severe', 'Severe', 'Profound'
 ];
 
 
@@ -33,7 +33,7 @@ const HEARING_DEGREES = [
 function createWithOneDegree(type, config = null) {
   let data = [];
   
-  for (let degree of HEARING_DEGREES) {
+  for (let degree of HEARING_DEGREE_LABELS) {
     data = data.concat(generate([degree], type, config));
   }
 
@@ -48,8 +48,8 @@ function createWithOneDegree(type, config = null) {
 function createWithTwoDegrees(type, config = null) {
   let data = [];
 
-  for (let degree1 of HEARING_DEGREES) {
-    for (let degree2 of HEARING_DEGREES) {
+  for (let degree1 of HEARING_DEGREE_LABELS) {
+    for (let degree2 of HEARING_DEGREE_LABELS) {
       if (degree1 === degree2) break;
       data = data.concat(generate([degree1, degree2], type, config));
     }
@@ -63,12 +63,26 @@ function createWithTwoDegrees(type, config = null) {
 /*      TYPE CREATION FUNCTIONS      */
 /*************************************/
 
-const createNormal = () => generate(['NORMAL'], 'Conductive');
+const createNormal = () => generate(['Normal'], 'None');
 
 const createMixed  = () => createWithTwoDegrees('Mixed');
 
-// @param: type, 'Conductive' or 'Sensorineural'.
-const createCondOrSens = (type) => createWithOneDegree(type);
+
+function createConductive(config = null) {
+  let data = [];
+  
+  for (let degree of HEARING_DEGREE_LABELS) {
+    data = data.concat(generate([degree, 'Normal'], 'Conductive', config));
+  }
+
+  return data;
+}
+
+
+function createSensorineural(config = null) {
+  return createWithOneDegree('Sensorineural', config);
+}
+
 
 
 
@@ -77,16 +91,15 @@ const createCondOrSens = (type) => createWithOneDegree(type);
 /*************************************/
 
 /*
- * Generates conductive or sensorineural
- * unilateral hearing loss data.
+ * @param: type, 'Conductive' or 'Sensorineural'
  */
-function createUnilateral(type) {
+function createUnilateralCondOrSens(type) {
   let data = [];
   let degrees;
   
   for (let hlEar of ['Left', 'Right']) {
-    for (let degree of HEARING_DEGREES) {
-      degrees = hlEar === 'Left' ? [degree, 'NORMAL'] : ['NORMAL', degree];
+    for (let degree of HEARING_DEGREE_LABELS) {
+      degrees = hlEar === 'Left' ? [degree, 'Normal'] : ['Normal', degree];
       data = data.concat(generate(degrees, type, 'Unilateral'));
     }
   }
@@ -95,8 +108,29 @@ function createUnilateral(type) {
 }
 
 
-function createAsymmetrical(type) {
-  return createWithTwoDegrees(type, 'Asymmetrical');
+function createUnilateralMixed() {
+  let data = [];
+  let degrees;
+  
+  for (let hlEar of ['Left', 'Right']) {
+    for (let degree1 of HEARING_DEGREE_LABELS) {
+      for (let degree2 of HEARING_DEGREE_LABELS) {
+        if (degree1 === degree2) break;
+
+        if (hlEar === 'Left') degrees = [degree1, 'Normal', degree2, 'Normal'];
+        else degrees = ['Normal', degree1, 'Normal', degree2];
+
+        data = data.concat(generate(degrees, 'Mixed', 'Unilateral'));
+      }
+    }
+  }
+
+  return data;
+}
+
+
+function createDiffFrequency(type, config) {
+  return createWithOneDegree(type, config);
 }
 
 
@@ -106,20 +140,19 @@ function createAsymmetrical(type) {
 /*************************************/
 
 /*
- * Drives the data generation 
- * and classification process.
+ * Drives the data generation and classification process.
  */
 function createData() {
-  let   data1 = createCondOrSens('Conductive');
-  const data2 = createMixed();
-  const data3 = createNormal();
-  const data4 = createCondOrSens('Sensorineural');
-  const data5 = createUnilateral('Conductive');
-  const data6 = createUnilateral('Sensorineural');
-  const data7 = createAsymmetrical('Conductive');
-  const data8 = createAsymmetrical('Sensorineural');
-
-  return data1.concat(data2, data3, data4, data5, data6, data7, data8);
+  return [].concat(createConductive(), createMixed(), createNormal(),
+                   createSensorineural(), createUnilateralMixed(),
+                   createUnilateralCondOrSens('Conductive'),
+                   createUnilateralCondOrSens('Sensorineural'),
+                   createDiffFrequency('Conductive', 'Low-Frequency'),
+                   createDiffFrequency('Conductive', 'High-Frequency'),
+                   createDiffFrequency('Mixed', 'Low-Frequency'),
+                   createDiffFrequency('Mixed', 'High-Frequency'),
+                   createDiffFrequency('Sensorineural', 'Low-Frequency'),
+                   createDiffFrequency('Sensorineural', 'High-Frequency'));
 }
 
 

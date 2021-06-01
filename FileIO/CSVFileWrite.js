@@ -51,15 +51,14 @@ function getHeader() {
 
 /*
  * Writes a JS Object to a CSV file.
- * NOTE: Currently does not include configuration.
  */
 function writeCSVFile(filename, data) {
   let content = getHeader() + '\n';
-  let ACSet, BCSet, configuration, degree, type;
+  let ACSet, BCSet, type, degree, configuration;
   
   // Convert each object to a CSV string.
   for (let row of data) {
-    [ ACSet, BCSet, configuration, degree, type ] = Object.values(row);
+    [ ACSet, BCSet, type, degree, configuration ] = Object.values(row);
 
     content += `${type},${degree},${configuration},`;
     content += Object.values(ACSet['Left Ear']).join(',')  + ',';

@@ -1,15 +1,17 @@
-/********************************************/
-/*              GetAverage.js               */
-/*                                          */
-/* Holds the average calculation            */
-/* functions for data classification.       */
-/*                                          */
-/* @author: Kyra Taylor                     */
-/* @date:   03/19/2021                      */
-/********************************************/
+/*********************************************/
+/*               GetAverage.js               */
+/*                                           */
+/* Holds the pure-tone average (PTA)         */
+/* calculation functions for classification. */
+/*                                           */
+/* @author: Kyra Taylor                      */
+/* @date:   03/19/2021                       */
+/*********************************************/
 
 
-// Used by the reduce methods.
+/*
+ * Used by the reduce method.
+ */
 const add = (accumulator, currVal) => accumulator + currVal;
 
 
@@ -20,50 +22,48 @@ const getAverage = arr => Math.round(arr.reduce(add) / arr.length);
 
 
 /*
- * Given an array of decibel values, returns
- * the average of the first three values.
+ * Pure-Tone Average (PTA) usually considers
+ * the dB values at 500, 1000, and 2000 Hz.
+ * 
+ * Low-Frequency PTA considers 250, 500, 1000, and 2000 Hz.
+ * High-Frequency PTA considers 4000 and 8000 Hz.
  */
-const getAverageOf3 = arr => getAverage(arr.slice(0, 3));
+const sliceArrFuncs = {
+  'Normal':         arr => arr.slice(1, 4),
+  'Low-Frequency':  arr => arr.slice(0, 4),
+  'High-Frequency': arr => arr.slice(-2),
+}
+
+function getPTAArrFunc(freq) {
+  return sliceArrFuncs[freq] || sliceArrFuncs['Normal'];
+}
 
 
 /* 
- * Calculates the pure-tone average (PTA) of
- * the 500, 1000, and 2000 Hz thresholds. Used
- * to determine the degree of hearing loss.
+ * Calculates PTA. Used to determine
+ * the degree of hearing loss.
  * 
- * Takes any number of arguments.
+ * Takes any number of arguments. If
+ * the last argument is a string, uses
+ * different Hz values.
  */
 function getPTA() {
   const args = Array.from(arguments);
 
+  // See if 'Low-Frequency' or 'High-Frequency' was passed.
+  const key = typeof args.slice(-1)[0] === 'string' ? args.pop() : 'Normal';
+  const sliceFunc = getPTAArrFunc(key);
+
+  // Get the average of all the arrays passed.
   const sum = args.reduce((accumulator, current) => {
-    return accumulator + Math.round(getAverageOf3(current));
+    return accumulator + Math.round(getAverage(sliceFunc(current)));
   }, 0);
 
   return sum / args.length;
 }
 
 
-/*
- * Returns low-frequency pure-tone-average (PTA)
- * and high-frequency PTA. lowPTA includes the
- * low Hz values (250, 500, 1000, 2000). highPTA
- * includes the high Hz values (4000, 8000).
- */
-function getLowHighPTA(decibels) {
-  const highHz  = decibels.splice(-2);
-  const highPTA = getAverage(highHz);
-  const lowPTA  = getAverage(decibels);
-
-  return [ lowPTA, highPTA ];
-}
-
-
 
 /***********************************************/
 
-module.exports = {
-  getAverage,
-  getPTA,
-  getLowHighPTA
-};
+module.exports = { getPTAArrFunc, getPTA };

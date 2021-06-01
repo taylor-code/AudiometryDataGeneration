@@ -1,7 +1,7 @@
 /********************************************/
 /*            GenerateConfig.js             */
 /*                                          */
-/* Holds the data generation functions      */
+/* Holds the generation functions           */
 /* for hearing loss configuration           */
 /* (unilateral, asymmetrical,               */
 /* low-frequency, and high-frequency).      */
@@ -15,91 +15,56 @@
 /*              IMPORTS              */
 /*************************************/
 
+const { NORMAL_MIN, NORMAL_MAX } = require('../HearingDegrees');
+const { generateCont: GC }       = require('./GenerateContainer');
+
 const {
-  HEARING_DEGREES,
+  generateOneEar_DiffFreq,
   generateOneEar,
   generateSet
-} = require('./GenerateHelpers');
+} = require('./GenerateEar');
 
 
 
 /**************************************/
-/* CONFIGURATION GENERATION FUNCTIONS */
+/*    CONFIG GENERATION FUNCTIONS     */
 /**************************************/
 
-/* 
- * Generates Conductive data: Unilateral or Asymmetrical.
- */
-function generateDiffEars_Cond({ min1: minL, max1: maxL,
-                                 min2: minR, max2: maxR })
-{
-  const NORMAL_MIN = HEARING_DEGREES.NORMAL.MIN;
-  const NORMAL_MAX = HEARING_DEGREES.NORMAL.MAX;
+function getBC(generateFunc) {
+  if (GC.type === 'Conductive') {
+    return generateSet(NORMAL_MIN, NORMAL_MAX);
+  }
+  return {
+    'Left Ear':  generateFunc(GC.getNextDb(), GC.getNextDb(), GC.freq),
+    'Right Ear': generateFunc(GC.getNextDb(), GC.getNextDb(), GC.freq)
+  };
+}
 
+
+const generateOneEarFuncs = {
+  'Unilateral':     generateOneEar,
+  'Low-Frequency':  generateOneEar_DiffFreq,
+  'High-Frequency': generateOneEar_DiffFreq
+};
+
+
+/*
+ * Generates Unilateral, Asymmetrical,
+ * Low-Frequency, or High-Frequency.
+ */
+function generateConfig() {
+  const generateFunc = generateOneEarFuncs[GC.config];
   return {
     'AC': {
-      'Left Ear': generateOneEar(minL, maxL),
-      'Right Ear': generateOneEar(minR, maxR)
+      'Left Ear':  generateFunc(GC.getNextDb(), GC.getNextDb(), GC.freq),
+      'Right Ear': generateFunc(GC.getNextDb(), GC.getNextDb(), GC.freq)
     },
-    'BC': generateSet(NORMAL_MIN, NORMAL_MAX)
+    'BC': getBC(generateFunc)
   };
-}
-
-
-/* 
- * Generates Sensorineural data: Unilateral or Asymmetrical.
- */
-function generateDiffEars_Sens({ min1: minL, max1: maxL,
-                                 min2: minR, max2: maxR })
-{
-  return {
-    'AC': {
-      'Left Ear':  generateOneEar(minL, maxL),
-      'Right Ear': generateOneEar(minR, maxR)
-    },
-    'BC': {
-      'Left Ear':  generateOneEar(minL, maxL),
-      'Right Ear': generateOneEar(minR, maxR)
-    }
-  };
-}
-
-
-/* 
-* Generates low-frequency hearing loss data.
-*/
-function generateLowFrequency() {
-  return undefined;
-}
-
-
-/* 
- * Generates high-frequency hearing loss data.
- */
-function generateHighFrequency() {
-  return undefined;
-}
-
-
-
-/*************************************/
-/*         GENERAL FUNCTION          */
-/*************************************/
-
-function getGenerationConfigFunc(key) {
-  const generationFunctions = {
-    'Unilateral_Conductive':      generateDiffEars_Cond,
-    'Unilateral_Sensorineural':   generateDiffEars_Sens,
-    'Asymmetrical_Conductive':    generateDiffEars_Cond,
-    'Asymmetrical_Sensorineural': generateDiffEars_Sens,
-    'Low-Frequency':              generateLowFrequency,
-    'High-Frequency':             generateHighFrequency
-  };
-  return generationFunctions[key];
 }
 
 
 
 /********************************************/
 
-module.exports = { getGenerationConfigFunc };
+module.exports = { generateConfig };

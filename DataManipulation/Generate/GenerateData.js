@@ -13,37 +13,36 @@
 /*         IMPORTS/CONSTANTS         */
 /*************************************/
 
-const { getMinMaxArr }            = require('./GenerateHelpers');
-const { getGenerationTypeFunc }   = require('./GenerateType');
-const { getGenerationConfigFunc } = require('./GenerateConfig');
+const { generateCont: GC  } = require('./GenerateContainer');
+const { generateConfig }    = require('./GenerateConfig');
+const { generateType }      = require('./GenerateType');
 
-const { classifyType }   = require('../Classify/ClassifyType');
-const { classifyConfig } = require('../Classify/ClassifyConfig');
+const { classify } = require('../Classify/ClassifyData');
 
-const NUM_SETS = 150;
+const NUM_SETS = 100;
 
 
 
 /*************************************/
-/* GENERAL TYPE AND CONFIG FUNCTIONS */
+/*         GENERATE FUNCTION         */
 /*************************************/
 
 /*
- * Generates hearing data for a type
- * of hearing loss or a configuration.
- * 
+ * Generates hearing loss data.
+ *
  * @return: an Array of hearing data sets.
  */
-function generateSets(identifier, degrees, generateFunc, classifyFunc) {
-  const minMax = getMinMaxArr(degrees);
+function generate(degrees, type, config = null) {
+  GC.setProp(type, degrees, config);
+
+  const generateFunc = config ? generateConfig : generateType;
 
   let numSets = NUM_SETS;
   let data = [];
   let set;
 
   while (numSets-- > 0) {
-    set = classifyFunc(generateFunc(minMax), identifier);
-
+    set = classify(generateFunc(), type);
     // Only add valid sets.
     if (set) data.push(set);
   }
@@ -53,27 +52,6 @@ function generateSets(identifier, degrees, generateFunc, classifyFunc) {
 
 
 
-/*************************************/
-/*         GENERAL FUNCTION          */
-/*************************************/
-
-/*
- * Generates data for a loss
- * loss type or configuration.
- */
-function generate(degrees, type, config = null) {
-  if (!config) {
-    const generateFunc = getGenerationTypeFunc(type);
-    return generateSets(type, degrees, generateFunc, classifyType);
-  }
-
-  const key = type ? `${config}_${type}` : config;
-  const generateFunc = getGenerationConfigFunc(key);
-  return generateSets(config, degrees, generateFunc, classifyConfig);
-}
-
-
-
-/************************************************/
+/********************************************/
 
 module.exports = { generate };
