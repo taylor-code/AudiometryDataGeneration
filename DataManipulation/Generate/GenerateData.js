@@ -19,7 +19,7 @@ const { generateType }      = require('./GenerateType');
 
 const { classify } = require('../Classify/ClassifyData');
 
-const NUM_SETS = 100;
+const NUM_SETS = 101;
 
 
 

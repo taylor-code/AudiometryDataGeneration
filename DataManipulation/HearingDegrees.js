@@ -13,13 +13,13 @@
 /*************************************/
 
 const HEARING_DEGREES = {
-  'Normal':            { MIN: -10,  MAX: 15  },
-  'Slight':            { MIN:  16,  MAX: 25  },
-  'Mild':              { MIN:  26,  MAX: 40  },
-  'Moderate':          { MIN:  41,  MAX: 55  },
-  'Moderately-Severe': { MIN:  56,  MAX: 70  },
-  'Severe':            { MIN:  71,  MAX: 90  },
-  'Profound':          { MIN:  91,  MAX: 100 }
+  'Normal':            { MIN:  0,  MAX: 15  },
+  'Slight':            { MIN: 16,  MAX: 25  },
+  'Mild':              { MIN: 26,  MAX: 40  },
+  'Moderate':          { MIN: 41,  MAX: 55  },
+  'Moderately-Severe': { MIN: 56,  MAX: 70  },
+  'Severe':            { MIN: 71,  MAX: 90  },
+  'Profound':          { MIN: 91,  MAX: 100 }
 };
 
 const NORMAL_MIN = HEARING_DEGREES.Normal.MIN;

@@ -3,7 +3,7 @@
 /*                                          */
 /* Holds the data classification            */
 /* function for hearing loss type (None,    */
-/* (Conductive, Sensorineural, and Mixed).  */
+/* Conductive, Sensorineural, and Mixed).   */
 /*                                          */
 /* @author: Kyra Taylor                     */
 /* @date:   03/20/2021                      */
@@ -11,44 +11,71 @@
 
 
 const { classifyCont: CC } = require('./ClassifyContainer');
-const { splitStr } = require('./ClassifyHelpers');
 
+
+
+/*************************************/
+/*         HELPER FUNCTIONS          */
+/*************************************/
+
+/*
+ * For comparison, removes 'Left:' and
+ * and 'Right' from an array of strings.
+ */
+function removeLeftRightLabels(arr) {
+  arr.map((elem, index, newArr) => {
+    newArr[index] = elem.replace(/Left:|Right:/, '').trim()
+  });
+  return arr;
+}
 
 
 /*
- * Removes 'Left' and 'Right' from
- * the type and/or degree if unneeded.
+ * A `types` or `degrees` array will always
+ * have two elements: one for the left ear
+ * and one for the right ear.
+ */
+const sameElements = arr => arr[0] === arr[1];
+
+
+/*
+ * If the classifications are the same, returns
+ * the string without labels. Otherwise, returns
+ * the string with 'Left:' and 'Right:' labels.
+ */
+function getClassificationStr(arr) {
+  if (sameElements(arr)) return arr[0];
+  return `Left: ${arr[0]} & Right: ${arr[1]}`;
+}
+
+
+/*
+ * Checks if the left and right classifications
+ * classifications are the same. If so, does
+ * not include 'Left' and 'Right' labels.
  */
 function simplifyTypeAndDeg(types, degrees) {
-  let type   = types.join(' | ');
-  let degree = degrees.join(' | ');
-    
-  const typeSplit = splitStr(type);
-  const degSplit  = splitStr(degree);
-
-
-  // If the classifications are the
-  // same, remove 'Left' and 'Right'.
-  if (typeSplit[1] === typeSplit[3]) type = typeSplit[1];
-  if (degSplit[1] === degSplit[3]) degree = degSplit[1];
-
+  let type, degree;
 
   // If one ear is normal and the other is not,
   // do not include the normal ear's information.
-  else if (typeSplit[1] === 'None' && typeSplit[3] !== 'None') {
+  if (types[0] === 'None' && types[1] !== 'None') {
     // Right ear shows hearing loss.
-    type   = types[1];
-    degree = degrees[1];
+    type   = `Right: ${types[1]}`;
+    degree = `Right: ${degrees[1]}`;
   }
-  else if (typeSplit[1] !== 'None' && typeSplit[3] === 'None') {
+  else if (types[0] !== 'None' && types[1] === 'None') {
     // Left ear shows hearing loss.
-    type   = types[0];
-    degree = degrees[0];
+    type   = `Left: ${types[0]}`;
+    degree = `Left: ${degrees[0]}`;
   }
-  
+  else {
+    type   = getClassificationStr(types);
+    degree = getClassificationStr(degrees);
+  }
 
   return [ type, degree ];
-} 
+}
 
 
 
@@ -110,8 +137,8 @@ function classifyTypeAndDeg() {
     for (let ear of [ 'Left', 'Right' ]) {
       const [ type, degree ] = getTypeAndDeg(...infos[ear]);
       
-      types.push(`${ear}: ${type}`);
-      degrees.push(`${ear}: ${degree}`);
+      types.push(type);
+      degrees.push(degree);
     }
     
     return simplifyTypeAndDeg(types, degrees);

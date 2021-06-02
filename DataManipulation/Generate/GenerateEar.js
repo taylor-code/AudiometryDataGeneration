@@ -9,7 +9,7 @@
 /********************************************/
 
 
-const { NORMAL_MAX } = require('../HearingDegrees');
+const { NORMAL_MIN, NORMAL_MAX } = require('../HearingDegrees');
 
 
 
@@ -81,9 +81,9 @@ function generateOneEar_DiffFreq(degreeMin, degreeMax, freq) {
 
   // Low-Frequency and High-Frequency
   // have reverse variables.
-  const low  = (isLowFreq) ? degreeMin : 0;
+  const low  = (isLowFreq) ? degreeMin : NORMAL_MIN;
   const high = (isLowFreq) ? degreeMax : NORMAL_MAX;
-  const min  = (isLowFreq) ? 0 : degreeMin;
+  const min  = (isLowFreq) ? NORMAL_MIN : degreeMin;
   const max  = (isLowFreq) ? NORMAL_MAX : degreeMax;
 
   let change = Math.floor(degreeMax / 6);
