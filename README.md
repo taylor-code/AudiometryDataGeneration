@@ -5,18 +5,10 @@ JavaScript program to generate hearing loss data.
 
 ## How To Run
 
-**Note: Running the program on replit will take 8–10x longer
-than in Visual Studio Code.*
-
-### On replit:
-1. Go to: https://replit.com/@taylorcode/AudiometryDataGeneration
-2. Click the green "run" button.
-
-### On Your Computer:
 1. Download Node.js for your platform: https://nodejs.org/en/download/
 2. In Visual Studio Code, open the **/AudiometryDataGeneration** folder.
 3. Type `npm install` in the terminal to install the dependencies.
-4. Type `node index` or `node .` to run the program.
+4. Type `node index` to run the program.
 
 ---
 
