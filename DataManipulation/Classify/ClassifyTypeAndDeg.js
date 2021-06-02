@@ -80,7 +80,7 @@ function getTypeAndDeg(BCDeg, ACDeg, abgGreater10) {
   // Sensorineural or Mixed.
   else if (ACDeg !== 'Normal') {
     if (BCDeg === ACDeg) return ['Sensorineural', ACDeg];
-    return ['Mixed', `AC - ${ACDeg}, BC - ${BCDeg}`];
+    return ['Mixed', `AC: ${ACDeg} | BC: ${BCDeg}`];
   }
 }
 
