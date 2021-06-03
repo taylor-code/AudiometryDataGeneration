@@ -72,19 +72,19 @@ function classifyLateral() {
  * Symmetrical hearing loss occurs when each
  * ear has the same degree and configuration.
  * The PTA value for the left and right ears
- * must be within 15 dB.
+ * must be within 10 dB.
  *
  * Asymmetrical hearing loss occurs when each
  * ear has a different degree and configuration.
  * The PTA value for the left and right ears
- * cannot be within 15 dB.
+ * cannot be within 10 dB.
  */
 function classifySymmetry(degree, config) {
   const sameDegree = isSame(degree);
   const sameConfig = isSame(config);
   
   // Asymmetrical must have different degrees and configs.
-  if (Math.abs(CC.leftPTA - CC.rightPTA) > 15) {
+  if (Math.abs(CC.leftPTA - CC.rightPTA) > 10) {
     if (!sameDegree && !sameConfig) return 'Asymmetrical';
   }
   // Symmetrical must have same degrees and configs.
@@ -104,28 +104,39 @@ function classifySymmetry(degree, config) {
  * 4000 Hz and 8000 Hz.
  */
 function classifyFrequency() {
-  let configs = [];
-
+  // Currently, if one ear has frequency
+  // hearing loss, the other one does, too.
   const leftFreq = getFreq(CC.leftDiff);
-  if (leftFreq) configs.push(`Left: ${leftFreq}`);
+  if (leftFreq) return leftFreq;
 
   const rightFreq = getFreq(CC.rightDiff);
-  if (rightFreq) configs.push(`Right: ${rightFreq}`);
-
-  // If one or both ears have frequency
-  // hearing loss, return the config.
-  if (configs.length) {
-    let config = configs.join(' | ');
-    const conSplit = splitStr(config);
-
-    // Determine if the frequencies are the same.
-    if (conSplit.length === 4) {
-      if (conSplit[1] === conSplit[3]) config = conSplit[3];
-    }
-
-    return config;
-  }
+  if (rightFreq) return rightFreq;
 }
+
+// FOR UNILATERAL LOW- OR HIGH-FREQUENCY:
+// function classifyFrequency() {
+//   let configs = [];
+
+//   const leftFreq = getFreq(CC.leftDiff);
+//   if (leftFreq) configs.push(`Left: ${leftFreq}`);
+
+//   const rightFreq = getFreq(CC.rightDiff);
+//   if (rightFreq) configs.push(`Right: ${rightFreq}`);
+
+//   // If one or both ears have frequency
+//   // hearing loss, return the config.
+//   if (configs.length) {
+//     let config = configs.join(' | ');
+//     const conSplit = splitStr(config);
+
+//     // Determine if the frequencies are the same.
+//     if (conSplit.length === 4) {
+//       if (conSplit[1] === conSplit[3]) config = conSplit[3];
+//     }
+
+//     return config;
+//   }
+// }
 
 
 

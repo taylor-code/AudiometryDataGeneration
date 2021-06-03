@@ -60,6 +60,18 @@ class ClassifyContainer {
 
     this.leftDiff  = this.highLeftPTA  - this.lowLeftPTA;
     this.rightDiff = this.highRightPTA - this.lowRightPTA;
+
+    // The program sometimes inaccurately classifies
+    // Normal hearing as low- or high-frequency.
+    // If the low and high degrees are in the
+    // normal range, set the difference to 0.
+    const lowDeg_L  = getDegree(this.lowLeftPTA);
+    const lowDeg_R  = getDegree(this.lowRightPTA);
+    const highDeg_L = getDegree(this.highLeftPTA);
+    const highDeg_R = getDegree(this.highRightPTA);
+
+    if (lowDeg_L === highDeg_L === 'Normal') this.leftDiff  = 0;
+    if (lowDeg_R === highDeg_R === 'Normal') this.rightDiff = 0;
   }
 
 
