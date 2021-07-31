@@ -1,6 +1,8 @@
 # Audiometry Data Generation
 JavaScript program to generate hearing loss data.
 
+One execution produces approximately 22,500 instances in one second.
+
 ---
 
 ## How To Run
@@ -12,23 +14,15 @@ JavaScript program to generate hearing loss data.
 
 ---
 
-## Performance
-
-One execution produces approximately 
-
-
----
-
 ## Data
-80% of the data is written to **/JSONData/AudiometryTrain.json**.
-<br/>
-This data is also written to **/CSVData/AudiometryTrain.csv**.
+One execution produces three data sets:
+1. Training Set: Approximately 18,000 instances
+2. Testing Set: Approximately 4,500 instances
+3. Prediction Set: Three instances
 
-20% of the data is written to **/JSONData/AudiometryTest.json**.
-<br/>
-This data is also written to **/CSVData/AudiometryTest.csv**.
+The training and testing sets are written to **/JSONData**.
 
-Three instances are written to **/CSVData/AudiometryPred.csv**.
+The three sets are written to **/CSVData**.
 
 
 ### Data Instance
