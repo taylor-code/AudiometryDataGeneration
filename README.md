@@ -12,77 +12,88 @@ JavaScript program to generate hearing loss data.
 
 ---
 
-## Program Process
-1. Loads the training and testing data from **/JSONData**.
-2. Combines the data into one object.
-3. Generates and classifies new data.
-4. Appends the new data to the previous sets.
-5. Ensures no duplicate entries exist.
-6. Splits the data into two sets: training data and testing data.
-7. Saves the sets in JSON format and in CSV format.
+## Performance
+
+One execution produces approximately 
+
 
 ---
 
 ## Data
-90% of the data is written to **/JSONData/AudiometryTrain.json**.
+80% of the data is written to **/JSONData/AudiometryTrain.json**.
 <br/>
 This data is also written to **/CSVData/AudiometryTrain.csv**.
 
-10% of the data is written to **/JSONData/AudiometryTest.json**.
+20% of the data is written to **/JSONData/AudiometryTest.json**.
 <br/>
 This data is also written to **/CSVData/AudiometryTest.csv**.
 
+Three instances are written to **/CSVData/AudiometryPred.csv**.
 
-### Data Set
 
-Here is a sample data set:
+### Data Instance
+
+Here is a sample instance:
 ```json
   {
-    "AC": {
-      "Left Ear": {
-        "250 Hz": 60,
-        "500 Hz": 65,
-        "1000 Hz": 65,
-        "2000 Hz": 70,
-        "4000 Hz": 65,
-        "8000 Hz": 70
-      },
-      "Right Ear": {
-        "250 Hz": 5,
-        "500 Hz": 15,
-        "1000 Hz": 10,
-        "2000 Hz": 5,
-        "4000 Hz": 0,
-        "8000 Hz": 15
-      }
-    },
-    "BC": {
-      "Left Ear": {
-        "250 Hz": 35,
-        "500 Hz": 35,
-        "1000 Hz": 35,
-        "2000 Hz": 30,
-        "4000 Hz": 30,
+    "Left Ear": {
+      "AC": {
+        "250 Hz": -10,
+        "500 Hz": -10,
+        "1000 Hz": 5,
+        "2000 Hz": 10,
+        "4000 Hz": 35,
         "8000 Hz": 35
       },
-      "Right Ear": {
-        "250 Hz": 10,
-        "500 Hz": 15,
-        "1000 Hz": -5,
-        "2000 Hz": -10,
-        "4000 Hz": 0,
-        "8000 Hz": -10
+      "BC": {
+        "250 Hz": 0,
+        "500 Hz": 5,
+        "1000 Hz": 0,
+        "2000 Hz": 10,
+        "4000 Hz": 35,
+        "8000 Hz": 35
       }
     },
-    "Type": "Left: Mixed",
-    "Degree": "Left: AC - Moderately-Severe, BC - Mild",
-    "Configuration": "Unilateral - Left"
+    "Right Ear": {
+      "AC": {
+        "250 Hz": 95,
+        "500 Hz": 95,
+        "1000 Hz": 100,
+        "2000 Hz": 0,
+        "4000 Hz": -5,
+        "8000 Hz": 5
+      },
+      "BC": {
+        "250 Hz": 45,
+        "500 Hz": 55,
+        "1000 Hz": 50,
+        "2000 Hz": 15,
+        "4000 Hz": 0,
+        "8000 Hz": 0
+      }
+    },
+    "Type": "Left: Sensorineural & Right: Mixed",
+    "Degree": "Left: Mild & Right: AC: Profound | BC: Moderate",
+    "Configuration": "Left: High-Frequency & Right: Low-Frequency | Bilateral | Asymmetrical"
   }
 ```
 
-One hearing set contains the following information:
-- Air Conduction (`AC`) Hearing Test Values
-- Bone Conduction (`BC`) Hearing Test Values
+One instance contains the following information:
+- `Left Ear`: Air Conduction (`AC`) and Bone Conduction (`BC`) Hearing Test Values
+- `Right Ear`: Air Conduction (`AC`) and Bone Conduction (`BC`) Hearing Test Values
 - `Type`: Conductive, Sensorineural, Mixed, or None (no hearing loss)
 - `Degree`: Normal, Slight, Mild, Moderate, Moderately-Severe, Severe, Profound
 - `Configuration`: Bilateral, Unilateral, Symmetrical, Asymmetrical, Low-Frequency, High-Frequency
+
+---
+
+## Program Process
+1. Loads the training and testing data from **/JSONData**.
+2. Combines the data into one object.
+3. Generates and classifies single-ear instances.
+4. Combines the single-ear instances into two-ear instances.
+5. Classifies the two-ear instances.
+6. Appends the new data to the previous data.
+7. Ensures no duplicate entries exist.
+8. Splits the data into three sets: prediction, testing, and training data.
+9. Saves the sets in JSON format and in CSV format.

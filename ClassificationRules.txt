@@ -167,7 +167,7 @@ means the hearing loss is partially conductive and partially sensorineural.
 
     if (15  <  BCPTA <= 25  dB)    AND   (15  <  ACPTA <= 25  dB)   AND  (ABG > 10 for all frequencies X)   => Mixed Hearing Loss (Bone Conduction Slight-Air Conduction Slight)
     if (15  <  BCPTA <= 25  dB)    AND   (25  <  ACPTA <= 40  dB)   AND  (ABG > 10 for all frequencies X)   => Mixed Hearing Loss (Bone Conduction Slight-Air Conduction Mild)
-    if (15  <  BCPTA <= 25  dB)    AND   (40  <  ACPTA <= 55  dB)   AND  (ABG > 10 for all frequencies X)   => Mixed Hearing Loss (Bond Conduction Slight-Air Conduction Moderate)
+    if (15  <  BCPTA <= 25  dB)    AND   (40  <  ACPTA <= 55  dB)   AND  (ABG > 10 for all frequencies X)   => Mixed Hearing Loss (Bone Conduction Slight-Air Conduction Moderate)
     if (15  <  BCPTA <= 25  dB)    AND   (55  <  ACPTA <= 70  dB)   AND  (ABG > 10 for all frequencies X)   => Mixed Hearing Loss (Bone Conduction Slight-Air Conduction Moderately Severe)
     if (15  <  BCPTA <= 25  dB)    AND   (70  <  ACPTA <= 90  dB)   AND  (ABG > 10 for all frequencies X)   => Mixed Hearing Loss (Bone Conduction Slight-Air Conduction Severe)
     if (15  <  BCPTA <= 25  dB)    AND   (90  <  ACPTA          )   AND  (ABG > 10 for all frequencies X)   => Mixed Hearing Loss ( Bone Conduction Slight-Air Conduction Profound)
@@ -180,7 +180,7 @@ means the hearing loss is partially conductive and partially sensorineural.
     if (25  <  BCPTA <= 40  dB)    AND   (90  <  ACPTA          )   AND  (ABG > 10 for all frequencies X)   => Mixed Hearing Loss ( Bone Conduction Mild-Air Conduction Profound)
 	
 	
-    if (40  <  BCPTA <= 55  dB)    AND   (40  <  ACPTA <= 55  dB)   AND  (ABG > 10 for all frequencies X)   => Mixed Hearing Loss (Bond Conduction Moderate-Air Conduction Moderate)
+    if (40  <  BCPTA <= 55  dB)    AND   (40  <  ACPTA <= 55  dB)   AND  (ABG > 10 for all frequencies X)   => Mixed Hearing Loss (Bone Conduction Moderate-Air Conduction Moderate)
     if (40  <  BCPTA <= 55  dB)    AND   (55  <  ACPTA <= 70  dB)   AND  (ABG > 10 for all frequencies X)   => Mixed Hearing Loss (Bone Conduction Moderate-Air Conduction Moderately Severe)
     if (40  <  BCPTA <= 55  dB)    AND   (70  <  ACPTA <= 90  dB)   AND  (ABG > 10 for all frequencies X)   => Mixed Hearing Loss (Bone Conduction Moderate-Air Conduction Severe)
     if (40  <  BCPTA <= 55  dB)    AND   (90  <  ACPTA          )   AND  (ABG > 10 for all frequencies X)   => Mixed Hearing Loss ( Bone Conduction Moderate-Air Conduction Profound)

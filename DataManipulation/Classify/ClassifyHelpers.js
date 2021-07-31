@@ -1,39 +1,79 @@
 /********************************************/
-/*          ClassifyDataHelpers.js          */
+/*            ClassifyHelpers.js            */
 /*                                          */
-/* Holds the data classification helper     */
-/* functions.                               */
+/* Holds the classification helper          */
+/* functions, such as PTA calculation       */
+/* and ABG calculation.                     */
 /*                                          */
 /* @author: Kyra Taylor                     */
 /* @date:   03/19/2021                      */
 /********************************************/
 
 
+/*************************************/
+/*         HELPER FUNCTIONS          */
+/*************************************/
+
+const add = (accumulator, currVal) => accumulator + currVal;
+
+
 /*
- * Gets the decibel values.
+ * Returns the rounded average of the array values.
+ */
+const getAverage = arr => Math.round(arr.reduce(add) / arr.length);
+
+
+/*
+ * Pure-Tone Average (PTA) usually considers
+ * the dB values at 500, 1000, and 2000 Hz.
  * 
- * @return: an Object of four Arrays.
+ * Low-Frequency PTA considers 250, 500, and 1000 Hz.
+ * High-Frequency PTA considers 4000 and 8000 Hz.
  */
-function getEarValues(obj) {
-  const leftAC  = Object.values(obj['AC']['Left Ear']);
-  const rightAC = Object.values(obj['AC']['Right Ear']);
-
-  const leftBC  = Object.values(obj['BC']['Left Ear']);
-  const rightBC = Object.values(obj['BC']['Right Ear']);
-
-  return [ leftAC, rightAC, leftBC, rightBC ];
+const sliceArrFuncs = {
+  'Normal':         arr => arr.slice(1, 4),
+  'Low-Frequency':  arr => arr.slice(0, 3),
+  'High-Frequency': arr => arr.slice(-2),
 }
 
 
-/*
- * Splits a string into an array.
- * Ex: 'Left: High-Frequency | Right: High-Frequency'
- * => ['Left', 'High-Frequency', 'Right', 'High-Frequency']
- */
-function splitStr(classification) {
-  return classification.split(/[:|]/).map(str => str.trim());
+function getPTASliceArrFunc(freq) {
+  return sliceArrFuncs[freq];
 }
 
+
+
+/*************************************/
+/*      PTA CALCULATION FUNCTION      */
+/*************************************/
+
+/* 
+ * Calculates PTA. Used to determine
+ * the degree of hearing loss.
+ * 
+ * Takes any number of arguments. The
+ * last argument should be a string: 'Normal',
+ * 'Low-Frequency', or 'High-Frequency'.
+ */
+function getPTA() {
+  const args = Array.from(arguments);
+
+  // The last argument specifies the slice function type.
+  const sliceFunc = getPTASliceArrFunc(args.pop());
+
+  // Get the average of all the arrays passed.
+  const sum = args.reduce((accumulator, current) => {
+    return accumulator + Math.round(getAverage(sliceFunc(current)));
+  }, 0);
+
+  return sum / args.length;
+}
+
+
+
+/*************************************/
+/*      ABG CALCULATION FUNCTION      */
+/*************************************/
 
 /*
  * Used to determine conductive and
@@ -44,11 +84,14 @@ function splitStr(classification) {
  * 
  * @return: a Bool: true if all values are > 10.
  */
-function abgIsGreaterThan10(valuesAC, valuesBC) {
+function abgIsGreaterThan10(valuesAC, valuesBC, freq) {
+  const sliceFunc = getPTASliceArrFunc(freq);
+  const ac = sliceFunc(valuesAC);
+  const bc = sliceFunc(valuesBC);
 
   // ABG = AC Threshold – BC Threshold
-  for (let i = 0; i < valuesAC.length; i++) {
-    if (valuesAC[i] - valuesBC[i] <= 10) return false;
+  for (let i = 0; i < ac.length; i++) {
+    if (ac[i] - bc[i] <= 10) return false;
   }
 
   return true;
@@ -56,10 +99,11 @@ function abgIsGreaterThan10(valuesAC, valuesBC) {
 
 
 
-/********************************************/
+/***********************************************/
 
 module.exports = {
-  getEarValues,
-  splitStr,
+  getAverage,
+  getPTASliceArrFunc,
+  getPTA,
   abgIsGreaterThan10
 };

@@ -11,8 +11,8 @@
 const { writeJSONFile } = require('../FileIO/JSONFileIO');
 
 const {
+  TEST_DATA_PATH,
   TRAIN_DATA_PATH,
-  TEST_DATA_PATH
 } = require('../MainHelpers');
 
 
@@ -20,8 +20,9 @@ const {
  * Clears the JSON files.
  */
 function resetJSONData() {
-  writeJSONFile(TRAIN_DATA_PATH, []);
   writeJSONFile(TEST_DATA_PATH,  []);
+  writeJSONFile(TRAIN_DATA_PATH, []);
+
   console.log('Cleared the JSON files.');
 }
 

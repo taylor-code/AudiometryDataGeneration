@@ -54,17 +54,17 @@ function getHeader() {
  */
 function writeCSVFile(filename, data) {
   let content = getHeader() + '\n';
-  let ACSet, BCSet, type, degree, configuration;
+  let left, right, type, degree, configuration;
   
   // Convert each object to a CSV string.
   for (let row of data) {
-    [ ACSet, BCSet, type, degree, configuration ] = Object.values(row);
+    [ left, right, type, degree, configuration ] = Object.values(row);
 
     content += `${type},${degree},${configuration},`;
-    content += Object.values(ACSet['Left Ear']).join(',')  + ',';
-    content += Object.values(ACSet['Right Ear']).join(',') + ',';
-    content += Object.values(BCSet['Left Ear']).join(',')  + ',';
-    content += Object.values(BCSet['Right Ear']).join(',') + '\n';
+    content += Object.values(left['AC']).join(',')  + ',';
+    content += Object.values(left['BC']).join(',') + ',';
+    content += Object.values(right['AC']).join(',')  + ',';
+    content += Object.values(right['BC']).join(',') + '\n';
   }
 
   writeFileSync(filename, content);

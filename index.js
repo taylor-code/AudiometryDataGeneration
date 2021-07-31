@@ -21,8 +21,9 @@ const {
 } = require('./FileIO/JSONFileIO');
 
 const {
-  TRAIN_DATA_PATH,
+  PRED_DATA_PATH,
   TEST_DATA_PATH,
+  TRAIN_DATA_PATH,
   convertJSONToCSV,
   printStats
 } = require('./MainHelpers');
@@ -47,21 +48,22 @@ function main() {
     data = data.concat(readJSONFile(TEST_DATA_PATH));
 
     // Generate and classify new data.
-    const newData = createData();
-    data = data.concat(newData);
+    data = data.concat(createData());
     console.log('Generated the data.');
 
     // Cleanse the data.
     console.log('Now cleansing the data. This may take a while.');
-    const [ testData, trainData ] = cleanseData(data);
-    printStats(newData.length, testData.length, trainData.length);
+    const [ predData, testData, trainData ] = cleanseData(data);
+    printStats(testData.length, trainData.length);
 
     // Save the new data.
-    writeJSONFile(TEST_DATA_PATH, testData);
+    writeJSONFile(TEST_DATA_PATH,  testData);
     writeJSONFile(TRAIN_DATA_PATH, trainData);
+    
+    console.log();
 
     // Write to the CSV files.
-    convertJSONToCSV(testData, trainData);
+    convertJSONToCSV(predData, testData, trainData);
   }
   catch (err) {
     return console.error(err.message);

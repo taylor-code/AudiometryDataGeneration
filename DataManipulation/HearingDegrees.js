@@ -13,24 +13,32 @@
 /*************************************/
 
 const HEARING_DEGREES = {
-  'Normal':            { MIN:  0,  MAX: 15  },
-  'Slight':            { MIN: 16,  MAX: 25  },
-  'Mild':              { MIN: 26,  MAX: 40  },
-  'Moderate':          { MIN: 41,  MAX: 55  },
-  'Moderately-Severe': { MIN: 56,  MAX: 70  },
-  'Severe':            { MIN: 71,  MAX: 90  },
-  'Profound':          { MIN: 91,  MAX: 100 }
+  'Normal':            { MIN: -10,  MAX: 15  },
+  'Slight':            { MIN:  16,  MAX: 25  },
+  'Mild':              { MIN:  26,  MAX: 40  },
+  'Moderate':          { MIN:  41,  MAX: 55  },
+  'Moderately-Severe': { MIN:  56,  MAX: 70  },
+  'Severe':            { MIN:  71,  MAX: 90  },
+  'Profound':          { MIN:  91,  MAX: 100 }
 };
 
 const NORMAL_MIN = HEARING_DEGREES.Normal.MIN;
 const NORMAL_MAX = HEARING_DEGREES.Normal.MAX;
+
+const HEARING_SEV_DICT = {
+  'Slight':            0,
+  'Mild':              1,
+  'Moderate':          2,
+  'Moderately-Severe': 3,
+  'Severe':            4,
+  'Profound':          5
+};
 
 
 
 /*************************************/
 /*         DEGREE FUNCTIONS          */
 /*************************************/
-
 
 // Returns true if x is between min and max.
 const isInRange = (x, min, max) => (x - min) * (x - max) <= 0;
@@ -49,7 +57,7 @@ function getDegree(dB) {
   if (isInRange(dB, HD.Slight.MIN,   HD.Slight.MAX))   return 'Slight';
   if (isInRange(dB, HD.Mild.MIN,     HD.Mild.MAX))     return 'Mild';
   if (isInRange(dB, HD.Moderate.MIN, HD.Moderate.MAX)) return 'Moderate';
-  if (isInRange(dB, HD[MOD_SEV].MIN, HD[MOD_SEV].MAX)) return 'Moderately-Severe';
+  if (isInRange(dB, HD[MOD_SEV].MIN, HD[MOD_SEV].MAX)) return  MOD_SEV;
   if (isInRange(dB, HD.Severe.MIN,   HD.Severe.MAX))   return 'Severe';
   if (isInRange(dB, HD.Profound.MIN, HD.Profound.MAX)) return 'Profound';
   return 'null';
@@ -75,6 +83,7 @@ function getMinMaxArr(degrees) {
 module.exports = {
   NORMAL_MIN,
   NORMAL_MAX,
+  HEARING_SEV_DICT,
   getDegree,
   getMinMaxArr
 };

@@ -10,6 +10,10 @@
 /********************************************/
 
 
+/*************************************/
+/*              IMPORTS              */
+/*************************************/
+
 const { getMinMaxArr } = require('../HearingDegrees');
 
 
@@ -23,13 +27,12 @@ class GenerateContainer {
   /*
    * Sets the generation variables.
    */
-  setProp(type, degrees, config = null) {
-    this.freq   = config && config.includes('Frequency') ? config : null;
-    this.type   = type;
-    this.config = config;
+  setProp(degrees, type, freq = null) {
+    this.freq = freq || 'Normal';
+    this.type = type;
 
     this.minMax = [...getMinMaxArr(degrees)];
-    this.gen = this.getDegree();
+    this.gen    = this.getDegree();
   }
 
 

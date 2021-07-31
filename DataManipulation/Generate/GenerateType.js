@@ -2,7 +2,7 @@
 /*             GenerateType.js              */
 /*                                          */
 /* Holds the generation functions for       */
-/* hearing loss type (None, Mixed,          */
+/* hearing loss type (Normal, Mixed,        */
 /* Conductive, and Sensorineural).          */
 /*                                          */
 /* @author: Kyra Taylor                     */
@@ -11,18 +11,17 @@
 
 
 const { generateCont: GC } = require('./GenerateContainer');
-const { generateSet }      = require('./GenerateEar');
-
+const { generateOneEar }   = require('./GenerateOneEar');
 
 
 /*
- * Generates no hearing loss (None),
- * Mixed, Conductive, and Sensorineural.
+ * Generates no hearing loss (Normal),
+ * Mixed, Conductive, or Sensorineural.
  */
 function generateType() {
   return {
-    'AC': generateSet(GC.getNextDb(), GC.getNextDb()),
-    'BC': generateSet(GC.getNextDb(), GC.getNextDb()),
+    'AC': generateOneEar(GC.getNextDb(), GC.getNextDb()),
+    'BC': generateOneEar(GC.getNextDb(), GC.getNextDb()),
   };
 }
 

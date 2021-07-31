@@ -1,8 +1,7 @@
 /********************************************/
 /*             GenerateData.js              */
 /*                                          */
-/* Holds the general data generation        */
-/* functions.                               */
+/* Holds the general generate() function.   */
 /*                                          */
 /* @author: Kyra Taylor                     */
 /* @date:   02/04/2021                      */
@@ -13,13 +12,12 @@
 /*         IMPORTS/CONSTANTS         */
 /*************************************/
 
-const { generateCont: GC  } = require('./GenerateContainer');
-const { generateConfig }    = require('./GenerateConfig');
-const { generateType }      = require('./GenerateType');
+const { generateCont: GC } = require('./GenerateContainer');
+const { generateFreqLoss } = require('./GenerateFreqLoss');
+const { generateType }     = require('./GenerateType');
+const { classifyOneEar }   = require('../Classify/ClassifyOneEar');
 
-const { classify } = require('../Classify/ClassifyData');
-
-const NUM_SETS = 101;
+const NUM_INSTANCES = 2;
 
 
 
@@ -30,24 +28,25 @@ const NUM_SETS = 101;
 /*
  * Generates hearing loss data.
  *
- * @return: an Array of hearing data sets.
+ * @return: an Array of instances.
  */
-function generate(degrees, type, config = null) {
-  GC.setProp(type, degrees, config);
+function generate(degrees, type, freq = null) {
+  GC.setProp(degrees, type, freq);
 
-  const generateFunc = config ? generateConfig : generateType;
+  const generateFunc = freq ? generateFreqLoss : generateType;
 
-  let numSets = NUM_SETS;
-  let data = [];
-  let set;
+  let numInstances = NUM_INSTANCES;
+  let instances = [];
+  let instance;
 
-  while (numSets-- > 0) {
-    set = classify(generateFunc(), type);
-    // Only add valid sets.
-    if (set) data.push(set);
+  while (numInstances-- > 0) {
+    instance = classifyOneEar(generateFunc());
+
+    // Invalid instances are returned as `undefined`.
+    if (instance) instances.push(instance);
   }
 
-  return data;
+  return instances;
 }
 
 
