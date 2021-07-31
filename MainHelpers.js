@@ -65,5 +65,5 @@ module.exports = {
   TEST_DATA_PATH,
   TRAIN_DATA_PATH,
   convertJSONToCSV,
-  printStats,
+  printStats
 };

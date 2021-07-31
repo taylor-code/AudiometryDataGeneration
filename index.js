@@ -21,7 +21,6 @@ const {
 } = require('./FileIO/JSONFileIO');
 
 const {
-  PRED_DATA_PATH,
   TEST_DATA_PATH,
   TRAIN_DATA_PATH,
   convertJSONToCSV,
