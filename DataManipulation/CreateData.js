@@ -46,7 +46,7 @@ function createInstances() {
   ];
 
   // No hearing loss (Normal)
-  let instances = [].concat(generate(['Normal'], 'Normal'));
+  let instances = generate(['Normal'], 'Normal');
 
   for (let degree1 of HEARING_DEGREE_LABELS) {
 

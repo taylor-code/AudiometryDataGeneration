@@ -37,9 +37,9 @@ function convertJSONToCSV(predData, testData, trainData) {
 
 /*
  * Prints the statistics of:
- *   1. How many data sets were generated
- *   2. How many of the sets were duplicates
- *   3. The current number of data sets
+ *   1. How many instances were generated
+ *   2. How many instances were duplicates
+ *   3. The current number of instances
  */
 function printStats(testLen, trainLen) {
   const numDuplicates = getNumDuplicates();
@@ -52,8 +52,8 @@ function printStats(testLen, trainLen) {
     console.log(`* Removed ${numDuplicates} duplicates.`);
   }
 
-  console.log(`* Current number of test data sets: ${testLen}`);
-  console.log(`* Current number of train data sets: ${trainLen}`);
+  console.log(`* Current number of test instances: ${testLen}`);
+  console.log(`* Current number of train instances: ${trainLen}`);
   console.log('*************************************************\n');
 }
 

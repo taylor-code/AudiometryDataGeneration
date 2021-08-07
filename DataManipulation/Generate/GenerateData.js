@@ -17,8 +17,6 @@ const { generateFreqLoss } = require('./GenerateFreqLoss');
 const { generateType }     = require('./GenerateType');
 const { classifyOneEar }   = require('../Classify/ClassifyOneEar');
 
-const NUM_INSTANCES = 2;
-
 
 
 /*************************************/
@@ -35,10 +33,10 @@ function generate(degrees, type, freq = null) {
 
   const generateFunc = freq ? generateFreqLoss : generateType;
 
-  let numInstances = NUM_INSTANCES;
   let instances = [];
   let instance;
 
+  let numInstances = 2;
   while (numInstances-- > 0) {
     instance = classifyOneEar(generateFunc());
 

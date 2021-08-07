@@ -87,48 +87,58 @@ function dbAreEqual(obj1, obj2) {
  * The key is Type_Degree_Configuration.
  * The value is an array of hearing instances.
  */
-function getKeyValueHearingSets(data) {
-  let hearingSets = {};
+function getKeyValueHearingDict(data) {
+  let hearingDict = {};
   let key;
 
   for (let datum of data) {
     key = `${datum['Type']}_${datum['Degree']}_${datum['Configuration']}`;
-    if (!(key in hearingSets)) hearingSets[key] = [];
-    
+
+    if (!(key in hearingDict)) hearingDict[key] = [];
+
     // To improve the model's macro-accuracy,
     // the number of instances per key are limited.
-    if (hearingSets[key].length < 4) hearingSets[key].push(datum);
+    if (hearingDict[key].length < 10) hearingDict[key].push(datum);
   }
 
-  return hearingSets;
+  return hearingDict;
+}
+
+
+/*
+ * Deletes classes with less than 3 instances.
+ * This is to improve the model's macro-accuracy.
+ */
+function normalizeClassDistribution(hearingDict) {
+  return Object.keys(hearingDict).reduce((filtered, key) => {
+    if (hearingDict[key].length > 3) filtered[key] = hearingDict[key];
+    return filtered;
+  }, {});
 }
 
 
 /* 
  * Separates the instances into two arrays.
- * Puts 60% of the instances into `trainData`,
- * and 40% into `testData`. Moves three
- * instances from `testData` to `predData`.
+ * 1 instance into `testData` and the
+ * rest into `trainData`. Moves three
+ * instances from `trainData` to `predData`.
  */
-function separateData(hearingSets) {
+function separateData(hearingDict) {
   const NUM_PRED_INSTANCES = 3;
 
   let predData  = [];
   let testData  = [];
   let trainData = [];
 
-  let separator;
-  for (let value of Object.values(hearingSets)) {
-    separator = Math.round(value.length / 8);
-
-    testData  = testData.concat(value.splice(0, separator));
-    trainData = trainData.concat(value);
+  for (let instances of Object.values(hearingDict)) {
+    testData  = testData.concat(instances.splice(0, 1));
+    trainData = trainData.concat(instances);
   }
 
-  // Move some instances to `predData.`
+  // Move three instances to `predData.`
   for (let i = 0; i < NUM_PRED_INSTANCES; i++) {
-    let index = Math.floor(Math.random() * (testData.length - i));
-    predData = predData.concat(testData.splice(index, 1));
+    let index = Math.floor(Math.random() * (trainData.length - i));
+    predData = predData.concat(trainData.splice(index, 1));
   }
 
   return [ predData, testData, trainData ];
@@ -146,13 +156,16 @@ function separateData(hearingSets) {
  * Removes duplicates for each of the groups.
  */
 function cleanseData(data) {
-  let hearingSets = getKeyValueHearingSets(data);
+  let hearingDict = getKeyValueHearingDict(data);
+  hearingDict = normalizeClassDistribution(hearingDict);
   
-  for (let key of Object.keys(hearingSets)) {
-    hearingSets[key] = removeDuplicates(hearingSets[key]);
+  console.time('Duplicate Removal Timer');
+  for (let key of Object.keys(hearingDict)) {
+    hearingDict[key] = removeDuplicates(hearingDict[key]);
   }
+  console.timeEnd('Duplicate Removal Timer');
 
-  return separateData(hearingSets);
+  return separateData(hearingDict);
 }
 
 

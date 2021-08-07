@@ -38,11 +38,10 @@ const {
  * hearing test data, and writes to JSON files.
  */
 function main() {
-  console.time('Timer');
+  console.time('Program Run Time');
 
   try {
-    // Initialize the previous data object.
-    // Combine the train and the test data.
+    // Combine the training and testing datasets.
     let data = readJSONFile(TRAIN_DATA_PATH);
     data = data.concat(readJSONFile(TEST_DATA_PATH));
 
@@ -51,7 +50,7 @@ function main() {
     console.log('Generated the data.');
 
     // Cleanse the data.
-    console.log('Now cleansing the data. This may take a while.');
+    console.log('\nNow checking for duplicates. This may take a while.');
     const [ predData, testData, trainData ] = cleanseData(data);
     printStats(testData.length, trainData.length);
 
@@ -68,7 +67,8 @@ function main() {
     return console.error(err.message);
   }
 
-  console.timeEnd('Timer');
+  console.log();
+  console.timeEnd('Program Run Time');
 }
 
 

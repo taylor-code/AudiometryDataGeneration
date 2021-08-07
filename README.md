@@ -16,13 +16,13 @@ One execution produces approximately 22,500 instances in one second.
 
 ## Data
 One execution produces three data sets:
-1. Training Set: Approximately 18,000 instances
+1. Training Set: Approximately 14,500 instances
 2. Testing Set: Approximately 4,500 instances
-3. Prediction Set: Three instances
+3. Prediction Set: 3 instances
 
-The training and testing sets are written to **/JSONData**.
+The training and testing sets are saved in JSON format to **/JSONData**.
 
-The three sets are written to **/CSVData**.
+The three sets are saved in CSV format to **/CSVData**.
 
 
 ### Data Instance
