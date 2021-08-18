@@ -10,10 +10,6 @@
 /********************************************/
 
 
-/*************************************/
-/*              IMPORTS              */
-/*************************************/
-
 const { getMinMaxArr } = require('../HearingDegrees');
 
 
@@ -61,7 +57,7 @@ class GenerateContainer {
 }
 
 
-let generateCont = new GenerateContainer();
+const generateCont = new GenerateContainer();
 
 
 

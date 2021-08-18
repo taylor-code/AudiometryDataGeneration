@@ -14,7 +14,7 @@
 /*************************************/
 
 const { classifyTwoEars } = require('./Classify/ClassifyTwoEars');
-const { generate }        = require('./Generate/GenerateData');
+const { generate        } = require('./Generate/GenerateData');
 
 
 

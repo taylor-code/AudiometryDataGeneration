@@ -159,11 +159,9 @@ function cleanseData(data) {
   let hearingDict = getKeyValueHearingDict(data);
   hearingDict = normalizeClassDistribution(hearingDict);
   
-  console.time('Duplicate Removal Timer');
   for (let key of Object.keys(hearingDict)) {
     hearingDict[key] = removeDuplicates(hearingDict[key]);
   }
-  console.timeEnd('Duplicate Removal Timer');
 
   return separateData(hearingDict);
 }

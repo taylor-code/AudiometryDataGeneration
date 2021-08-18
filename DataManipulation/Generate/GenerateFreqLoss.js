@@ -15,8 +15,8 @@
 /*************************************/
 
 const { NORMAL_MIN, NORMAL_MAX } = require('../HearingDegrees');
-const { generateCont: GC }       = require('./GenerateContainer');
-const { generateOneEar }         = require('./GenerateOneEar');
+const { generateCont: GC       } = require('./GenerateContainer');
+const { generateOneEar         } = require('./GenerateOneEar');
 
 
 

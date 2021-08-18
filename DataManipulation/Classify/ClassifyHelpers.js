@@ -24,15 +24,15 @@ const getAverage = arr => Math.round(arr.reduce(add) / arr.length);
 
 
 /*
- * Pure-Tone Average (PTA) usually considers
- * the dB values at 500, 1000, and 2000 Hz.
+ * Pure-Tone Average (PTA) includes the
+ * dB values at 500, 1000, and 2000 Hz.
  * 
- * Low-Frequency PTA considers 250, 500, and 1000 Hz.
- * High-Frequency PTA considers 4000 and 8000 Hz.
+ * Low-Frequency PTA considers 250–4000 Hz.
+ * High-Frequency PTA considers 4000–8000 Hz.
  */
 const sliceArrFuncs = {
   'Normal':         arr => arr.slice(1, 4),
-  'Low-Frequency':  arr => arr.slice(0, 3),
+  'Low-Frequency':  arr => arr.slice(0, 5),
   'High-Frequency': arr => arr.slice(-2),
 }
 
@@ -52,7 +52,7 @@ function getPTASliceArrFunc(freq) {
  * the degree of hearing loss.
  * 
  * Takes any number of arguments. The
- * last argument should be a string: 'Normal',
+ * last argument is a string: 'Normal',
  * 'Low-Frequency', or 'High-Frequency'.
  */
 function getPTA() {

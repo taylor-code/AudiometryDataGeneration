@@ -14,8 +14,8 @@
 
 const { generateCont: GC } = require('./GenerateContainer');
 const { generateFreqLoss } = require('./GenerateFreqLoss');
-const { generateType }     = require('./GenerateType');
-const { classifyOneEar }   = require('../Classify/ClassifyOneEar');
+const { generateType     } = require('./GenerateType');
+const { classifyOneEar   } = require('../Classify/ClassifyOneEar');
 
 
 

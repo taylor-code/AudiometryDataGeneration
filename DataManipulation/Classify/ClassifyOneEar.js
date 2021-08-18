@@ -43,7 +43,7 @@ const isNormalMax = (arr) => Math.max(...arr) <= 15;
 
 /* 
  * Low-Frequency hearing loss involves the
- * low frequency range (125 – 1000 Hz).
+ * low frequency range (250 – 4000 Hz).
  *
  * High-Frequency hearing loss involves the
  * high frequency range (4000 – 8000 Hz).
@@ -58,7 +58,7 @@ function classifyFrequency(ac) {
   // however, this is not low-/high-frequency loss.
   if (isNormalMax(ac)) return 'Normal';
 
-  let low  = getAverage(ac.slice(0, 3));
+  let low  = getAverage(ac.slice(0, 5));
   let high = getAverage(ac.slice(-2));
 
   if (low - high >= 15) return 'Low-Frequency';

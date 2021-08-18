@@ -63,7 +63,7 @@ function generateLowFreq(min, max) {
     '250 Hz':  getRandomInt_InRange(min, max),
     '500 Hz':  getRandomInt_InRange(min, max),
     '1000 Hz': getRandomInt_InRange(min, max),
-    '2000 Hz': getRandomInt_InRange(NORMAL_MIN, NORMAL_MAX),
+    '2000 Hz': getRandomInt_InRange(min, max),
     '4000 Hz': getRandomInt_InRange(NORMAL_MIN, NORMAL_MAX),
     '8000 Hz': getRandomInt_InRange(NORMAL_MIN, NORMAL_MAX),
   };

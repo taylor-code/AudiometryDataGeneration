@@ -1,7 +1,8 @@
 /********************************************/
 /*             CSVFileWrite.js              */
 /*                                          */
-/* Holds the CSV file I/O functions.        */
+/* Holds the functions for writing          */
+/* data to a CSV file.                      */
 /*                                          */
 /* @author: Kyra Taylor                     */
 /* @date:   02/01/2021                      */
@@ -19,30 +20,30 @@ function getHeader() {
     'Type',
     'Degree',
     'Configuration',
-    'AC L 250 Hz',
-    'AC L 500 Hz',
-    'AC L 1000 Hz',
-    'AC L 2000 Hz',
-    'AC L 4000 Hz',
-    'AC L 8000 Hz',
-    'AC R 250 Hz',
-    'AC R 500 Hz',
-    'AC R 1000 Hz',
-    'AC R 2000 Hz',
-    'AC R 4000 Hz',
-    'AC R 8000 Hz',
-    'BC L 250 Hz',
-    'BC L 500 Hz',
-    'BC L 1000 Hz',
-    'BC L 2000 Hz',
-    'BC L 4000 Hz',
-    'BC L 8000 Hz',
-    'BC R 250 Hz',
-    'BC R 500 Hz',
-    'BC R 1000 Hz',
-    'BC R 2000 Hz',
-    'BC R 4000 Hz',
-    'BC R 8000 Hz'
+    'L AC 250 Hz',
+    'L AC 500 Hz',
+    'L AC 1000 Hz',
+    'L AC 2000 Hz',
+    'L AC 4000 Hz',
+    'L AC 8000 Hz',
+    'L BC 250 Hz',
+    'L BC 500 Hz',
+    'L BC 1000 Hz',
+    'L BC 2000 Hz',
+    'L BC 4000 Hz',
+    'L BC 8000 Hz',
+    'R AC 250 Hz',
+    'R AC 500 Hz',
+    'R AC 1000 Hz',
+    'R AC 2000 Hz',
+    'R AC 4000 Hz',
+    'R AC 8000 Hz',
+    'R BC 250 Hz',
+    'R BC 500 Hz',
+    'R BC 1000 Hz',
+    'R BC 2000 Hz',
+    'R BC 4000 Hz',
+    'R BC 8000 Hz'
   ];
 
   return header.join(',');
@@ -62,13 +63,12 @@ function writeCSVFile(filename, data) {
 
     content += `${type},${degree},${configuration},`;
     content += Object.values(left['AC']).join(',')  + ',';
-    content += Object.values(left['BC']).join(',') + ',';
-    content += Object.values(right['AC']).join(',')  + ',';
+    content += Object.values(left['BC']).join(',')  + ',';
+    content += Object.values(right['AC']).join(',') + ',';
     content += Object.values(right['BC']).join(',') + '\n';
   }
 
   writeFileSync(filename, content);
-  console.log(`CSV data successfully saved to ${filename}`);
 }
 
 

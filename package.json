@@ -3,8 +3,5 @@
   "version": "1.2.0",
   "main": "index.js",
   "author": "Kyra Taylor",
-  "license": "ISC",
-  "scripts": {
-    "clear": "node Utility/ResetData.js"
-  }
+  "license": "ISC"
 }

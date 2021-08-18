@@ -82,9 +82,10 @@ function classifySymmetry(degrees, freqs, diffPTA) {
   const sameDegree = sameElements(degrees);
   const sameConfig = sameElements(freqs);
 
-  // Asymmetrical implies different degrees and configs.
+  // Asymmetrical implies different degrees or configs.
   if (diffPTA > 10) {
-    if (!sameDegree && !sameConfig) return 'Asymmetrical';
+    if (!sameDegree) return 'Asymmetrical';
+    if (!sameConfig) return 'Asymmetrical';
   }
   // Symmetrical implies same degrees and configs.
   if (sameDegree && sameConfig) return 'Symmetrical';

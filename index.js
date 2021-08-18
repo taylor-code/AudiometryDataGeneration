@@ -12,13 +12,9 @@
 /*              IMPORTS              */
 /*************************************/
 
-const { createData  } = require('./DataManipulation/CreateData');
-const { cleanseData } = require('./DataManipulation/CleanseData');
-
-const {
-  readJSONFile,
-  writeJSONFile
-} = require('./FileIO/JSONFileIO');
+const { createData    } = require('./DataManipulation/CreateData');
+const { cleanseData   } = require('./DataManipulation/CleanseData');
+const { writeJSONFile } = require('./FileIO/JSONFileWrite');
 
 const {
   TEST_DATA_PATH,
@@ -34,41 +30,33 @@ const {
 /*************************************/
 
 /*
- * Reads in the JSON file, generates and classifies
- * hearing test data, and writes to JSON files.
+ * After creating hearing loss data
+ * instances, writes the data to \Data.
  */
 function main() {
-  console.time('Program Run Time');
+  console.time('Total Run Time');
 
   try {
-    // Combine the training and testing datasets.
-    let data = readJSONFile(TRAIN_DATA_PATH);
-    data = data.concat(readJSONFile(TEST_DATA_PATH));
-
     // Generate and classify new data.
-    data = data.concat(createData());
-    console.log('Generated the data.');
+    const data = createData();
 
     // Cleanse the data.
-    console.log('\nNow checking for duplicates. This may take a while.');
     const [ predData, testData, trainData ] = cleanseData(data);
     printStats(testData.length, trainData.length);
 
     // Save the new data.
     writeJSONFile(TEST_DATA_PATH,  testData);
     writeJSONFile(TRAIN_DATA_PATH, trainData);
-    
-    console.log();
 
     // Write to the CSV files.
     convertJSONToCSV(predData, testData, trainData);
+    console.log('Saved the data to /Data\n');
   }
   catch (err) {
     return console.error(err.message);
   }
 
-  console.log();
-  console.timeEnd('Program Run Time');
+  console.timeEnd('Total Run Time');
 }
 
 

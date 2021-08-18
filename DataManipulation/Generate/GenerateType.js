@@ -11,7 +11,7 @@
 
 
 const { generateCont: GC } = require('./GenerateContainer');
-const { generateOneEar }   = require('./GenerateOneEar');
+const { generateOneEar   } = require('./GenerateOneEar');
 
 
 /*

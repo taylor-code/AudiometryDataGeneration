@@ -15,8 +15,8 @@
 const { writeCSVFile     } = require('./FileIO/CSVFileWrite')
 const { getNumDuplicates } = require('./DataManipulation/CleanseData');
 
-const TEST_DATA_PATH  = './JSONData/AudiometryTest.json';
-const TRAIN_DATA_PATH = './JSONData/AudiometryTrain.json';
+const TEST_DATA_PATH  = './Data/JSON/AudiometryTest.json';
+const TRAIN_DATA_PATH = './Data/JSON/AudiometryTrain.json';
 
 
 
@@ -25,9 +25,9 @@ const TRAIN_DATA_PATH = './JSONData/AudiometryTrain.json';
 /*************************************/
 
 function convertJSONToCSV(predData, testData, trainData) {
-  const PRED_CSV_PATH  = './CSVData/AudiometryPred.csv';
-  const TEST_CSV_PATH  = './CSVData/AudiometryTest.csv';
-  const TRAIN_CSV_PATH = './CSVData/AudiometryTrain.csv';
+  const PRED_CSV_PATH  = './Data/CSV/AudiometryPred.csv';
+  const TEST_CSV_PATH  = './Data/CSV/AudiometryTest.csv';
+  const TRAIN_CSV_PATH = './Data/CSV/AudiometryTrain.csv';
 
   writeCSVFile(PRED_CSV_PATH,  predData);
   writeCSVFile(TEST_CSV_PATH,  testData);
