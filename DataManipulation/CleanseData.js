@@ -95,10 +95,7 @@ function getKeyValueHearingDict(data) {
     key = `${datum['Type']}_${datum['Degree']}_${datum['Configuration']}`;
 
     if (!(key in hearingDict)) hearingDict[key] = [];
-
-    // To improve the model's macro-accuracy,
-    // the number of instances per key are limited.
-    if (hearingDict[key].length < 10) hearingDict[key].push(datum);
+    hearingDict[key].push(datum);
   }
 
   return hearingDict;
