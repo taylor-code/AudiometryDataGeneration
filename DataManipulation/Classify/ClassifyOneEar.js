@@ -25,9 +25,13 @@ const {
 } = require('../HearingDegrees');
 
 
-/*
+/**
  * Returns whether the maximum value in
  * `arr` is in the normal hearing range.
+ * 
+ * @param {[integer]} arr: dB values.
+ * 
+ * @returns {boolean}
  */
 const isNormalMax = (arr) => Math.max(...arr) <= 15;
 
@@ -41,7 +45,7 @@ const isNormalMax = (arr) => Math.max(...arr) <= 15;
 /*             FREQUENCY             */
 /*-----------------------------------*/
 
-/* 
+/**
  * Low-Frequency hearing loss involves the
  * low frequency range (250 – 4000 Hz).
  *
@@ -51,6 +55,10 @@ const isNormalMax = (arr) => Math.max(...arr) <= 15;
  * A low- or high-frequency loss is a
  * difference >= 15 dB between the low
  * frequencies and the high frequencies.
+ * 
+ * @param {[integer]} ac: dB values for the AC test.
+ * 
+ * @returns {string}
  */
 function classifyFrequency(ac) {
   // Normal hearing loss may have a difference greater
@@ -70,7 +78,7 @@ function classifyFrequency(ac) {
 /*          TYPE AND DEGREE          */
 /*-----------------------------------*/
 
-/* 
+/**
  * Conductive hearing loss occurs when the
  * BC test values are in the normal range
  * but the AC test values are not. The
@@ -83,6 +91,10 @@ function classifyFrequency(ac) {
  * Mixed hearing loss occurs when both the
  * AC and BC thresholds show loss, but the
  * ABG is > 10 dB for all test frequencies.
+ * 
+ * @param {Object} instance
+ * 
+ * @returns {[string]}: [<type>, <degree>]
  */
 function classifyTypeAndDeg(instance) {
   const freq = instance['Config'];
@@ -117,9 +129,13 @@ function classifyTypeAndDeg(instance) {
 /*          DRIVER FUNCTION          */
 /*************************************/
 
-/*
+/**
  * For one ear, classifies low-/high-frequency
  * hearing loss, the degree, and the type.
+ * 
+ * @param {Object} instance
+ * 
+ * @returns {Object} instance: Labeled.
  */
 function classifyOneEar(instance) {
   // Classify low-/high-frequency.

@@ -29,7 +29,7 @@ const {
 /*          MAIN() FUNCTION          */
 /*************************************/
 
-/*
+/**
  * After creating hearing loss data
  * instances, writes the data to \Data.
  */

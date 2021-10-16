@@ -22,10 +22,14 @@ const { generate        } = require('./Generate/GenerateData');
 /*    INSTANCE CREATION FUNCTIONS     */
 /*************************************/
 
-/*
+/**
  * Generates instances with same frequency,
  * low-frequency, and high-frequency hearing
  * loss with the given `degrees` and `type`.
+ * 
+ * @param {[string]} degrees
+ * 
+ * @returns {[Object]}
  */
 function createFrequencies(degrees, type) {
   return [].concat(generate(degrees, type),
@@ -34,10 +38,12 @@ function createFrequencies(degrees, type) {
 }
 
 
-/*
+/**
  * Generates one ear instances. Creates
  * instances with Normal, Conductive,
  * Sensorineural, and Mixed types.
+ * 
+ * @returns {[Object]} instances
  */
 function createInstances() {
   const HEARING_DEGREE_LABELS = [
@@ -72,12 +78,16 @@ function createInstances() {
 /*       COMBINATIONS FUNCTION       */
 /*************************************/
 
-/*
+/**
  * Combines the single-ear instances
  * into two-ear combinations.
+ * 
+ * @param {[Object]} instances
+ * 
+ * @returns {[Object]} combos
  */
 function getCombinations(instances) {
-  let combos   = [];
+  const combos = [];
   let instance = [];
 
   for (let leftEar of instances) {
@@ -96,8 +106,9 @@ function getCombinations(instances) {
 /*     CREATION DRIVER FUNCTION      */
 /*************************************/
 
-/*
- * Drives the data generation and classification process.
+/**
+ * Drives the data generation
+ * and classification process.
  */
 function createData() {
   return getCombinations(createInstances());

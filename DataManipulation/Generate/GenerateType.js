@@ -14,9 +14,11 @@ const { generateCont: GC } = require('./GenerateContainer');
 const { generateOneEar   } = require('./GenerateOneEar');
 
 
-/*
+/**
  * Generates no hearing loss (Normal),
  * Mixed, Conductive, or Sensorineural.
+ * 
+ * @returns {Object}
  */
 function generateType() {
   return {

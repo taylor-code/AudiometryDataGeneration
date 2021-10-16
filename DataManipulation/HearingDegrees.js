@@ -40,13 +40,19 @@ const HEARING_SEV_DICT = {
 /*         DEGREE FUNCTIONS          */
 /*************************************/
 
-// Returns true if x is between min and max.
+/**
+ * Returns true if `x` is between `min` and `max`.
+ */
 const isInRange = (x, min, max) => (x - min) * (x - max) <= 0;
 
 
-/*
+/**
  * Uses the hearing degrees maxes and mins to
  * determine the hearing loss severity (degree).
+ * 
+ * @param {integer} dB
+ * 
+ * @returns {string} Degree of hearing loss.
  */
 function getDegree(dB) {
   // Shorter names for readability:
@@ -64,13 +70,18 @@ function getDegree(dB) {
 }
 
 
+/**
+ * @param {[string]} degrees 
+ * 
+ * @returns {[integer]} minMax
+ */
 function getMinMaxArr(degrees) {
-  let minMax = [];
+  const minMax = [];
 
-  for (let degree of degrees) {
+  for (const degree of degrees) {
     // Round the min to the next multiple of 5.
     minMax.push(Math.ceil(HEARING_DEGREES[degree]['MIN'] / 5) * 5);
-    minMax.push(HEARING_DEGREES[degree]['MAX'])
+    minMax.push(HEARING_DEGREES[degree]['MAX']);
   }
 
   return minMax;

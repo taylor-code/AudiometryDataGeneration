@@ -9,7 +9,7 @@
 
 
 /*************************************/
-/*         IMPORTS/CONSTANTS         */
+/*              IMPORTS              */
 /*************************************/
 
 const { generateCont: GC } = require('./GenerateContainer');
@@ -23,22 +23,25 @@ const { classifyOneEar   } = require('../Classify/ClassifyOneEar');
 /*         GENERATE FUNCTION         */
 /*************************************/
 
-/*
+/**
  * Generates hearing loss data.
+ * 
+ * @param {[string]} degrees 
+ * @param {string} type 
+ * @param {string} freq 
  *
- * @return: an Array of instances.
+ * @returns {[Object]} instances
  */
 function generate(degrees, type, freq = null) {
   GC.setProp(degrees, type, freq);
 
   const generateFunc = freq ? generateFreqLoss : generateType;
 
-  let instances = [];
-  let instance;
-
+  const instances = [];
   let numInstances = 2;
+  
   while (numInstances-- > 0) {
-    instance = classifyOneEar(generateFunc());
+    const instance = classifyOneEar(generateFunc());
 
     // Invalid instances are returned as `undefined`.
     if (instance) instances.push(instance);

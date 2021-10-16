@@ -17,13 +17,17 @@
 const add = (accumulator, currVal) => accumulator + currVal;
 
 
-/*
+/**
  * Returns the rounded average of the array values.
+ * 
+ * @param {[integer]} arr
+ * 
+ * @returns {integer}
  */
 const getAverage = arr => Math.round(arr.reduce(add) / arr.length);
 
 
-/*
+/**
  * Pure-Tone Average (PTA) includes the
  * dB values at 500, 1000, and 2000 Hz.
  * 
@@ -37,6 +41,11 @@ const sliceArrFuncs = {
 }
 
 
+/**
+ * @param {string} freq
+ * 
+ * @returns {integer}
+ */
 function getPTASliceArrFunc(freq) {
   return sliceArrFuncs[freq];
 }
@@ -47,13 +56,17 @@ function getPTASliceArrFunc(freq) {
 /*      PTA CALCULATION FUNCTION      */
 /*************************************/
 
-/* 
+/**
  * Calculates PTA. Used to determine
  * the degree of hearing loss.
  * 
  * Takes any number of arguments. The
  * last argument is a string: 'Normal',
  * 'Low-Frequency', or 'High-Frequency'.
+ * 
+ * @param {[[integer]]}
+ * 
+ * @returns {number} The PTA.
  */
 function getPTA() {
   const args = Array.from(arguments);
@@ -75,14 +88,14 @@ function getPTA() {
 /*      ABG CALCULATION FUNCTION      */
 /*************************************/
 
-/*
+/**
  * Used to determine conductive and
  * sensorineural hearing loss types.
  * 
- * @param: valuesAC, dBs for air conduction (AC).
- * @param: valuesBC, dBs for bone conduction (BC).
+ * @param {[integer]} valuesAC: dBs for air conduction (AC).
+ * @param {[integer]} valuesBC: dBs for bone conduction (BC).
  * 
- * @return: a Bool: true if all values are > 10.
+ * @returns {boolean} True if all values are > 10.
  */
 function abgIsGreaterThan10(valuesAC, valuesBC, freq) {
   const sliceFunc = getPTASliceArrFunc(freq);

@@ -13,18 +13,22 @@
 /*         HELPER FUNCTIONS          */
 /*************************************/
 
-/*
+/**
  * A `types`, `degrees`, or `freqs` array
  * always has two elements: one for the
  * left ear and one for the right ear.
+ * 
+ * @returns {boolean}
  */
 const sameElements = arr => arr[0] === arr[1];
 
 
-/*
+/**
  * If the left and right classifications
  * are different, includes 'Left' and/or
  * 'Right' in the classification string.
+ * 
+ * @returns {string}
  */
 function simplifyClassificationStr(arr) {
   const L = arr[0];
@@ -44,7 +48,7 @@ function simplifyClassificationStr(arr) {
 /*  CONFIG CLASSIFICATION FUNCTIONS  */
 /*************************************/
 
-/* 
+/**
  * Bilateral hearing loss occurs when
  * both ears show loss, but the severity
  * and type may be different.
@@ -52,6 +56,10 @@ function simplifyClassificationStr(arr) {
  * Unilateral hearing loss occurs when
  * only one ear has hearing loss;
  * hearing in the other ear is normal.
+ * 
+ * @param {[string]} degrees
+ * 
+ * @returns {string}
  */
 function classifyLateral(degrees) {
   const L = degrees[0];
@@ -64,7 +72,7 @@ function classifyLateral(degrees) {
 }
 
 
-/* 
+/** 
  * Symmetrical hearing loss occurs when each
  * ear has the same degree and configuration.
  * The PTA value for the left and right ears
@@ -74,6 +82,12 @@ function classifyLateral(degrees) {
  * ear has a different degree and configuration.
  * The PTA value for the left and right ears
  * cannot be within 10 dB.
+ * 
+ * @param {[string]} degrees 
+ * @param {[string]} freqs 
+ * @param {integer} diffPTA 
+ * 
+ * @returns {string}
  */
 function classifySymmetry(degrees, freqs, diffPTA) {
   // Unilateral cannot be symmetrical or asymmetrical.
@@ -92,13 +106,19 @@ function classifySymmetry(degrees, freqs, diffPTA) {
 }
 
 
-/*
+/**
  * Classifies lateral and symmetry. Returns
  * a String of all the configurations.
+ * 
+ * @param {[string]} degrees 
+ * @param {[string]} freqs 
+ * @param {integer} diffPTA 
+ * 
+ * @returns {string}
  */
 function getConfigClassificationStr(degrees, freqs, diffPTA) {
   let config = simplifyClassificationStr(freqs);
-  let configs = config === 'Normal' ? [] : [ config ];
+  const configs = config === 'Normal' ? [] : [ config ];
 
   // Classify bilateral or unilateral.
   config = classifyLateral(degrees);
@@ -117,11 +137,16 @@ function getConfigClassificationStr(degrees, freqs, diffPTA) {
 /*          DRIVER FUNCTION          */
 /*************************************/
 
-/*
+/**
  * Classifies the type and degree of the left
  * ear and the right ear. If the types and
  * degrees are the same, removes 'Left' and
  * 'Right' from the final type and degree.
+ * 
+ * @param {Object} leftEar
+ * @param {Object} rightEar
+ * 
+ * @returns {Object}
  */
 function classifyTwoEars(leftEar, rightEar) {
   const types   = [ leftEar['Type'],   rightEar['Type'] ];

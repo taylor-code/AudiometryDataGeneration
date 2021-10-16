@@ -12,11 +12,14 @@
 const { writeFileSync } = require('fs');
 
 
-/* 
- * Writes a JS Object to a JSON file.
+/**
+ * Writes the data to a JSON file.
+ * 
+ * @param {string} filename
+ * @param {[Object]} data
  */
-function writeJSONFile(filename, obj) {
-  writeFileSync(filename, JSON.stringify(obj, null, 2));
+function writeJSONFile(filename, data) {
+  writeFileSync(filename, JSON.stringify(data, null, 2));
 }
 
 

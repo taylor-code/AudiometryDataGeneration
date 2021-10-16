@@ -23,8 +23,10 @@ const roundToNearest5 = (dB) => Math.round(dB / 5) * 5;
 /*      RANDOM NUMBER FUNCTION       */
 /*************************************/
 
-/*
- * Generates a random integer between min and max.
+/**
+ * Generates a random integer between `min` and `max`.
+ * 
+ * @returns {integer}
  */
 function getRandomInt_InRange(min, max) {
   min = Math.ceil(min);
@@ -38,9 +40,14 @@ function getRandomInt_InRange(min, max) {
 /*    ONE EAR GENERATION FUNCTIONS   */
 /*************************************/
 
-/* 
+/**
  * Generates hearing test values for one ear with
  * no Low-Frequency or High-Frequency hearing loss.
+ * 
+ * @param {integer} min
+ * @param {integer} max
+ * 
+ * @returns {Object}
  */
 function generateSameFreq(min, max) {
   return {
@@ -54,9 +61,14 @@ function generateSameFreq(min, max) {
 }
 
 
-/* 
+/**
  * Generates hearing test values for one
  * ear with Low-Frequency hearing loss.
+ * 
+ * @param {integer} min
+ * @param {integer} max
+ * 
+ * @returns {Object}
  */
 function generateLowFreq(min, max) {
   return {
@@ -70,9 +82,14 @@ function generateLowFreq(min, max) {
 }
 
 
-/* 
+/**
  * Generates hearing test values for one
  * ear with High-Frequency hearing loss.
+ * 
+ * @param {integer} min
+ * @param {integer} max
+ * 
+ * @returns {Object}
  */
 function generateHighFreq(min, max) {
   return {
@@ -98,6 +115,13 @@ const generateOneEarFuncs = {
 /*              DRIVER               */
 /*************************************/
 
+/**
+ * @param {integer} min
+ * @param {integer} max
+ * @param {string} freq
+ * 
+ * @returns {Object}
+ */
 function generateOneEar(min, max, freq = 'Normal') {
   return generateOneEarFuncs[freq](min, max);
 }

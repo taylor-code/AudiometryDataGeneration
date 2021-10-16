@@ -24,6 +24,9 @@ const { generateOneEar         } = require('./GenerateOneEar');
 /*    CONFIG GENERATION FUNCTIONS     */
 /**************************************/
 
+/**
+ * @returns {Object}
+ */
 function getBC() {
   if (GC.type === 'Conductive') {
     return generateOneEar(NORMAL_MIN, NORMAL_MAX);
@@ -32,9 +35,11 @@ function getBC() {
 }
 
 
-/*
+/**
  * Generates Unilateral, Low-Frequency,
  * or High-Frequency hearing loss.
+ * 
+ * @returns {Object}
  */
 function generateFreqLoss() {
   return {

@@ -20,8 +20,12 @@ const { getMinMaxArr } = require('../HearingDegrees');
 
 class GenerateContainer {
 
-  /*
+  /**
    * Sets the generation variables.
+   * 
+   * @param {[string]} degrees 
+   * @param {string} type 
+   * @param {string} freq 
    */
   setProp(degrees, type, freq = null) {
     this.freq = freq || 'Normal';
@@ -32,7 +36,7 @@ class GenerateContainer {
   }
 
 
-  /*
+  /**
    * A round-robin generator that yields
    * decibels in the `minMax` array.
    */
@@ -47,7 +51,7 @@ class GenerateContainer {
   }
 
 
-  /*
+  /**
    * Uses the getDegree() generator.
    */
   getNextDb() {

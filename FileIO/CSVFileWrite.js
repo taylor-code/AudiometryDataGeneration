@@ -12,8 +12,8 @@
 const { writeFileSync } = require('fs');
 
 
-/*
- * @return: A String of the CSV file header.
+/**
+ * @returns {string} The CSV file header.
  */
 function getHeader() {
   const header = [
@@ -50,8 +50,11 @@ function getHeader() {
 }
 
 
-/*
- * Writes a JS Object to a CSV file.
+/**
+ * Writes the data to a CSV file.
+ * 
+ * @param {string} filename
+ * @param {[Object]} data
  */
 function writeCSVFile(filename, data) {
   let content = getHeader() + '\n';
