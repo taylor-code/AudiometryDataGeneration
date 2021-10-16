@@ -117,7 +117,7 @@ function getKeyValueHearingDict(data) {
  * 
  * @param {Object} hearingDict
  * 
- * @param {Object} hearingDict: Filtered.
+ * @returns {Object} hearingDict: Filtered.
  */
 function normalizeClassDistribution(hearingDict) {
   return Object.keys(hearingDict).reduce((filtered, key) => {
@@ -135,7 +135,7 @@ function normalizeClassDistribution(hearingDict) {
  * 
  * @param {Object} hearingDict
  * 
- * @param {[[Object]]} An array of the three arrays.
+ * @returns {[[Object]]} An array of the three arrays.
  */
 function separateData(hearingDict) {
   const NUM_PRED_INSTANCES = 3;

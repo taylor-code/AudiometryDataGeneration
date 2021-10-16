@@ -39,6 +39,8 @@ class GenerateContainer {
   /**
    * A round-robin generator that yields
    * decibels in the `minMax` array.
+   * 
+   * @returns {integer}
    */
   *getDegree() {
     const numDecibels = this.minMax.length;
@@ -53,6 +55,8 @@ class GenerateContainer {
 
   /**
    * Uses the getDegree() generator.
+   * 
+   * @returns {integer}
    */
   getNextDb() {
     return this.gen.next().value;
